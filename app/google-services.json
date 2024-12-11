@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "488899582525",
+    "project_id": "datemate-d592c",
+    "storage_bucket": "datemate-d592c.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:488899582525:android:693c023e455f39b6326854",
+        "android_client_info": {
+          "package_name": "com.thezayin.datemate"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDjeSR6BnxaOAStYvlZ_sM4DHH2sOVa5eI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

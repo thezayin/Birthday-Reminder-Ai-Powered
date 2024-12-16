@@ -1,5 +1,6 @@
 package com.thezayin.presentation
 
+import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -46,6 +47,7 @@ fun HomeScreen(
         fetchNativeAd = { viewModel.getNativeAd() },
         dismissErrorDialog = { viewModel.hideErrorDialog() },
         onMenuClick = {
+            Log.d("HomeScreen", "onMenuClick $it")
             if (it == 0) onAddBirthdayClick()
             else onCalculatorClick()
         }

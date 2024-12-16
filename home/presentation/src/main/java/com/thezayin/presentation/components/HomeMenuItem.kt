@@ -27,11 +27,10 @@ import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
-@Preview
 @Composable
 fun HomeMenuItem(
     modifier: Modifier = Modifier,
-    id: Int = 0,
+    id: Int,
     title: String = "Title",
     backgroundColor: Int = R.color.light_purple,
     clickableColor: Int = R.color.light_purple_1,

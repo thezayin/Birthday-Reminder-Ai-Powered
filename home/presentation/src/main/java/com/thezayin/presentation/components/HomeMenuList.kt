@@ -25,6 +25,7 @@ fun HomeMenuList(
         list?.size?.let {
             items(it) { item ->
                 HomeMenuItem(
+                    id = item,
                     modifier = modifier,
                     title = list[item].title,
                     backgroundColor = list[item].color,

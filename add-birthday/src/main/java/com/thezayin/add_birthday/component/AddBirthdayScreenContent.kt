@@ -1,4 +1,4 @@
-package com.thezayin.presentation.component
+package com.thezayin.add_birthday.component
 
 import android.util.Log
 import androidx.compose.foundation.clickable
@@ -33,7 +33,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.presentation.model.calculateNextBirthday
+import com.thezayin.model.calculateNextBirthday
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp

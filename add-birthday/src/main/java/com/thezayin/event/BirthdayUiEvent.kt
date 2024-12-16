@@ -1,4 +1,4 @@
-package com.thezayin.presentation.event
+package com.thezayin.event
 
 import com.thezayin.domain.model.BirthdayModel
 

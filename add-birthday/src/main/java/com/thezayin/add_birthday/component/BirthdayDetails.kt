@@ -1,4 +1,4 @@
-package com.thezayin.presentation.component
+package com.thezayin.add_birthday.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,8 +27,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.thezayin.presentation.model.isValidDayForMonth
-import com.thezayin.presentation.model.updateButtonState
+import com.thezayin.model.isValidDayForMonth
+import com.thezayin.model.updateButtonState
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 

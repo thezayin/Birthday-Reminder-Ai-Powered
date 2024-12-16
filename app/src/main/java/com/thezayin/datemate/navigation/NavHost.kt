@@ -3,7 +3,7 @@ package com.thezayin.datemate.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.thezayin.presentation.AddBirthdayScreen
+import com.thezayin.AddBirthdayScreen
 import com.thezayin.presentation.CalcHistoryScreen
 import com.thezayin.presentation.CalculatorScreen
 import com.thezayin.presentation.HomeScreen

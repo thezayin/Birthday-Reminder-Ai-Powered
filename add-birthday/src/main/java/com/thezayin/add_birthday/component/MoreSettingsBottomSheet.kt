@@ -1,4 +1,4 @@
-package com.thezayin.presentation.component
+package com.thezayin.add_birthday.component
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog

@@ -1,4 +1,4 @@
-package com.thezayin.presentation
+package com.thezayin
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,8 +14,8 @@ import com.thezayin.domain.usecase.GetBirthdayCountByYearUseCase
 import com.thezayin.domain.usecase.GetBirthdayCountUseCase
 import com.thezayin.domain.usecase.UpdateBirthdayUseCase
 import com.thezayin.framework.utils.Response
-import com.thezayin.presentation.event.BirthdayUiEvent
-import com.thezayin.presentation.state.BirthdayUiState
+import com.thezayin.event.BirthdayUiEvent
+import com.thezayin.state.BirthdayUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,15 +24,7 @@ import kotlinx.coroutines.launch
 
 class AddBirthdayViewModel(
     private val addBirthdayUseCase: AddBirthdayUseCase,
-    private val deleteBirthdayUseCase: DeleteBirthdayUseCase,
-    private val updateBirthdayUseCase: UpdateBirthdayUseCase,
     private val getAllBirthdaysUseCase: GetAllBirthdaysUseCase,
-    private val clearAllBirthdaysUseCase: ClearAllBirthdaysUseCase,
-    private val getBirthdayCountUseCase: GetBirthdayCountUseCase,
-    private val getBirthdayCountByGroupUseCase: GetBirthdayCountByGroupUseCase,
-    private val getBirthdayCountByMonthUseCase: GetBirthdayCountByMonthUseCase,
-    private val getBirthdayCountByDayUseCase: GetBirthdayCountByDayUseCase,
-    private val getBirthdayCountByYearUseCase: GetBirthdayCountByYearUseCase
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BirthdayUiState())
     val uiState: StateFlow<BirthdayUiState> = _uiState.asStateFlow()
@@ -75,7 +67,7 @@ class AddBirthdayViewModel(
         }
     }
 
-    fun addBirthday(birthday: BirthdayModel) {
+    private fun addBirthday(birthday: BirthdayModel) {
         viewModelScope.launch {
             addBirthdayUseCase(birthday).collect { response ->
                 when (response) {

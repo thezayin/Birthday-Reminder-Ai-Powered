@@ -1,4 +1,4 @@
-package com.thezayin.presentation.model
+package com.thezayin.model
 
 import androidx.compose.runtime.MutableState
 import java.util.Calendar
@@ -19,7 +19,6 @@ fun isValidDayForMonth(day: Int, month: Int, year: Int?): Boolean {
                 day in 1..28
             }
         }
-
         else -> false
     }
 }

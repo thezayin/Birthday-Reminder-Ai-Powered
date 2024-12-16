@@ -1,31 +1,20 @@
 plugins {
-    alias(libs.plugins.androidApplication)
+    alias(libs.plugins.androidLibrary)
     alias(libs.plugins.jetbrainsKotlinAndroid)
-    alias(libs.plugins.serialization.json)
     alias(libs.plugins.compose.compiler)
     alias(libs.plugins.ksp)
-    id("com.google.gms.google-services")
-    id("com.google.firebase.crashlytics")
-    id("com.google.firebase.firebase-perf")
-    id("com.google.firebase.appdistribution")
     id("kotlin-kapt")
 }
 
 android {
-    namespace = "com.thezayin.datemate"
+    namespace = "com.thezayin.add_birthday"
     compileSdk =  libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
-        applicationId = "com.thezayin.datemate"
         minSdk = libs.versions.minSdkVersion.get().toInt()
-        targetSdk = libs.versions.targetSdkVersion.get().toInt()
-        versionCode = 1
-        versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
-        vectorDrawables {
-            useSupportLibrary = true
-        }
+        consumerProguardFiles("consumer-rules.pro")
     }
 
     buildTypes {
@@ -38,39 +27,23 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-        dataBinding = true
-    }
-
-    packaging {
-        resources {
-            excludes += "/META-INF/{AL2.0,LGPL2.1}"
-        }
+        jvmTarget = "11"
     }
 }
 
-
 dependencies {
+
     implementation(project(":ads"))
     implementation(project(":analytics"))
 
-    implementation(project(":core:components"))
+    implementation(project(":databases:domain"))
     implementation(project(":core:values"))
     implementation(project(":core:framework"))
-
-    implementation(project(":home:presentation"))
-    implementation(project(":databases:presentation"))
-    implementation(project(":calculator:presentation"))
-    implementation(project(":add-birthday"))
-    implementation(project(":setting"))
-    implementation(project(":splash"))
+    implementation(project(":core:components"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -80,7 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
@@ -100,27 +72,5 @@ dependencies {
     implementation(libs.koin.android)
     testImplementation(libs.koin.test.junit4)
     implementation(libs.koin.androidx.navigation)
-
-    //serialization and ktor
-    implementation(libs.kotlinx.serialization.json)
-    implementation(libs.ktor.client.android)
-    implementation(libs.ktor.client.logging)
-    implementation(libs.ktor.client.serialize)
-
-    //navigation
-    implementation(libs.androidx.navigation.compose)
-
-    //firebase
-    implementation(libs.firebase.analytics)
-    implementation(libs.firebase.crashlytics)
-    implementation(libs.firebase.perf)
-    implementation(libs.firebase.messaging)
-    implementation(libs.firebase.inappmessaging.display)
-    implementation(libs.firebase.config)
-    implementation(libs.jsoup.jsoup)
-
-    implementation(libs.timber)
-
-    implementation (libs.androidx.multidex)
-    implementation(libs.grizzly)
+    implementation(libs.sdp.compose)
 }

@@ -40,12 +40,10 @@ dependencies {
     implementation(project(":ads"))
     implementation(project(":analytics"))
 
+    implementation(project(":databases:domain"))
     implementation(project(":core:values"))
     implementation(project(":core:framework"))
     implementation(project(":core:components"))
-
-    implementation(project(":add_birthday:domain"))
-    implementation(project(":add_birthday:data"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)

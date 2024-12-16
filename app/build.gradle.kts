@@ -68,6 +68,7 @@ dependencies {
     implementation(project(":home:presentation"))
     implementation(project(":databases:presentation"))
     implementation(project(":calculator:presentation"))
+    implementation(project(":add_birthday:presentation"))
     implementation(project(":setting"))
     implementation(project(":splash"))
 

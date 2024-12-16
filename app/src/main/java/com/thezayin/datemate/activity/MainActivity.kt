@@ -30,6 +30,8 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         googleManager.init(this)
         googleManager.initOnLastConsent()
+
+
         enableEdgeToEdge()
         setContent {
             DateMateTheme {

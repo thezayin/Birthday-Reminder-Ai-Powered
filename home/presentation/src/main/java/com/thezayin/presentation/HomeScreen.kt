@@ -11,7 +11,8 @@ import org.koin.compose.koinInject
 @Composable
 fun HomeScreen(
     onCalculatorClick: () -> Unit,
-    onSettingsClick: () -> Unit
+    onSettingsClick: () -> Unit,
+    onAddBirthdayClick: () -> Unit
 ) {
     val viewModel: HomeViewModel = koinInject()
     val state = viewModel.homeUiState.collectAsState().value
@@ -45,7 +46,8 @@ fun HomeScreen(
         fetchNativeAd = { viewModel.getNativeAd() },
         dismissErrorDialog = { viewModel.hideErrorDialog() },
         onMenuClick = {
-            onCalculatorClick()
+            if (it == 0) onAddBirthdayClick()
+            else onCalculatorClick()
         }
     )
 }

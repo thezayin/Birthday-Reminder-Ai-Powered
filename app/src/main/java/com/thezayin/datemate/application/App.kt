@@ -5,6 +5,7 @@ import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.thezayin.ads.di.adModule
 import com.thezayin.analytics.di.analyticsModule
 import com.thezayin.framework.di.featureModule
+import com.thezayin.presentation.di.addBirthdayModule
 import com.thezayin.presentation.di.calculatorModule
 import com.thezayin.presentation.di.databaseModule
 import com.thezayin.presentation.di.homeModule
@@ -29,7 +30,8 @@ class App : Application() {
                 settingModule,
                 analyticsModule,
                 databaseModule,
-                calculatorModule
+                calculatorModule,
+                addBirthdayModule
             )
         }
         // Initialize Firebase Crashlytics

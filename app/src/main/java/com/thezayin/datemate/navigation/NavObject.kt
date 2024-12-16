@@ -21,7 +21,7 @@ object CalHistoryScreenNav
 object SettingScreenNav
 
 @Serializable
-object PremiumScreenNav
+object AddBirthdayScreenNav
 
 @Serializable
 object CalculatorScreenNav

@@ -3,6 +3,7 @@ package com.thezayin.datemate.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
+import com.thezayin.presentation.AddBirthdayScreen
 import com.thezayin.presentation.CalcHistoryScreen
 import com.thezayin.presentation.CalculatorScreen
 import com.thezayin.presentation.HomeScreen
@@ -30,6 +31,9 @@ fun NavHost(navController: NavHostController) {
                 },
                 onSettingsClick = {
                     navController.navigate(SettingScreenNav)
+                },
+                onAddBirthdayClick = {
+                    navController.navigate(AddBirthdayScreenNav)
                 }
             )
         }
@@ -50,6 +54,12 @@ fun NavHost(navController: NavHostController) {
             CalculatorScreen(
                 onBackPress = { navController.navigateUp() },
                 onHistoryClick = { navController.navigate(CalHistoryScreenNav) }
+            )
+        }
+
+        composable<AddBirthdayScreenNav> {
+            AddBirthdayScreen(
+                navigateBack = { navController.navigateUp() }
             )
         }
     }

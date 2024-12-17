@@ -25,3 +25,6 @@ object AddBirthdayScreenNav
 
 @Serializable
 object CalculatorScreenNav
+
+@Serializable
+object SavedBirthdayScreenNav

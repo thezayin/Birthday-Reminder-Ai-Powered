@@ -28,3 +28,4 @@ fun takeScreenShot(view: View, dir: File): File? {
     }
     return null
 }
+

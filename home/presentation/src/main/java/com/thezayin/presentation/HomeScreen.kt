@@ -13,7 +13,8 @@ import org.koin.compose.koinInject
 fun HomeScreen(
     onCalculatorClick: () -> Unit,
     onSettingsClick: () -> Unit,
-    onAddBirthdayClick: () -> Unit
+    onAddBirthdayClick: () -> Unit,
+    onSavedBirthdayClick: () -> Unit
 ) {
     val viewModel: HomeViewModel = koinInject()
     val state = viewModel.homeUiState.collectAsState().value
@@ -50,8 +51,11 @@ fun HomeScreen(
         dismissErrorDialog = { viewModel.hideErrorDialog() },
         onMenuClick = {
             Log.d("HomeScreen", "onMenuClick $it")
-            if (it == 0) onAddBirthdayClick()
-            else onCalculatorClick()
+            when (it) {
+                0 -> onAddBirthdayClick()
+                1 -> onCalculatorClick()
+                2 -> onSavedBirthdayClick()
+            }
         }
     )
 }

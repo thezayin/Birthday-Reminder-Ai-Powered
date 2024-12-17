@@ -32,12 +32,12 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.nativead.NativeAd
+import com.thezayin.add_birthday.model.calculateNextBirthday
 import com.thezayin.components.ErrorQueryDialog
 import com.thezayin.components.LoadingDialog
 import com.thezayin.framework.lifecycles.ComposableLifecycle
 import com.thezayin.framework.nativead.GoogleNativeAd
 import com.thezayin.framework.nativead.GoogleNativeAdStyle
-import com.thezayin.model.calculateNextBirthday
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -77,7 +77,8 @@ fun AddBirthdayScreenContent(
     onAddBirthdayClick: () -> Unit,
     isDuplicate: Boolean,  // Pass this state
     onDismissDuplicateDialog: () -> Unit,  // Action to dismiss the dialog
-    onConfirmAddDuplicate: () -> Unit,    // Action to add the duplicate birthday
+    onConfirmAddDuplicate: () -> Unit, // Action to add the duplicate birthday
+    setAdded: () -> Unit,
 ) {
     ComposableLifecycle { _, event ->
         when (event) {
@@ -104,7 +105,10 @@ fun AddBirthdayScreenContent(
 
     if (isAdded) {
         SuccessDialog(
-            onDone = navigateBack,
+            onDone = {
+                setAdded()
+                navigateBack()
+            },
             message = "Birthday added successfully"
         )
     }

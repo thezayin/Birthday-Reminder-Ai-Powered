@@ -14,25 +14,19 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.presentation.utils.calculateDaysLeft
 import com.thezayin.presentation.utils.getFormattedBirthdayDate
 import com.thezayin.presentation.utils.getFormattedNotificationTime
-import com.thezayin.presentation.utils.getMonthName
 import com.thezayin.presentation.utils.getZodiacSign
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

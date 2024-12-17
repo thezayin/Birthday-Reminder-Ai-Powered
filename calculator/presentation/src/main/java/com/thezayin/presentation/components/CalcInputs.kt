@@ -95,13 +95,13 @@ fun CalcInputs(
             },
             textStyle = TextStyle(
                 color = colorResource(com.thezayin.values.R.color.text_color),
-                fontSize = 12.ssp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
             ),
             placeholder = {
                 Text(
                     text = "Name",
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     color = colorResource(com.thezayin.values.R.color.text_color)
                 )
             },
@@ -126,7 +126,7 @@ fun CalcInputs(
             placeholder = {
                 Text(
                     text = "Date of Birth",
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     color = colorResource(com.thezayin.values.R.color.text_color)
                 )
             },
@@ -151,14 +151,14 @@ fun CalcInputs(
 
             },
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(11.dp),
+            shape = RoundedCornerShape(10.sdp),
             colors = customTextFieldColors
         )
 
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(20.dp)
+                .height(20.sdp)
         )
 
         TextField(
@@ -167,13 +167,13 @@ fun CalcInputs(
             readOnly = true,
             textStyle = TextStyle(
                 color = colorResource(com.thezayin.values.R.color.text_color),
-                fontSize = 12.ssp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
             ),
             placeholder = {
                 Text(
                     text = "Current or Another Date",
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     color = colorResource(com.thezayin.values.R.color.text_color)
                 )
             },
@@ -198,7 +198,7 @@ fun CalcInputs(
             },
 
             modifier = Modifier.fillMaxWidth(),
-            shape = RoundedCornerShape(11.dp),
+            shape = RoundedCornerShape(10.sdp),
             colors = customTextFieldColors
         )
     }

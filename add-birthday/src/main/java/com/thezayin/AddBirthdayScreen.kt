@@ -1,23 +1,20 @@
 package com.thezayin
 
-import android.util.Log
+import android.app.Activity
+import android.widget.Toast
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.lifecycle.viewModelScope
-import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.add_birthday.component.AddBirthdayScreenContent
-import com.thezayin.event.BirthdayUiEvent
+import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.model.NotificationDate
-import com.thezayin.model.calculateNextBirthday
 import com.thezayin.model.calculateNotifyAt
 import org.koin.compose.koinInject
-import java.util.Calendar
 
 @Composable
 fun AddBirthdayScreen(
@@ -25,6 +22,10 @@ fun AddBirthdayScreen(
 ) {
     val viewModel: AddBirthdayViewModel = koinInject()
     val uiState by viewModel.uiState.collectAsState()
+    val activity = LocalContext.current as Activity
+
+    val nativeAd = remember { viewModel.nativeAd }
+    val remoteConfig = viewModel.remoteConfig.adConfigs
 
     // Remember states for input fields
     val name = remember { mutableStateOf(TextFieldValue()) }
@@ -43,24 +44,22 @@ fun AddBirthdayScreen(
     val notifyMinute = remember { mutableStateOf(TextFieldValue("00")) } // Default to 00
     val notifyPeriod = remember { mutableStateOf("AM") } // Default to AM
 
-    val groups = listOf("Family", "Friends", "Work", "Colleagues", "Other") // Example groups
+    val groups = listOf("Family", "Friends", "Work", "Teacher", "Other") // Example groups
 
-    // Handle error dialog visibility
-    var showErrorDialog by remember { mutableStateOf(false) }
-
-    // Update showErrorDialog based on uiState.error
-    LaunchedEffect(uiState.error) {
-        if (uiState.error != null) {
-            showErrorDialog = true
-            Log.e("AddBirthdayScreen", "UI Error: ${uiState.error}")
-        }
-    }
+    val error = uiState.error
+    val isAdded = uiState.isAdded
+    val isError = uiState.isError
+    val isLoading = uiState.isLoading
+    val isDuplicate = uiState.isDuplicate
+    val showBottomAd = remoteConfig.nativeAdOnHomeScreen
+    val showLoadingAd = remoteConfig.nativeAdOnResultLoadingDialog
 
     AddBirthdayScreenContent(
         name = name,
         day = day,
         month = month,
         year = year,
+        isAdded = isAdded,
         selectedGroup = selectedGroup,
         groups = groups,
         isButtonEnabled = isButtonEnabled,
@@ -70,21 +69,38 @@ fun AddBirthdayScreen(
         notifyDay = notificationDate.day,
         notifyMonth = notificationDate.month,
         notifyYear = notificationDate.year,
-        isLoading = uiState.isLoading,
-        showError = showErrorDialog,
-        nativeAd = null, // Replace with your ad fetching logic
-        showBottomAd = false, // Adjust based on your ad logic
-        showLoadingAd = false, // Adjust based on your ad logic
+        isLoading = isLoading,
+        showError = isError,
+        nativeAd = nativeAd.value,
+        showBottomAd = showBottomAd, // Adjust based on your ad logic
+        showLoadingAd = showLoadingAd, // Adjust based on your ad logic
         coroutineScope = viewModel.viewModelScope,
         navigateBack = navigateBack,
         dismissErrorDialog = {
-            // Handle dismissing error dialog
-            // e.g., viewModel.handleEvent(BirthdayUiEvent.DismissError)
-            showErrorDialog = false
+            viewModel.isError(false)
         },
         fetchNativeAd = {
-            // Handle fetching native ads
-            // e.g., viewModel.handleEvent(BirthdayUiEvent.FetchAd)
+            viewModel.getNativeAd()
+        },
+        error = error,
+        isDuplicate = isDuplicate,  // Pass the duplicate state
+        onDismissDuplicateDialog = { viewModel.isDuplicate(false) },
+        onConfirmAddDuplicate = {
+            viewModel.confirmAddDuplicate(
+                BirthdayModel(
+                    name = name.value.text,
+                    day = day.value.text.toInt(),
+                    month = month.value.text.toInt(),
+                    year = year.value.text.toIntOrNull(),
+                    group = selectedGroup.value,
+                    notifyAt = calculateNotifyAt(
+                        notificationDate,
+                        notifyHour.value.text.toInt(),
+                        notifyMinute.value.text.toInt(),
+                        notifyPeriod.value
+                    )
+                )
+            )
         },
         onAddBirthdayClick = {
             // Validate inputs
@@ -92,14 +108,11 @@ fun AddBirthdayScreen(
             val monthInt = month.value.text.toIntOrNull()
             val notifyDayInt = notificationDate.day.value.text.toIntOrNull()
             val notifyMonthInt = notificationDate.month.value.text.toIntOrNull()
-            val notifyYearInt = notificationDate.year.value.text.toIntOrNull()
             val hourInt = notifyHour.value.text.toIntOrNull()
             val minuteInt = notifyMinute.value.text.toIntOrNull()
             val nameStr = name.value.text.trim()
             val groupStr = selectedGroup.value
             val periodStr = notifyPeriod.value
-
-            Log.d("AddBirthdayScreen", "Add Button Clicked with: Name=$nameStr, Day=$dayInt, Month=$monthInt, Year=${year.value.text}, NotifyAt=${notificationDate.day.value.text}/${notificationDate.month.value.text}/${notificationDate.year.value.text} $periodStr")
 
             // Comprehensive validation
             if (nameStr.isNotEmpty() &&
@@ -111,15 +124,12 @@ fun AddBirthdayScreen(
                 minuteInt != null && minuteInt in 0..59
             ) {
                 // Additional date validation
-                val nextBirthday = calculateNextBirthday(dayInt, monthInt, year = year.value.text.toIntOrNull())
-                Log.d("AddBirthdayScreen", "Calculated Next Birthday: ${nextBirthday.get(Calendar.DAY_OF_MONTH)}/${nextBirthday.get(Calendar.MONTH) + 1}/${nextBirthday.get(Calendar.YEAR)}")
                 val notifyAt = calculateNotifyAt(
                     notificationDate = notificationDate,
                     hour = hourInt,
                     minute = minuteInt,
                     period = periodStr
                 )
-                Log.d("AddBirthdayScreen", "Calculated notifyAt: $notifyAt")
 
                 val birthday = BirthdayModel(
                     name = nameStr,
@@ -129,11 +139,13 @@ fun AddBirthdayScreen(
                     group = groupStr,
                     notifyAt = notifyAt
                 )
-                viewModel.handleEvent(BirthdayUiEvent.AddBirthday(birthday))
+                viewModel.addBirthday(birthday)
             } else {
-                // Show validation error
-                showErrorDialog = true
-                Log.e("AddBirthdayScreen", "Validation Failed")
+                Toast.makeText(
+                    activity,
+                    "Please enter valid details",
+                    Toast.LENGTH_SHORT
+                ).show()
             }
         }
     )

@@ -1,8 +1,6 @@
 package com.thezayin.add_birthday.component
 
-import android.util.Log
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -26,18 +24,27 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
+import androidx.compose.ui.unit.dp
+import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.nativead.NativeAd
+import com.thezayin.components.ErrorQueryDialog
+import com.thezayin.components.LoadingDialog
+import com.thezayin.framework.lifecycles.ComposableLifecycle
+import com.thezayin.framework.nativead.GoogleNativeAd
+import com.thezayin.framework.nativead.GoogleNativeAdStyle
 import com.thezayin.model.calculateNextBirthday
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.isActive
+import kotlinx.coroutines.launch
 import java.util.Calendar
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -49,6 +56,8 @@ fun AddBirthdayScreenContent(
     year: MutableState<TextFieldValue>,
     selectedGroup: MutableState<String>,
     groups: List<String>,
+    error: String?,
+    isAdded: Boolean,
     isButtonEnabled: MutableState<Boolean>,
     notifyHour: MutableState<TextFieldValue>,
     notifyMinute: MutableState<TextFieldValue>,
@@ -65,8 +74,70 @@ fun AddBirthdayScreenContent(
     navigateBack: () -> Unit,
     dismissErrorDialog: () -> Unit,
     fetchNativeAd: () -> Unit,
-    onAddBirthdayClick: () -> Unit
+    onAddBirthdayClick: () -> Unit,
+    isDuplicate: Boolean,  // Pass this state
+    onDismissDuplicateDialog: () -> Unit,  // Action to dismiss the dialog
+    onConfirmAddDuplicate: () -> Unit,    // Action to add the duplicate birthday
 ) {
+    ComposableLifecycle { _, event ->
+        when (event) {
+            Lifecycle.Event.ON_START -> {
+                coroutineScope.launch {
+                    while (isActive) {
+                        fetchNativeAd()
+                        delay(20000L) // Fetch a new ad every 20 seconds
+                    }
+                }
+            }
+
+            else -> Unit // No action needed for other lifecycle events
+        }
+    }
+    // Show error dialog if there is an error
+    if (showError) {
+        ErrorQueryDialog(
+            showDialog = { dismissErrorDialog() },
+            callback = {},
+            error = error ?: "unknown error"
+        )
+    }
+
+    if (isAdded) {
+        SuccessDialog(
+            onDone = navigateBack,
+            message = "Birthday added successfully"
+        )
+    }
+
+    // Duplicate Birthday Dialog
+    if (isDuplicate) {
+        DuplicateBirthdayDialog(
+            personName = name.value.text,
+            date = "${notifyDay.value.text}/${notifyMonth.value.text}",
+            time = "${notifyHour.value.text}:${notifyMinute.value.text} ${notifyPeriod.value}",
+            onAddAgain = {
+                onConfirmAddDuplicate() // Trigger action to add the birthday
+            },
+            onCancel = {
+                onDismissDuplicateDialog() // Dismiss the dialog
+            }
+        )
+    }
+
+    // Display loading dialog with optional native ad
+    if (isLoading) {
+        LoadingDialog(ad = {
+            GoogleNativeAd(
+                modifier = Modifier
+                    .padding(top = 20.dp)
+                    .fillMaxWidth(),
+                nativeAd = nativeAd,
+                style = GoogleNativeAdStyle.Small
+            )
+        }, nativeAd = { fetchNativeAd() }, showAd = showLoadingAd
+        )
+    }
+
     // State for Bottom Sheet
     var showMoreSettings by remember { mutableStateOf(false) }
 
@@ -88,10 +159,6 @@ fun AddBirthdayScreenContent(
         notifyDay.value = TextFieldValue(nextBirthday.get(Calendar.DAY_OF_MONTH).toString())
         notifyMonth.value = TextFieldValue((nextBirthday.get(Calendar.MONTH) + 1).toString())
         notifyYear.value = TextFieldValue(nextBirthday.get(Calendar.YEAR).toString())
-        Log.d(
-            "AddBirthdayScreenContent",
-            "Notification Date updated to: ${notifyDay.value.text}/${notifyMonth.value.text}/${notifyYear.value.text}"
-        )
     }
 
     // Main layout with Scaffold
@@ -107,7 +174,26 @@ fun AddBirthdayScreenContent(
             )
         },
         bottomBar = {
-            // No Bottom Bar needed as per requirements
+            Button(
+                onClick = onAddBirthdayClick,
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(16.sdp)
+                    .height(35.sdp),
+                enabled = isButtonEnabled.value,
+                shape = RoundedCornerShape(8.sdp),
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = colorResource(id = R.color.primary),
+                    disabledContainerColor = colorResource(id = R.color.telenor_blue),
+                ),
+            ) {
+                Text(
+                    text = "Save",
+                    fontSize = 12.ssp,
+                    fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                    color = colorResource(id = R.color.white)
+                )
+            }
         }
     ) { paddingValues ->
         Column(
@@ -140,14 +226,6 @@ fun AddBirthdayScreenContent(
                     }
                     .padding(8.sdp)
             )
-
-            // Optionally, display an ad in the content area if needed
-            if (showBottomAd && nativeAd != null) {
-                Spacer(modifier = Modifier.height(20.sdp))
-                // Replace GoogleNativeAd with your ad composable
-                // GoogleNativeAd(...)
-            }
-
             Spacer(modifier = Modifier.weight(1f)) // Pushes content to the top
         }
 
@@ -170,41 +248,12 @@ fun AddBirthdayScreenContent(
                     selectedGroup = selectedGroup,
                     groups = groups,
                     onSave = {
-                        // Handle save action, e.g., validate and persist settings
                         showMoreSettings = false
-                        // Optionally, trigger any additional actions after saving
                     },
-                    nextBirthday = nextBirthday // Pass nextBirthday here
+                    nextBirthday = nextBirthday
                 )
             }
         }
 
-        // Fixed Save Button at the Bottom
-        Box(
-            modifier = Modifier
-                .fillMaxSize()
-        ) {
-            Button(
-                onClick = onAddBirthdayClick,
-                modifier = Modifier
-                    .align(Alignment.BottomCenter)
-                    .fillMaxWidth()
-                    .padding(16.sdp)
-                    .height(35.sdp),
-                enabled = isButtonEnabled.value,
-                shape = RoundedCornerShape(8.sdp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.primary),
-                    disabledContainerColor = colorResource(id = R.color.telenor_blue),
-                ),
-            ) {
-                Text(
-                    text = "Save",
-                    fontSize = 12.ssp,
-                    fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
-                    color = colorResource(id = R.color.white)
-                )
-            }
-        }
     }
 }

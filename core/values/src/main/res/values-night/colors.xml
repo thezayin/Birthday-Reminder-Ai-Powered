@@ -17,7 +17,7 @@
     <color name="background">#28282B</color>
     <color name="text_color">#e3e3e3</color>
     <color name="premium_icon_color">#ffc500</color>
-
+    <color name="left_days_card">#575757</color>
     <color name="green">#069952</color>
     <color name="red">#E62E2E</color>
     <color name="transparent">#00000000</color>

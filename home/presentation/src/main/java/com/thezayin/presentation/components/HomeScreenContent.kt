@@ -5,27 +5,36 @@ import androidx.compose.animation.core.LinearOutSlowInEasing
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.slideInHorizontally
 import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.MutableState
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.font.Font
+import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import com.google.android.gms.ads.nativead.NativeAd
 import com.thezayin.components.ErrorQueryDialog
 import com.thezayin.components.LoadingDialog
+import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.model.HomeMenu
 import com.thezayin.framework.lifecycles.ComposableLifecycle
 import com.thezayin.framework.nativead.GoogleNativeAd
 import com.thezayin.framework.nativead.GoogleNativeAdStyle
+import com.thezayin.presentation.utils.getMonthName
 import com.thezayin.values.R
+import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.isActive
@@ -42,6 +51,7 @@ fun HomeScreenContent(
     list: List<HomeMenu>?,
     isWelcomeTextVisible: MutableState<Boolean>,
     isMenuVisible: MutableState<Boolean>,
+    upcomingBirthdays: List<BirthdayModel>?,
     isBirthdayVisible: MutableState<Boolean>,
     onSettingsClick: () -> Unit,
     onPremiumClick: () -> Unit,
@@ -117,7 +127,7 @@ fun HomeScreenContent(
                 GoogleNativeAd(
                     modifier = Modifier
                         .fillMaxWidth()
-                        .padding(10.dp),
+                        .padding(10.sdp),
                     style = GoogleNativeAdStyle.Small,
                     nativeAd = nativeAd
                 )
@@ -157,6 +167,41 @@ fun HomeScreenContent(
                     list = list,
                     onClick = onMenuClick,
                 )
+
+            }
+
+            // Upcoming birthdays section
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .weight(1f) // Ensures proper height constraints
+            ) {
+                if (!upcomingBirthdays.isNullOrEmpty()) {
+                    Column {
+                        Text(
+                            text = "Upcoming Birthdays:",
+                            color = colorResource(R.color.text_color),
+                            fontSize = 12.ssp,
+                            fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                            modifier = Modifier
+                                .padding(horizontal = 10.sdp)
+                                .padding(top = 20.sdp)
+                        )
+                        UpcomingBirthdaysList(
+                            upcomingBirthdays = upcomingBirthdays.groupBy { getMonthName(it.month) }
+                        )
+                    }
+                } else {
+                    Text(
+                        text = "No Upcoming Birthdays",
+                        color = colorResource(R.color.text_color),
+                        fontSize = 14.ssp,
+                        fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
+                        modifier = Modifier
+                            .align(Alignment.Center)
+                            .padding(10.sdp)
+                    )
+                }
             }
         }
     }

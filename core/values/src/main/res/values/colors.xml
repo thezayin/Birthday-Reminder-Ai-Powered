@@ -33,9 +33,9 @@
     <color name="red">#E62E2E</color>
 
     <color name="text_field_background">#ddcac2</color>
-    //blur list background
     <color name="blur_background">#80000000</color>
     <color name="card_background">#FFF</color>
+    <color name="left_days_card">#d3d3d3</color>
     <color name="blur_background_text">#F5F5F5</color>
 
 

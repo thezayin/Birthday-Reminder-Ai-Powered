@@ -39,7 +39,7 @@ fun CalculatorButton(
                 .fillMaxWidth()
                 .height(35.sdp),
             enabled = isButtonEnable,
-            shape = RoundedCornerShape(10.sdp),
+            shape = RoundedCornerShape(8.sdp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.primary),
                 disabledContainerColor = colorResource(id = R.color.telenor_blue),
@@ -49,9 +49,9 @@ fun CalculatorButton(
             calculation()
             Text(
                 text = "Calculate",
-                fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                 color = colorResource(id = R.color.white),
-                fontSize = 12.ssp
+                fontSize = 10.ssp
             )
         }
     }

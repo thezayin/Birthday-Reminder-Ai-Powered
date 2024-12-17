@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.thezayin.presentation"
+    namespace = "com.thezayin.saved_birthdays"
     compileSdk =  libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
@@ -27,15 +27,11 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_1_8
-        targetCompatibility = JavaVersion.VERSION_1_8
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions {
-        jvmTarget = "1.8"
-    }
-    buildFeatures {
-        compose = true
-        dataBinding = true
+        jvmTarget = "11"
     }
 }
 
@@ -44,13 +40,10 @@ dependencies {
     implementation(project(":ads"))
     implementation(project(":analytics"))
 
+    implementation(project(":databases:domain"))
     implementation(project(":core:values"))
     implementation(project(":core:framework"))
     implementation(project(":core:components"))
-
-    implementation(project(":home:domain"))
-    implementation(project(":home:data"))
-    implementation(project(":databases:domain"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -60,7 +53,6 @@ dependencies {
     implementation(libs.androidx.ui.graphics)
     implementation(libs.androidx.ui.tooling.preview)
     implementation(libs.androidx.material3)
-    implementation(libs.androidx.storage)
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

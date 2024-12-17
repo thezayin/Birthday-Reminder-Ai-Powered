@@ -58,22 +58,12 @@ fun HomeTopBar(
             Row(
                 verticalAlignment = Alignment.CenterVertically
             ) {
-                // Premium Button
-                Button(
-                    onClick = { premiumCallback() },
-                    modifier = Modifier.padding(start = 10.dp),
-                    shape = RoundedCornerShape(10.dp),
-                    colors = ButtonDefaults.buttonColors(
-                        containerColor = colorResource(id = R.color.green_level_1)
-                    )
-                ) {
-                    Image(
-                        painter = painterResource(id = R.drawable.ic_crown),
-                        contentDescription = "Premium",
-                        modifier = Modifier.size(25.dp),
-                        contentScale = ContentScale.Fit
-                    )
-                }
+                Image(
+                    painter = painterResource(id = R.drawable.ic_crown),
+                    contentDescription = "Premium",
+                    modifier = Modifier.size(25.dp),
+                    contentScale = ContentScale.Fit
+                )
             }
         }
     }

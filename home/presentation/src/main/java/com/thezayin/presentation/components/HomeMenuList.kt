@@ -11,25 +11,24 @@ import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun HomeMenuList(
-    modifier: Modifier,
-    list: List<HomeMenu>?,
-    onClick: (Int) -> Unit = {}
+    modifier: Modifier, list: List<HomeMenu>?, onClick: (Int) -> Unit = {}
 ) {
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier
-            .padding(vertical = 40.sdp, horizontal = 5.sdp),
+            .padding(horizontal = 5.sdp)
+            .padding(top = 25.sdp),
         verticalArrangement = Arrangement.spacedBy(10.sdp),
         horizontalArrangement = Arrangement.spacedBy(10.sdp),
     ) {
         list?.size?.let {
             items(it) { item ->
                 HomeMenuItem(
+                    id = item,
                     modifier = modifier,
                     title = list[item].title,
                     backgroundColor = list[item].color,
                     clickableColor = list[item].subColor,
-                    painterResource = list[item].icon,
                     onClick = onClick
                 )
             }

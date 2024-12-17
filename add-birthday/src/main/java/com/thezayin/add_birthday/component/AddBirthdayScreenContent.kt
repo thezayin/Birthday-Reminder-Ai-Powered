@@ -232,6 +232,7 @@ fun AddBirthdayScreenContent(
         // Bottom Sheet for More Settings
         if (showMoreSettings) {
             ModalBottomSheet(
+                containerColor = colorResource(id = R.color.card_background),
                 sheetState = rememberModalBottomSheetState(),
                 onDismissRequest = { showMoreSettings = false },
             ) {

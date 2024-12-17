@@ -29,6 +29,7 @@ import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
+import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
 
@@ -49,12 +50,12 @@ fun CalcInputs(
 
     // Define custom colors for TextFields
     val customTextFieldColors = TextFieldDefaults.colors(
-        focusedTextColor = colorResource(com.thezayin.values.R.color.text_color),
-        unfocusedTextColor = colorResource(com.thezayin.values.R.color.text_color),
-        focusedContainerColor = colorResource(com.thezayin.values.R.color.force_iron),
-        unfocusedContainerColor = colorResource(com.thezayin.values.R.color.force_iron),
-        unfocusedIndicatorColor = Color.Transparent,
+        focusedContainerColor = colorResource(id = R.color.txt_field),
+        unfocusedContainerColor = colorResource(id = R.color.txt_field),
         focusedIndicatorColor = Color.Transparent,
+        unfocusedIndicatorColor = Color.Transparent,
+        focusedTextColor = colorResource(id = R.color.text_color),
+        unfocusedTextColor = colorResource(id = R.color.text_color)
     )
 
     val datePickerDialog = DatePickerDialog(
@@ -84,8 +85,8 @@ fun CalcInputs(
         Text(
             text = "Enter your birth date and the current date to calculate your age.",
             fontSize = 12.ssp,
-            color = colorResource(com.thezayin.values.R.color.text_color),
-            fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
+            color = colorResource(R.color.text_color),
+            fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
             modifier = Modifier.padding(bottom = 16.sdp)
         )
         TextField(
@@ -94,15 +95,15 @@ fun CalcInputs(
                 name.value = it
             },
             textStyle = TextStyle(
-                color = colorResource(com.thezayin.values.R.color.text_color),
+                color = colorResource(R.color.text_color),
                 fontSize = 10.ssp,
-                fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
+                fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
             ),
             placeholder = {
                 Text(
                     text = "Name",
                     fontSize = 10.ssp,
-                    color = colorResource(com.thezayin.values.R.color.text_color)
+                    color = colorResource(R.color.text_color)
                 )
             },
             modifier = Modifier.fillMaxWidth(),
@@ -119,15 +120,15 @@ fun CalcInputs(
             onValueChange = {},
             readOnly = true,
             textStyle = TextStyle(
-                color = colorResource(com.thezayin.values.R.color.text_color),
+                color = colorResource(R.color.text_color),
                 fontSize = 12.ssp,
-                fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
+                fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
             ),
             placeholder = {
                 Text(
                     text = "Date of Birth",
                     fontSize = 10.ssp,
-                    color = colorResource(com.thezayin.values.R.color.text_color)
+                    color = colorResource(R.color.text_color)
                 )
             },
             trailingIcon = {
@@ -166,15 +167,15 @@ fun CalcInputs(
             onValueChange = {},
             readOnly = true,
             textStyle = TextStyle(
-                color = colorResource(com.thezayin.values.R.color.text_color),
+                color = colorResource(R.color.text_color),
                 fontSize = 10.ssp,
-                fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_medium)),
+                fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
             ),
             placeholder = {
                 Text(
                     text = "Current or Another Date",
                     fontSize = 10.ssp,
-                    color = colorResource(com.thezayin.values.R.color.text_color)
+                    color = colorResource(R.color.text_color)
                 )
             },
             trailingIcon = {

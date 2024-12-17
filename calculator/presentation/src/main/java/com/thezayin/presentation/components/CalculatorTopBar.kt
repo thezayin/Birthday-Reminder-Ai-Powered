@@ -16,6 +16,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.thezayin.values.R
+import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun CalculatorTopBar(
@@ -24,8 +25,8 @@ fun CalculatorTopBar(
 ) {
     Box(
         modifier = Modifier
-            .padding(horizontal = 15.dp)
-            .padding(top = 40.dp)
+            .padding(horizontal = 15.sdp)
+            .padding(top = 40.sdp)
             .fillMaxWidth()
     ) {
         Row(
@@ -38,21 +39,22 @@ fun CalculatorTopBar(
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Settings",
                 modifier = Modifier
-                    .size(25.dp)
+                    .size(20.sdp)
                     .clickable { onBackClick() }
             )
 
             Spacer(
                 modifier = Modifier
-                    .width(8.dp)
+                    .width(8.sdp)
                     .weight(1f)
             )
+
             // Row containing Premium Button and Like Icon
             Image(
                 painter = painterResource(id = R.drawable.ic_history),
                 contentDescription = "Settings",
                 modifier = Modifier
-                    .size(30.dp)
+                    .size(25.dp)
                     .clickable { onHistoryClick() }
             )
         }

@@ -21,10 +21,7 @@ fun CalculatorScreen(
     val state = viewModel.calculatorState.collectAsState().value
     val scope = rememberCoroutineScope()
     val nativeAd = remember { viewModel.nativeAd }
-    val googleManager = viewModel.googleManager
     val remoteConfig = viewModel.remoteConfig.adConfigs
-
-    val context = LocalContext.current
 
     val result = state.calculatedValue
     val isLoading = state.isLoading

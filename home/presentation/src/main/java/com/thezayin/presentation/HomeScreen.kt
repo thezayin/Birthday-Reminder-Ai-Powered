@@ -25,6 +25,7 @@ fun HomeScreen(
     val menuList = state.menuItems
     val isLoading = state.isLoading
     val showError = state.isError
+    val upcomingBirthdays = state.upcomingBirthdays
     val showBottomAd = remoteConfig.nativeAdOnHomeScreen
     val showLoadingAd = remoteConfig.nativeAdOnResultLoadingDialog
     val isWelcomeTextVisible = remember { mutableStateOf(false) }
@@ -44,6 +45,7 @@ fun HomeScreen(
         isBirthdayVisible = isBirthdayVisible,
         onSettingsClick = onSettingsClick,
         onPremiumClick = {},
+        upcomingBirthdays = upcomingBirthdays,
         fetchNativeAd = { viewModel.getNativeAd() },
         dismissErrorDialog = { viewModel.hideErrorDialog() },
         onMenuClick = {

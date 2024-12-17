@@ -144,6 +144,6 @@ class GoogleManager(
     fun createRewardedInterstitialAd() = googleRewardedInterstitialAd?.get()
     fun createAppOpenAd() = googleAppOpen?.get()
     fun createInterstitialAd() = googleInterAd?.get()
-    fun createNativeAd(): NativeAd? = googleNativeAd?.get()
+    fun createNativeAd(): NativeAd? = null
     fun createRewardedAd() = googleRewardedAd?.get()
 }

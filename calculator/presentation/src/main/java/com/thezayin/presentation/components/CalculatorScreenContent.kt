@@ -99,7 +99,7 @@ fun CalculatorScreenContent(
             ad = {
                 GoogleNativeAd(
                     modifier = Modifier
-                        .padding(top = 20.dp)
+                        .padding(top = 20.sdp)
                         .fillMaxWidth(),
                     nativeAd = nativeAd,
                     style = GoogleNativeAdStyle.Small

@@ -1,5 +1,6 @@
 package com.thezayin.presentation.event
 
+import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.model.HomeMenu
 
 sealed interface HomeEvents {
@@ -9,4 +10,5 @@ sealed interface HomeEvents {
     data object HideErrorDialog : HomeEvents
     data class ErrorMessage(val errorMessage: String) : HomeEvents
     data class MenuItems(val items: List<HomeMenu>) : HomeEvents
+    data class GetRecentBirthdays(val items: List<BirthdayModel>?) : HomeEvents
 }

@@ -1,12 +1,16 @@
 package com.thezayin.presentation
 
+import android.annotation.SuppressLint
+import android.util.Log
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.google.android.gms.ads.nativead.NativeAd
 import com.thezayin.ads.GoogleManager
 import com.thezayin.analytics.analytics.Analytics
+import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.model.HomeMenu
+import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
 import com.thezayin.domain.usecase.MenuItemsUseCase
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
@@ -17,12 +21,15 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
+import java.time.LocalDate
+import java.time.temporal.ChronoUnit
 
 class HomeViewModel(
     val googleManager: GoogleManager,
     val analytics: Analytics,
     val remoteConfig: RemoteConfig,
-    val menuItemsUseCase: MenuItemsUseCase
+    val menuItemsUseCase: MenuItemsUseCase,
+    val getAllBirthdaysUseCase: GetAllBirthdaysUseCase
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeState())
     val homeUiState = _homeUiState.asStateFlow()
@@ -38,6 +45,7 @@ class HomeViewModel(
             HomeEvents.HideLoading -> _homeUiState.update { it.copy(isLoading = false) }
             HomeEvents.ShowError -> _homeUiState.update { it.copy(isError = true) }
             HomeEvents.ShowLoading -> _homeUiState.update { it.copy(isLoading = true) }
+            is HomeEvents.GetRecentBirthdays -> _homeUiState.update { it.copy(upcomingBirthdays = event.items) }
         }
     }
 
@@ -50,6 +58,46 @@ class HomeViewModel(
 
     init {
         fetchMenuItems()
+        fetchRecentBirthdays()
+    }
+
+    @SuppressLint("NewApi")
+    private fun fetchRecentBirthdays() = viewModelScope.launch {
+        getAllBirthdaysUseCase().collect { response ->
+            when (response) {
+                is Response.Loading -> showLoading()
+                is Response.Error -> {
+                    hideLoading()
+                    showError()
+                    errorMessages(response.e)
+                }
+
+                is Response.Success -> {
+                    hideLoading()
+                    val today = LocalDate.now()
+                    val upcomingBirthdays = response.data
+                        .map { birthday ->
+                            // Handle optional year
+                            val yearToUse = birthday.year ?: today.year
+                            var birthdayDate = LocalDate.of(yearToUse, birthday.month, birthday.day)
+
+                            // If the birthday has passed this year and year is null, move it to next year
+                            if (birthdayDate.isBefore(today) && birthday.year == null) {
+                                birthdayDate = birthdayDate.plusYears(1)
+                            }
+
+                            birthdayDate to birthday
+                        }
+                        .sortedBy { (date, _) ->
+                            ChronoUnit.DAYS.between(today, date)
+                        }
+                        .take(3) // Take the 3 closest birthdays
+                        .map { (_, birthday) -> birthday } // Extract the BirthdayModel
+                    Log.d("HomeViewModel", "fetchRecentBirthdays: ${response.data}")
+                    getRecentBirthdays(upcomingBirthdays)
+                }
+            }
+        }
     }
 
     private fun fetchMenuItems() = viewModelScope.launch {
@@ -92,5 +140,9 @@ class HomeViewModel(
 
     private fun showLoading() {
         homeEvents(HomeEvents.ShowLoading)
+    }
+
+    private fun getRecentBirthdays(birthdays: List<BirthdayModel>?) {
+        homeEvents(HomeEvents.GetRecentBirthdays(birthdays))
     }
 }

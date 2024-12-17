@@ -75,22 +75,21 @@ fun AgeResultDialog(
     }
     Dialog(onDismissRequest = { }) {
         Surface(
-            shape = RoundedCornerShape(16.sdp),
+            shape = RoundedCornerShape(18.sdp),
             color = colorResource(id = R.color.card_background),
         ) {
             Box(contentAlignment = Alignment.Center) {
                 Column(modifier = Modifier.padding(20.sdp)) {
                     Row(
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(top = 10.sdp),
+                            .fillMaxWidth(),
                         verticalAlignment = Alignment.CenterVertically,
                         horizontalArrangement = Arrangement.End
                     ) {
                         Image(
                             contentDescription = "Close",
                             modifier = Modifier
-                                .size(20.sdp)
+                                .size(18.sdp)
                                 .clickable {
                                     showDialog(false)
                                     onDismiss()
@@ -99,36 +98,35 @@ fun AgeResultDialog(
                         )
                     }
 
-                    Spacer(modifier = Modifier.height(20.sdp))
+                    Spacer(modifier = Modifier.height(10.sdp))
                     Text(
                         text = "Result",
                         fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
-                        color = colorResource(id = R.color.text_color),
-                        fontSize = 16.ssp,
-                        modifier = Modifier.fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(20.sdp))
-                    // Introductory Text
-                    Text(
-                        text = "Age of $name is:",
-                        fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
-                        color = colorResource(id = R.color.text_color),
-                        fontSize = 16.ssp,
-                        modifier = Modifier
-                            .fillMaxWidth(),
-                        textAlign = TextAlign.Center
-                    )
-                    Spacer(modifier = Modifier.height(20.sdp))
-                    Text(
-                        text = "$yearsCalculated years, $monthsCalculated months, $daysCalculated days",
-                        fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
                         color = colorResource(id = R.color.text_color),
                         fontSize = 14.ssp,
                         modifier = Modifier.fillMaxWidth(),
                         textAlign = TextAlign.Center
                     )
-                    Spacer(modifier = Modifier.height(20.sdp))
+                    Spacer(modifier = Modifier.height(10.sdp))
+                    // Introductory Text
+                    Text(
+                        text = "Age of $name is:",
+                        fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                        color = colorResource(id = R.color.text_color),
+                        fontSize = 12.ssp,
+                        modifier = Modifier
+                            .fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
+                    Spacer(modifier = Modifier.height(5.sdp))
+                    Text(
+                        text = "$yearsCalculated years, $monthsCalculated months, $daysCalculated days",
+                        fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                        color = colorResource(id = R.color.text_color),
+                        fontSize = 12.ssp,
+                        modifier = Modifier.fillMaxWidth(),
+                        textAlign = TextAlign.Center
+                    )
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
@@ -138,7 +136,7 @@ fun AgeResultDialog(
                     ) {
                         Image(
                             modifier = Modifier
-                                .size(25.sdp)
+                                .size(20.sdp)
                                 .clickable {
                                     context.copyText(
                                         "$yearsCalculated years, $monthsCalculated months, $daysCalculated days"
@@ -165,7 +163,7 @@ fun AgeResultDialog(
                                 Image(
                                     painter = painterResource(id = R.drawable.ic_play),
                                     contentDescription = null,
-                                    modifier = Modifier.size(23.sdp)
+                                    modifier = Modifier.size(20.sdp)
                                 )
                                 textToSpeech = TextToSpeech(context) { status ->
                                     if (status == TextToSpeech.SUCCESS) {
@@ -185,7 +183,7 @@ fun AgeResultDialog(
                         }
                         Image(
                             modifier = Modifier
-                                .size(25.sdp)
+                                .size(20.sdp)
                                 .clickable {
                                     context.share(
                                         "$yearsCalculated years, $monthsCalculated months, $daysCalculated days"

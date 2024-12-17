@@ -29,13 +29,13 @@ fun CalculatorWelcome(
     ) {
         Text(
             text = "Welcome to Age",
-            fontSize = 26.ssp,
+            fontSize = 20.ssp,
             color = colorResource(com.thezayin.values.R.color.text_color),
             fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_bold)),
         )
         Text(
             text = "Calculator.",
-            fontSize = 26.ssp,
+            fontSize = 22.ssp,
             color = colorResource(com.thezayin.values.R.color.primary),
             fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_bold)),
             modifier = Modifier.padding(bottom = 16.sdp)

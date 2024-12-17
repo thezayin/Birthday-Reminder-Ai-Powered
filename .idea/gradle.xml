@@ -30,6 +30,7 @@
             <option value="$PROJECT_DIR$/home/data" />
             <option value="$PROJECT_DIR$/home/domain" />
             <option value="$PROJECT_DIR$/home/presentation" />
+            <option value="$PROJECT_DIR$/saved-birthdays" />
             <option value="$PROJECT_DIR$/setting" />
             <option value="$PROJECT_DIR$/splash" />
           </set>

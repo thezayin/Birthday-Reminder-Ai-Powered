@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -31,6 +32,7 @@ import com.thezayin.model.isValidDayForMonth
 import com.thezayin.model.updateButtonState
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun BirthdayDetails(
@@ -92,11 +94,16 @@ fun BirthdayDetails(
                     isButtonEnabled = isButtonEnabled
                 )
             },
+            textStyle = TextStyle(
+                color = colorResource(R.color.text_color),
+                fontSize = 10.ssp,
+                fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+            ),
             placeholder = {
                 Text(
                     text = "Enter Name",
-                    color = colorResource(id = R.color.dusty_grey),
-                    fontSize = 12.sp,
+                    fontSize = 10.ssp,
+                    color = colorResource(R.color.text_color),
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                 )
             },
@@ -149,6 +156,11 @@ fun BirthdayDetails(
             // ***** Day TextField *****
             TextField(
                 value = day.value,
+                textStyle = TextStyle(
+                    fontSize = 10.ssp,
+                    color = colorResource(R.color.text_color),
+                    fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                ),
                 onValueChange = { newValue ->
                     day.value = newValue.copy(text = newValue.text.filter { it.isDigit() })
                     // Validate Day
@@ -196,8 +208,8 @@ fun BirthdayDetails(
                 placeholder = {
                     Text(
                         text = "DD",
-                        color = colorResource(id = R.color.dusty_grey),
-                        fontSize = 12.sp,
+                        fontSize = 10.ssp,
+                        color = colorResource(R.color.text_color),
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     )
                 },
@@ -220,6 +232,11 @@ fun BirthdayDetails(
             // ***** Month TextField *****
             TextField(
                 value = month.value,
+                textStyle = TextStyle(
+                    color = colorResource(R.color.text_color),
+                    fontSize = 10.ssp,
+                    fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                ),
                 onValueChange = { newValue ->
                     month.value = newValue.copy(text = newValue.text.filter { it.isDigit() })
                     // Validate Month
@@ -265,8 +282,8 @@ fun BirthdayDetails(
                 placeholder = {
                     Text(
                         text = "MM",
-                        color = colorResource(id = R.color.dusty_grey),
-                        fontSize = 12.sp,
+                        fontSize = 10.ssp,
+                        color = colorResource(R.color.text_color),
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     )
                 },
@@ -289,6 +306,11 @@ fun BirthdayDetails(
             // ***** Year TextField *****
             TextField(
                 value = year.value,
+                textStyle = TextStyle(
+                    color = colorResource(R.color.text_color),
+                    fontSize = 10.ssp,
+                    fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                ),
                 onValueChange = { newValue ->
                     year.value = newValue.copy(text = newValue.text.filter { it.isDigit() })
                     // Validate Year only if it's not empty
@@ -336,8 +358,8 @@ fun BirthdayDetails(
                 placeholder = {
                     Text(
                         text = "YYYY",
-                        color = colorResource(id = R.color.dusty_grey),
-                        fontSize = 12.sp,
+                        fontSize = 10.ssp,
+                        color = colorResource(R.color.text_color),
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     )
                 },

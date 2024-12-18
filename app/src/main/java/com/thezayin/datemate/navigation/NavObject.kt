@@ -28,3 +28,6 @@ object CalculatorScreenNav
 
 @Serializable
 object SavedBirthdayScreenNav
+
+@Serializable
+object GiftIdeasScreenNav

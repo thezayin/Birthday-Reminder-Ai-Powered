@@ -24,6 +24,7 @@ import androidx.compose.material3.RadioButtonDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -64,6 +65,7 @@ fun EditBirthdayDetailsBottomSheet(
 ) {
     val context = LocalContext.current
 
+    val state  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isEditMode by remember { mutableStateOf(false) }
     var isNameError by remember { mutableStateOf(false) }
     var nameErrorMessage by remember { mutableStateOf("") }
@@ -78,6 +80,7 @@ fun EditBirthdayDetailsBottomSheet(
     val isSaveEnabled by derivedStateOf { name.text.isNotBlank() && selectedDate.isNotBlank() }
 
     ModalBottomSheet(
+        sheetState = state,
         onDismissRequest = onDismiss,
         containerColor = colorResource(R.color.background),
         shape = RoundedCornerShape(topStart = 16.sdp, topEnd = 16.sdp)

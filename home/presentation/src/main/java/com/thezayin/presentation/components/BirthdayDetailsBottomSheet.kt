@@ -11,6 +11,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,7 +35,9 @@ fun BirthdayDetailsBottomSheet(
     birthday: BirthdayModel,
     onDismiss: () -> Unit
 ) {
+    val state  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
+        sheetState = state,
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(topStart = 16.sdp, topEnd = 16.sdp),
         containerColor = colorResource(R.color.card_background)

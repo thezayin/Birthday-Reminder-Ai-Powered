@@ -80,6 +80,7 @@ fun AddBirthdayScreenContent(
     onConfirmAddDuplicate: () -> Unit, // Action to add the duplicate birthday
     setAdded: () -> Unit,
 ) {
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ComposableLifecycle { _, event ->
         when (event) {
             Lifecycle.Event.ON_START -> {
@@ -188,7 +189,7 @@ fun AddBirthdayScreenContent(
                 shape = RoundedCornerShape(8.sdp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.primary),
-                    disabledContainerColor = colorResource(id = R.color.telenor_blue),
+                    disabledContainerColor = colorResource(id = R.color.greyish),
                 ),
             ) {
                 Text(
@@ -236,8 +237,8 @@ fun AddBirthdayScreenContent(
         // Bottom Sheet for More Settings
         if (showMoreSettings) {
             ModalBottomSheet(
+                sheetState = state,
                 containerColor = colorResource(id = R.color.card_background),
-                sheetState = rememberModalBottomSheetState(),
                 onDismissRequest = { showMoreSettings = false },
             ) {
                 MoreSettingsBottomSheet(

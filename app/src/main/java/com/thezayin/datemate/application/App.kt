@@ -2,12 +2,13 @@ package com.thezayin.datemate.application
 
 import android.app.Application
 import com.google.firebase.crashlytics.FirebaseCrashlytics
+import com.thezayin.add_birthday.di.addBirthdayModule
 import com.thezayin.ads.di.adModule
 import com.thezayin.analytics.di.analyticsModule
-import com.thezayin.add_birthday.di.addBirthdayModule
 import com.thezayin.framework.di.featureModule
 import com.thezayin.presentation.di.calculatorModule
 import com.thezayin.presentation.di.databaseModule
+import com.thezayin.presentation.di.giftIdeasModule
 import com.thezayin.presentation.di.homeModule
 import com.thezayin.saved_birthdays.di.savedBirthdayModule
 import com.thezayin.setting.di.settingModule
@@ -33,7 +34,8 @@ class App : Application() {
                 databaseModule,
                 calculatorModule,
                 addBirthdayModule,
-                savedBirthdayModule
+                savedBirthdayModule,
+                giftIdeasModule
             )
         }
         // Initialize Firebase Crashlytics

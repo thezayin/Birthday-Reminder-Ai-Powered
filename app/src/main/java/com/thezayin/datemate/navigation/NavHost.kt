@@ -6,6 +6,7 @@ import androidx.navigation.compose.composable
 import com.thezayin.add_birthday.AddBirthdayScreen
 import com.thezayin.presentation.CalcHistoryScreen
 import com.thezayin.presentation.CalculatorScreen
+import com.thezayin.presentation.GiftIdeasScreen
 import com.thezayin.presentation.HomeScreen
 import com.thezayin.saved_birthdays.SavedBirthdaysScreen
 import com.thezayin.setting.SettingScreen
@@ -28,7 +29,7 @@ fun NavHost(navController: NavHostController) {
         composable<HomeScreenNav> {
             HomeScreen(
                 onCalculatorClick = {
-                    navController.navigate(CalculatorScreenNav)
+                    navController.navigate(GiftIdeasScreenNav)
                 },
                 onSettingsClick = {
                     navController.navigate(SettingScreenNav)
@@ -68,6 +69,11 @@ fun NavHost(navController: NavHostController) {
         }
         composable<SavedBirthdayScreenNav> {
             SavedBirthdaysScreen(
+                navigateBack = { navController.navigateUp() }
+            )
+        }
+        composable<GiftIdeasScreenNav> {
+            GiftIdeasScreen(
                 navigateBack = { navController.navigateUp() }
             )
         }

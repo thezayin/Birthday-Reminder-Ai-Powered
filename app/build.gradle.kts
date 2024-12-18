@@ -65,6 +65,7 @@ dependencies {
     implementation(project(":core:values"))
     implementation(project(":core:framework"))
 
+    implementation(project(":gift-ideas:presentation"))
     implementation(project(":saved-birthdays"))
     implementation(project(":home:presentation"))
     implementation(project(":databases:presentation"))

@@ -26,6 +26,10 @@
             <option value="$PROJECT_DIR$/databases/data" />
             <option value="$PROJECT_DIR$/databases/domain" />
             <option value="$PROJECT_DIR$/databases/presentation" />
+            <option value="$PROJECT_DIR$/gift-ideas" />
+            <option value="$PROJECT_DIR$/gift-ideas/data" />
+            <option value="$PROJECT_DIR$/gift-ideas/domain" />
+            <option value="$PROJECT_DIR$/gift-ideas/presentation" />
             <option value="$PROJECT_DIR$/home" />
             <option value="$PROJECT_DIR$/home/data" />
             <option value="$PROJECT_DIR$/home/domain" />

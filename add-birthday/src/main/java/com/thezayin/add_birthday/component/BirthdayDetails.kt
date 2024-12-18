@@ -28,8 +28,8 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.thezayin.model.isValidDayForMonth
-import com.thezayin.model.updateButtonState
+import com.thezayin.add_birthday.model.isValidDayForMonth
+import com.thezayin.add_birthday.model.updateButtonState
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp

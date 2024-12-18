@@ -12,13 +12,15 @@ import timber.log.Timber
 
 private const val SERVER_LIST = "server_list"
 private const val AD_CONFIGS = "ad_configs"
+private const val AD_UNITS = "ad_units"
 
 class RemoteConfig(
     private val json: Json
 ) {
     private val default: Map<String, Any> = mapOf(
         SERVER_LIST to defaultServerUrl,
-        AD_CONFIGS to defaultAdConfigs
+        AD_CONFIGS to defaultAdConfigs,
+        AD_UNITS to defaultAdUnits
     )
 
     @SuppressLint("LogNotTimber")
@@ -32,12 +34,12 @@ class RemoteConfig(
         }
     }
 
-    val serverList: ServerUrl
+    val adUnits: AdUnits
         get() = try {
-            val serverListJson = config.getString(SERVER_LIST)
-            json.decodeFromString(ServerUrl.serializer(), serverListJson)
+            val adUnitsJson = config.getString(AD_UNITS)
+            json.decodeFromString(AdUnits.serializer(), adUnitsJson)
         } catch (e: Exception) {
-            json.decodeFromString(ServerUrl.serializer(), defaultServerUrl)  // Fallback to default
+            json.decodeFromString(AdUnits.serializer(), defaultAdUnits)  // Fallback to default
         }
 
     @OptIn(ExperimentalSerializationApi::class)

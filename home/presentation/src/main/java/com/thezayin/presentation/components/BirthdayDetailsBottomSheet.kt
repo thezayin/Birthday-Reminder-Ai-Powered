@@ -11,28 +11,23 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.Text
+import androidx.compose.material3.rememberModalBottomSheetState
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.presentation.utils.calculateDaysLeft
 import com.thezayin.presentation.utils.getFormattedBirthdayDate
 import com.thezayin.presentation.utils.getFormattedNotificationTime
-import com.thezayin.presentation.utils.getMonthName
 import com.thezayin.presentation.utils.getZodiacSign
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
-import java.time.Instant
-import java.time.ZoneId
-import java.time.format.DateTimeFormatter
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +35,9 @@ fun BirthdayDetailsBottomSheet(
     birthday: BirthdayModel,
     onDismiss: () -> Unit
 ) {
+    val state  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
+        sheetState = state,
         onDismissRequest = onDismiss,
         shape = RoundedCornerShape(topStart = 16.sdp, topEnd = 16.sdp),
         containerColor = colorResource(R.color.card_background)

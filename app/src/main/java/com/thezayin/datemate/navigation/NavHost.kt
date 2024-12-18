@@ -3,10 +3,12 @@ package com.thezayin.datemate.navigation
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
-import com.thezayin.AddBirthdayScreen
+import com.thezayin.add_birthday.AddBirthdayScreen
 import com.thezayin.presentation.CalcHistoryScreen
 import com.thezayin.presentation.CalculatorScreen
+import com.thezayin.presentation.GiftIdeasScreen
 import com.thezayin.presentation.HomeScreen
+import com.thezayin.saved_birthdays.SavedBirthdaysScreen
 import com.thezayin.setting.SettingScreen
 import com.thezayin.splash.SplashScreen
 
@@ -27,13 +29,16 @@ fun NavHost(navController: NavHostController) {
         composable<HomeScreenNav> {
             HomeScreen(
                 onCalculatorClick = {
-                    navController.navigate(CalculatorScreenNav)
+                    navController.navigate(GiftIdeasScreenNav)
                 },
                 onSettingsClick = {
                     navController.navigate(SettingScreenNav)
                 },
                 onAddBirthdayClick = {
                     navController.navigate(AddBirthdayScreenNav)
+                },
+                onSavedBirthdayClick = {
+                    navController.navigate(SavedBirthdayScreenNav)
                 }
             )
         }
@@ -59,6 +64,16 @@ fun NavHost(navController: NavHostController) {
 
         composable<AddBirthdayScreenNav> {
             AddBirthdayScreen(
+                navigateBack = { navController.navigateUp() }
+            )
+        }
+        composable<SavedBirthdayScreenNav> {
+            SavedBirthdaysScreen(
+                navigateBack = { navController.navigateUp() }
+            )
+        }
+        composable<GiftIdeasScreenNav> {
+            GiftIdeasScreen(
                 navigateBack = { navController.navigateUp() }
             )
         }

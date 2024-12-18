@@ -24,13 +24,15 @@ data class AdConfigs(
     @SerialName("nativeAdOnWebScreen") val nativeAdOnWebScreen: Boolean = true,
     @SerialName("nativeAdOnWebLoadingDialog") val nativeAdOnWebLoadingDialog: Boolean = true,
     @SerialName("nativeAdOnPremiumScreen") val nativeAdOnPremiumScreen: Boolean = true,
-    @SerialName("showServerList") val showServerList: Boolean = true
+    @SerialName("interstitialAdOnBack") val interstitialAdOnBack: Boolean = true,
+    @SerialName("rewardedAdOnGenerateIdea") val rewardedAdOnGenerateIdea: Boolean = true,
 )
 
 val defaultAdConfigs = """
    {
    "init_ads": true,
-   "showPremium": true,
+   "rewardedAdOnGenerateIdea": true,
+   "interstitialAdOnBack": true,
    "appOpenAd": true,
    "adOnSplashScreen": true,
    "adOnPremiumClick": true,
@@ -53,6 +55,6 @@ val defaultAdConfigs = """
    "nativeAdOnWebScreen": true,
    "nativeAdOnWebLoadingDialog": true,
    "nativeAdOnPremiumScreen": true,
-   "showServerList": true
+   "showServerList": true,
 }
 """.trimIndent()

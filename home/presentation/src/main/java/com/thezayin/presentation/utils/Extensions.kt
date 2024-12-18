@@ -22,6 +22,13 @@ fun calculateDaysLeft(birthday: BirthdayModel): Int {
     return ChronoUnit.DAYS.between(today, finalDate).toInt()
 }
 
+// Helper Function to Format Date
+fun getFormattedBirthdayDate(birthday: BirthdayModel): String {
+    val monthName = getMonthName(birthday.month)
+    val year = birthday.year ?: java.time.LocalDate.now().year
+    return "Friday, ${birthday.day} $monthName $year" // Adjust formatting dynamically if needed
+}
+
 fun getMonthName(month: Int): String {
     return when (month) {
         1 -> "January"
@@ -75,12 +82,6 @@ fun getMonthColor(month: String): Int {
         "December" -> R.color.gold_yellow
         else -> R.color.greyish // Default color
     }
-}
-// Helper Function to Format Date
-fun getFormattedBirthdayDate(birthday: BirthdayModel): String {
-    val monthName = getMonthName(birthday.month)
-    val year = birthday.year ?: java.time.LocalDate.now().year
-    return "Friday, ${birthday.day} $monthName $year" // Adjust formatting dynamically if needed
 }
 
 // Helper Function to Format Notification Time

@@ -53,7 +53,6 @@ fun AddBirthdayScreen(
     LaunchedEffect(uiState.error) {
         if (uiState.error != null) {
             showErrorDialog = true
-            Log.e("AddBirthdayScreen", "UI Error: ${uiState.error}")
         }
     }
 
@@ -100,8 +99,6 @@ fun AddBirthdayScreen(
             val groupStr = selectedGroup.value
             val periodStr = notifyPeriod.value
 
-            Log.d("AddBirthdayScreen", "Add Button Clicked with: Name=$nameStr, Day=$dayInt, Month=$monthInt, Year=${year.value.text}, NotifyAt=${notificationDate.day.value.text}/${notificationDate.month.value.text}/${notificationDate.year.value.text} $periodStr")
-
             // Comprehensive validation
             if (nameStr.isNotEmpty() &&
                 dayInt != null && dayInt in 1..31 &&
@@ -113,14 +110,12 @@ fun AddBirthdayScreen(
             ) {
                 // Additional date validation
                 val nextBirthday = calculateNextBirthday(dayInt, monthInt, year = year.value.text.toIntOrNull())
-                Log.d("AddBirthdayScreen", "Calculated Next Birthday: ${nextBirthday.get(Calendar.DAY_OF_MONTH)}/${nextBirthday.get(Calendar.MONTH) + 1}/${nextBirthday.get(Calendar.YEAR)}")
                 val notifyAt = calculateNotifyAt(
                     notificationDate = notificationDate,
                     hour = hourInt,
                     minute = minuteInt,
                     period = periodStr
                 )
-                Log.d("AddBirthdayScreen", "Calculated notifyAt: $notifyAt")
 
                 val birthday = BirthdayModel(
                     name = nameStr,
@@ -134,7 +129,6 @@ fun AddBirthdayScreen(
             } else {
                 // Show validation error
                 showErrorDialog = true
-                Log.e("AddBirthdayScreen", "Validation Failed")
             }
         }
     )

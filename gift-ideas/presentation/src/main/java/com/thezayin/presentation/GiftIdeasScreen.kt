@@ -11,13 +11,12 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import androidx.lifecycle.viewModelScope
 import com.thezayin.components.AdLoadingDialog
-import com.thezayin.framework.ads.interstitialAd
-import com.thezayin.framework.ads.rewardedAd
-import com.thezayin.framework.extension.functions.copyText
-import com.thezayin.framework.extension.functions.share
-import com.thezayin.framework.extension.functions.textToSpeech
+import com.thezayin.framework.ads.functions.interstitialAd
+import com.thezayin.framework.ads.functions.rewardedAd
+import com.thezayin.framework.extension.copyText
+import com.thezayin.framework.extension.share
+import com.thezayin.framework.extension.textToSpeech
 import com.thezayin.presentation.component.GiftIdeasScreenContent
 import org.koin.compose.koinInject
 import java.util.Locale
@@ -59,9 +58,6 @@ fun GiftIdeasScreen(
     }
 
     GiftIdeasScreenContent(
-        isLoading = uiState.isLoading,
-        nativeAd = remember { viewModel.nativeAd }.value,
-        coroutineScope = viewModel.viewModelScope,
         showError = uiState.isError,
         error = uiState.errorMessage,
         navigateBack = {
@@ -73,14 +69,11 @@ fun GiftIdeasScreen(
                 callback = { navigateBack() }
             )
         },
-        showLoadingAd = viewModel.remoteConfig.adConfigs.nativeAdOnResultLoadingDialog,
         isWriting = uiState.isWriting,
         writingProgress = uiState.writingProgress,
         isWritingCompleted = uiState.isWritingCompleted,
         giftIdeas = uiState.giftIdeas,
         thoughtDuration = thoughtDuration, // Pass the duration
-        fetchNativeAd = { viewModel.getNativeAd() },
-        dismissErrorDialog = { viewModel.isError(error = false) },
         onGenerateClick = { interests, dislikes, relationship, budget ->
             activity.rewardedAd(
                 showAd = viewModel.remoteConfig.adConfigs.rewardedAdOnGenerateIdea,

@@ -24,7 +24,6 @@ import ir.kaaveh.sdpcompose.ssp
 fun CalculatorButton(
     modifier: Modifier,
     isButtonEnable: Boolean,
-    calculation: () -> Unit,
     onClick: () -> Unit
 ) {
     Row(
@@ -42,11 +41,10 @@ fun CalculatorButton(
             shape = RoundedCornerShape(8.sdp),
             colors = ButtonDefaults.buttonColors(
                 containerColor = colorResource(id = R.color.primary),
-                disabledContainerColor = colorResource(id = R.color.telenor_blue),
+                disabledContainerColor = colorResource(id = R.color.greyish),
             ),
             onClick = onClick
         ) {
-            calculation()
             Text(
                 text = "Calculate",
                 fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
@@ -64,6 +62,5 @@ fun CalculatorButtonPreview() {
         modifier = Modifier,
         onClick = {},
         isButtonEnable = false,
-        calculation = {}
     )
 }

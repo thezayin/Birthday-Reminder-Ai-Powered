@@ -1,46 +1,52 @@
 package com.thezayin.presentation
 
+import android.app.Activity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.ui.platform.LocalContext
+import com.thezayin.components.AdLoadingDialog
+import com.thezayin.framework.ads.functions.interstitialAd
+import com.thezayin.framework.ads.functions.rewardedAd
 import com.thezayin.presentation.component.CalcHistoryScreenContent
 import org.koin.compose.koinInject
 
 @Composable
 fun CalcHistoryScreen(
-    onBackClick: () -> Unit = {},
-    premiumCallback: () -> Unit = {}
+    navigateBack: () -> Unit = {},
 ) {
     val viewModel: DatabaseViewModel = koinInject()
     val state = viewModel.calHistoryState.collectAsState().value
-    val coroutineScope = rememberCoroutineScope()
-    val nativeAd = remember { viewModel.nativeAd }
-    val googleManager = viewModel.googleManager
-    val remoteConfig = viewModel.remoteConfig.adConfigs
+    val showLoadingAd = remember { mutableStateOf(false) }
+    val activity = LocalContext.current as Activity
 
-    val isLoading = state.isLoading
-    val showError = state.isError
-    val showBottomAd = remoteConfig.nativeAdOnHomeScreen
-    val showLoadingAd = remoteConfig.nativeAdOnResultLoadingDialog
-    val noResultFound = state.historyListEmpty
-    val list = state.historyList
-
+    if (showLoadingAd.value) {
+        AdLoadingDialog()
+    }
     CalcHistoryScreenContent(
-        isLoading = isLoading,
-        showError = showError,
-        nativeAd = nativeAd.value,
-        showBottomAd = showBottomAd,
-        showLoadingAd = showLoadingAd,
-        list = list,
-        noResultFound = noResultFound,
-        coroutineScope = coroutineScope,
-        onBackClick = onBackClick,
-        premiumCallback = premiumCallback,
-        fetchNativeAd = {},
-        dismissErrorDialog = {},
+        isLoading = state.isLoading,
+        list = state.historyList,
+        noResultFound = state.historyListEmpty,
+        onBackClick = {
+            activity.interstitialAd(
+                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnBack,
+                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnBack,
+                showLoading = { showLoadingAd.value = true },
+                hideLoading = { showLoadingAd.value = false },
+                callback = { navigateBack() }
+            )
+        },
         onDeleteClick = {
-            viewModel.clearHistory()
+            activity.rewardedAd(
+                showAd = viewModel.remoteConfig.adConfigs.rewardedAdOnDelete,
+                adUnitId = viewModel.remoteConfig.adUnits.rewardedAdOnDelete,
+                showLoading = { showLoadingAd.value = true },
+                hideLoading = { showLoadingAd.value = false },
+                callback = {
+                    viewModel.clearHistory()
+                }
+            )
         }
     )
 }

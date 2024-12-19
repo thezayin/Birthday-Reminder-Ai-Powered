@@ -3,9 +3,9 @@ package com.thezayin.datemate.application
 import android.app.Application
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.thezayin.add_birthday.di.addBirthdayModule
-import com.thezayin.ads.di.adModule
-import com.thezayin.analytics.di.analyticsModule
+import com.thezayin.di.analyticsModule
 import com.thezayin.framework.di.featureModule
+import com.thezayin.framework.notification.NotificationUtil
 import com.thezayin.presentation.di.calculatorModule
 import com.thezayin.presentation.di.databaseModule
 import com.thezayin.presentation.di.giftIdeasModule
@@ -21,16 +21,16 @@ import org.koin.core.logger.Level
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
+        NotificationUtil.createNotificationChannel(this)
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)
             modules(
                 homeModule,
-                adModule,
                 featureModule,
                 splashModule,
                 settingModule,
-                analyticsModule,
+                com.thezayin.di.analyticsModule,
                 databaseModule,
                 calculatorModule,
                 addBirthdayModule,

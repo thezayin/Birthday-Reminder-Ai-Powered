@@ -14,5 +14,12 @@ class InsertCalcHistoryImpl(private val repository: CalcDBRepository) : InsertCa
         months: String,
         days: String
     ): Flow<Response<Boolean>> =
-        repository.insertCalHistory(AgeCalModel(name = name, years = years, months = months, days = days))
+        repository.insertCalHistory(
+            AgeCalModel(
+                name = name,
+                years = years,
+                months = months,
+                days = days
+            )
+        )
 }

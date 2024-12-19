@@ -11,7 +11,6 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.offset
@@ -39,7 +38,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.zIndex
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.saved_birthdays.components.DayBadge
@@ -54,9 +52,7 @@ import kotlin.math.roundToInt
 
 @Composable
 fun SwipeToDeleteCard(
-    birthday: BirthdayModel,
-    onDelete: () -> Unit,
-    onClick: () -> Unit
+    birthday: BirthdayModel, onDelete: () -> Unit, onClick: () -> Unit
 ) {
     val swipeThreshold = 0.75f // 75% of card width for delete
     val coroutineScope = rememberCoroutineScope()
@@ -68,76 +64,66 @@ fun SwipeToDeleteCard(
     // **Text Shaking Animation**
     val shakeAnimation = rememberInfiniteTransition()
     val shakeOffset by shakeAnimation.animateFloat(
-        initialValue = -5f,
-        targetValue = 5f,
-        animationSpec = infiniteRepeatable(
-            animation = tween(800, easing = LinearEasing),
-            repeatMode = RepeatMode.Reverse
+        initialValue = -5f, targetValue = 5f, animationSpec = infiniteRepeatable(
+            animation = tween(800, easing = LinearEasing), repeatMode = RepeatMode.Reverse
         )
     )
 
-    Box(
-        modifier = Modifier
-            .fillMaxWidth()
-            .padding(vertical = 8.dp)
-            .clip(RoundedCornerShape(8.dp))
-            .onGloballyPositioned { coordinates ->
-                cardWidth = coordinates.size.width
-            }  .clickable { onClick() }
-    ) {
+    Box(modifier = Modifier
+        .fillMaxWidth()
+        .padding(vertical = 5.sdp)
+        .clip(RoundedCornerShape(10.sdp))
+        .onGloballyPositioned { coordinates ->
+            cardWidth = coordinates.size.width
+        }
+        .clickable { onClick() }) {
         // Background with swipe text
         Box(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(100.dp)
-                .clip(RoundedCornerShape(8.dp))
-                .background(Color.Red),
-            contentAlignment = Alignment.CenterEnd
+                .height(75.sdp)
+                .clip(RoundedCornerShape(8.sdp))
+                .background(Color.Red), contentAlignment = Alignment.CenterEnd
         ) {
             Text(
                 text = "<-- Swipe left to delete",
                 color = Color.White,
-                fontSize = 14.sp,
+                fontSize = 9.ssp,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier
-                    .padding(end = 16.dp)
+                    .padding(end = 16.sdp)
                     .offset(x = shakeOffset.dp) // Apply smooth shaking animation
             )
         }
 
         // Foreground card (swipeable)
-        Card(
-            colors = CardDefaults.cardColors(containerColor = colorResource(R.color.card_background)),
+        Card(colors = CardDefaults.cardColors(containerColor = colorResource(R.color.card_background)),
             modifier = Modifier
                 .offset { IntOffset(offsetX.roundToInt(), 0) }
-                .clip(RoundedCornerShape(8.dp))
-                .height(100.dp)
+                .clip(RoundedCornerShape(10.sdp))
+                .height(75.sdp)
                 .fillMaxWidth()
                 .pointerInput(Unit) {
-                    detectHorizontalDragGestures(
-                        onHorizontalDrag = { _, dragAmount ->
-                            val newOffset = offsetX + dragAmount
-                            offsetX = newOffset.coerceIn(-cardWidth.toFloat(), 0f)
-                        },
-                        onDragEnd = {
-                            coroutineScope.launch {
-                                if (offsetX <= -cardWidth * swipeThreshold) {
-                                    // Trigger delete
-                                    onDelete()
-                                } else {
-                                    // Snap back to position
-                                    offsetX = 0f
-                                }
+                    detectHorizontalDragGestures(onHorizontalDrag = { _, dragAmount ->
+                        val newOffset = offsetX + dragAmount
+                        offsetX = newOffset.coerceIn(-cardWidth.toFloat(), 0f)
+                    }, onDragEnd = {
+                        coroutineScope.launch {
+                            if (offsetX <= -cardWidth * swipeThreshold) {
+                                // Trigger delete
+                                onDelete()
+                            } else {
+                                // Snap back to position
+                                offsetX = 0f
                             }
                         }
-                    )
+                    })
                 }
                 .zIndex(1f), // Ensure card stays above the background
-            shape = RoundedCornerShape(8.dp)
-        ) {
+            shape = RoundedCornerShape(10.sdp)) {
             Row(
                 modifier = Modifier
-                    .padding(horizontal = 20.sdp, vertical = 10.sdp)
+                    .padding(horizontal = 20.sdp, vertical = 8.sdp)
                     .fillMaxWidth(),
                 verticalAlignment = Alignment.CenterVertically,
                 horizontalArrangement = Arrangement.SpaceBetween
@@ -149,7 +135,6 @@ fun SwipeToDeleteCard(
                         color = colorResource(R.color.text_color),
                         fontSize = 10.ssp
                     )
-                    Spacer(modifier = Modifier.height(4.dp))
                     Text(
                         text = "${birthday.day} ${getMonthName(birthday.month)} ${birthday.year ?: ""}",
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),

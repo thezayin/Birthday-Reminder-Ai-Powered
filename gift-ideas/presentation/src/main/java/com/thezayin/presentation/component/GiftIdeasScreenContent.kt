@@ -24,31 +24,17 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
-import androidx.lifecycle.Lifecycle
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.components.ErrorQueryDialog
 import com.thezayin.domain.model.GiftRecommendationModel
-import com.thezayin.framework.lifecycles.ComposableLifecycle
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.isActive
-import kotlinx.coroutines.launch
 
 @Composable
 fun GiftIdeasScreenContent(
     onGenerateClick: (String, String, String, String) -> Unit,
-    coroutineScope: CoroutineScope,
     showError: Boolean,
     error: String,
-    nativeAd: NativeAd?,
-    dismissErrorDialog: () -> Unit,
     navigateBack: () -> Unit,
-    fetchNativeAd: () -> Unit,
-    showLoadingAd: Boolean,
-    isLoading: Boolean,
     thoughtDuration: Int, // New parameter for duration
     isWriting: Boolean, // New parameter
     writingProgress: String, // New parameter
@@ -70,27 +56,12 @@ fun GiftIdeasScreenContent(
             relationship.isNotBlank() &&
             budget.isNotBlank()
 
-    ComposableLifecycle { _, event ->
-        when (event) {
-            Lifecycle.Event.ON_START -> {
-                coroutineScope.launch {
-                    while (isActive) {
-                        fetchNativeAd()
-                        delay(20000L) // Fetch a new ad every 20 seconds
-                    }
-                }
-            }
-
-            else -> Unit // No action needed for other lifecycle events
-        }
-    }
     Scaffold(
         modifier = Modifier
             .statusBarsPadding()
             .navigationBarsPadding(),
         containerColor = colorResource(id = R.color.background),
         topBar = {
-
             Row(
                 modifier = Modifier
                     .fillMaxWidth()
@@ -127,8 +98,8 @@ fun GiftIdeasScreenContent(
             if (isWriting) {
                 // Show Whiteboard with animated progress messages and gift ideas
                 WhiteboardScreen(
-                    isError= showError,
-                    errorMessage=error,
+                    isError = showError,
+                    errorMessage = error,
                     writingProgress = writingProgress,
                     isWritingCompleted = isWritingCompleted,
                     giftIdeas = giftIdeas,

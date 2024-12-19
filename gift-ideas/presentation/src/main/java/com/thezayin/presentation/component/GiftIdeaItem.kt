@@ -55,7 +55,8 @@ fun GiftIdeaItem(
         // Action Buttons Row
         Row(
             modifier = Modifier
-                .fillMaxWidth().padding(end = 20.sdp),
+                .fillMaxWidth()
+                .padding(end = 20.sdp),
             horizontalArrangement = Arrangement.End,
             verticalAlignment = Alignment.CenterVertically
         ) {

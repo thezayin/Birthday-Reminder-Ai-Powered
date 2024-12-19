@@ -33,8 +33,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ads"))
-    implementation(project(":analytics"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":core:values"))
     implementation(project(":core:framework"))

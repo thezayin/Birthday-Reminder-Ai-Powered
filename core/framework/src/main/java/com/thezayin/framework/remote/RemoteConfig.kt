@@ -10,7 +10,6 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 
-private const val SERVER_LIST = "server_list"
 private const val AD_CONFIGS = "ad_configs"
 private const val AD_UNITS = "ad_units"
 
@@ -18,7 +17,6 @@ class RemoteConfig(
     private val json: Json
 ) {
     private val default: Map<String, Any> = mapOf(
-        SERVER_LIST to defaultServerUrl,
         AD_CONFIGS to defaultAdConfigs,
         AD_UNITS to defaultAdUnits
     )

@@ -11,14 +11,13 @@
           <set>
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/add-birthday" />
-            <option value="$PROJECT_DIR$/ads" />
-            <option value="$PROJECT_DIR$/analytics" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/calculator" />
             <option value="$PROJECT_DIR$/calculator/data" />
             <option value="$PROJECT_DIR$/calculator/domain" />
             <option value="$PROJECT_DIR$/calculator/presentation" />
             <option value="$PROJECT_DIR$/core" />
+            <option value="$PROJECT_DIR$/core/analytics" />
             <option value="$PROJECT_DIR$/core/components" />
             <option value="$PROJECT_DIR$/core/framework" />
             <option value="$PROJECT_DIR$/core/values" />

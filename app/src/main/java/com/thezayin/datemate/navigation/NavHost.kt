@@ -29,7 +29,7 @@ fun NavHost(navController: NavHostController) {
         composable<HomeScreenNav> {
             HomeScreen(
                 onCalculatorClick = {
-                    navController.navigate(GiftIdeasScreenNav)
+                    navController.navigate(CalculatorScreenNav)
                 },
                 onSettingsClick = {
                     navController.navigate(SettingScreenNav)
@@ -39,13 +39,16 @@ fun NavHost(navController: NavHostController) {
                 },
                 onSavedBirthdayClick = {
                     navController.navigate(SavedBirthdayScreenNav)
+                },
+                onGiftIdeasClick = {
+                    navController.navigate(GiftIdeasScreenNav)
                 }
             )
         }
 
         composable<CalHistoryScreenNav> {
             CalcHistoryScreen(
-                onBackClick = { navController.navigateUp() }
+                navigateBack = { navController.navigateUp() }
             )
         }
 

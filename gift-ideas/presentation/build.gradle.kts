@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.presentation"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdkVersion.get().toInt()
@@ -37,8 +37,7 @@ android {
 
 dependencies {
 
-    implementation(project(":ads"))
-    implementation(project(":analytics"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":core:values"))
     implementation(project(":core:framework"))

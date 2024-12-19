@@ -23,8 +23,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.thezayin.framework.extension.functions.openLink
-import com.thezayin.framework.extension.functions.sendMail
+import com.thezayin.framework.extension.openLink
+import com.thezayin.framework.extension.sendMail
 import com.thezayin.framework.utils.Constants.PRIVATE_POLICY_URL
 import com.thezayin.framework.utils.Constants.TERMS_CONDITIONS_URL
 import com.thezayin.values.R

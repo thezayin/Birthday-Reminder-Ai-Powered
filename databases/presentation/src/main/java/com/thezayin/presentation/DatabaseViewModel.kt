@@ -1,43 +1,27 @@
 package com.thezayin.presentation
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.ads.GoogleManager
-import com.thezayin.analytics.analytics.Analytics
 import com.thezayin.domain.model.AgeCalModel
 import com.thezayin.domain.usecase.ClearCalcHistory
 import com.thezayin.domain.usecase.GetCalHistory
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.events.CalHistoryEvents
-import com.thezayin.presentation.state.HistoryState
-import kotlinx.coroutines.delay
+import com.thezayin.presentation.state.CalHistoryState
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class DatabaseViewModel(
-    val googleManager: GoogleManager,
-    val analytics: Analytics,
     val remoteConfig: RemoteConfig,
     val getCalHistory: GetCalHistory,
     val clearCalcHistory: ClearCalcHistory
 ) : ViewModel() {
-    private val _calHistoryState = MutableStateFlow(HistoryState.CalHistoryState())
+    private val _calHistoryState = MutableStateFlow(CalHistoryState())
     val calHistoryState = _calHistoryState.asStateFlow()
-
-    var nativeAd = mutableStateOf<NativeAd?>(null)
-        private set
-
-    fun getNativeAd() = viewModelScope.launch {
-        nativeAd.value = googleManager.createNativeAd().apply {} ?: run {
-            delay(3000)
-            googleManager.createNativeAd()
-        }
-    }
 
     private fun calHistoryEvents(event: CalHistoryEvents) {
         when (event) {
@@ -68,7 +52,6 @@ class DatabaseViewModel(
                     Response.Loading -> showLoading()
                     is Response.Success -> {
                         historyListEmpty(true)
-                        delay(5000L)
                         hideLoading()
                     }
                 }
@@ -76,9 +59,14 @@ class DatabaseViewModel(
         }
     }
 
-    private fun fetchHistory() =
-        viewModelScope.launch {
-            getCalHistory().collect { response ->
+    private fun fetchHistory() = viewModelScope.launch {
+        getCalHistory()
+            .catch { e ->
+                errorMessage(e.localizedMessage ?: "An error occurred while fetching history")
+                showError()
+                hideLoading()
+            }
+            .collect { response ->
                 when (response) {
                     is Response.Error -> {
                         errorMessage(response.e)
@@ -93,15 +81,10 @@ class DatabaseViewModel(
                         } else {
                             historyList(response.data)
                         }
-                        delay(5000L)
                         hideLoading()
                     }
                 }
             }
-        }
-
-    fun hideErrorDialog() {
-        calHistoryEvents(CalHistoryEvents.HideErrorDialog)
     }
 
     private fun hideLoading() {

@@ -301,7 +301,6 @@ fun MoreSettingsBottomSheet(
         // Handle DatePickerDialog
         if (showDatePicker) {
             LaunchedEffect(Unit) {
-                Log.d("MoreSettingsBottomSheet", "Showing DatePickerDialog")
                 DatePickerDialog(
                     context,
                     { _, selectedYear, selectedMonth, selectedDay ->
@@ -309,10 +308,6 @@ fun MoreSettingsBottomSheet(
                         notifyMonth.value = TextFieldValue((selectedMonth + 1).toString())
                         notifyYear.value = TextFieldValue(selectedYear.toString())
                         showDatePicker = false
-                        Log.d(
-                            "MoreSettingsBottomSheet",
-                            "Date Selected: $selectedDay/${selectedMonth + 1}/$selectedYear"
-                        )
                     },
                     notifyYear.value.text.toIntOrNull() ?: nextBirthday.get(Calendar.YEAR),
                     (notifyMonth.value.text.toIntOrNull()?.minus(1))

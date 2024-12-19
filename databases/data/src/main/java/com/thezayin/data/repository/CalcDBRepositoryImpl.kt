@@ -5,17 +5,16 @@ import com.thezayin.domain.model.AgeCalModel
 import com.thezayin.domain.repository.CalcDBRepository
 import com.thezayin.framework.utils.Response
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 
 class CalcDBRepositoryImpl(private val dao: CalDao) : CalcDBRepository {
     override fun getAllCalHistory(): Flow<Response<List<AgeCalModel>>> = flow {
-        try {
-            emit(Response.Loading)
-            val history = dao.getAllCalHistory()
-            emit(Response.Success(history))
-        } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
-        }
+        emit(Response.Loading)
+        val history = dao.getAllCalHistory()
+        emit(Response.Success(history))
+    }.catch { e ->
+        emit(Response.Error(e.localizedMessage ?: "An error occurred while fetching history"))
     }
 
     override fun insertCalHistory(ageCalModel: AgeCalModel): Flow<Response<Boolean>> = flow {

@@ -1,10 +1,7 @@
 package com.thezayin.saved_birthdays
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.ads.GoogleManager
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.usecase.DeleteBirthdayUseCase
 import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
@@ -13,7 +10,6 @@ import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.saved_birthdays.events.SavedBirthdayUiEvent
 import com.thezayin.saved_birthdays.state.SavedBirthdayUiState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -24,20 +20,10 @@ class SavedBirthdaysViewModel(
     private val getAllBirthdaysUseCase: GetAllBirthdaysUseCase,
     private val deleteBirthdayUseCase: DeleteBirthdayUseCase,
     private val updateBirthdayUseCase: UpdateBirthdayUseCase,
-    private val googleManager: GoogleManager,
     val remoteConfig: RemoteConfig,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SavedBirthdayUiState())
     val uiState: StateFlow<SavedBirthdayUiState> = _uiState.asStateFlow()
-    var nativeAd = mutableStateOf<NativeAd?>(null)
-        private set
-
-    fun getNativeAd() = viewModelScope.launch {
-        nativeAd.value = googleManager.createNativeAd().apply {} ?: run {
-            delay(3000)
-            googleManager.createNativeAd()
-        }
-    }
 
     init {
         fetchAllBirthdays()
@@ -155,7 +141,7 @@ class SavedBirthdaysViewModel(
         handleEvent(SavedBirthdayUiEvent.BirthdayList(birthdays))
     }
 
-    fun setFilterList(filterList: List<BirthdayModel>) {
+    private fun setFilterList(filterList: List<BirthdayModel>) {
         handleEvent(SavedBirthdayUiEvent.FilterBirthdays(filterList))
     }
 }

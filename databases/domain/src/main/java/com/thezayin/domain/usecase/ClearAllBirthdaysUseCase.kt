@@ -6,7 +6,8 @@ import kotlinx.coroutines.flow.Flow
 
 interface ClearAllBirthdaysUseCase : suspend () -> Flow<Response<Unit>>
 
-class ClearAllBirthdaysUseCaseImpl(private val repository: BirthdayRepository) : ClearAllBirthdaysUseCase {
+class ClearAllBirthdaysUseCaseImpl(private val repository: BirthdayRepository) :
+    ClearAllBirthdaysUseCase {
     override suspend fun invoke(): Flow<Response<Unit>> =
         repository.clearAllBirthdays()
 }

@@ -79,12 +79,12 @@ fun CalcInputs(
     Column(
         modifier = modifier
             .fillMaxWidth()
-            .padding(top = 40.sdp)
+            .padding(top = 30.sdp)
             .padding(horizontal = 15.sdp)
     ) {
         Text(
             text = "Enter your birth date and the current date to calculate your age.",
-            fontSize = 12.ssp,
+            fontSize = 10.ssp,
             color = colorResource(R.color.text_color),
             fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
             modifier = Modifier.padding(bottom = 16.sdp)
@@ -159,7 +159,7 @@ fun CalcInputs(
         Spacer(
             modifier = Modifier
                 .fillMaxWidth()
-                .height(20.sdp)
+                .height(16.sdp)
         )
 
         TextField(

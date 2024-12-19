@@ -13,7 +13,9 @@ fun CalHistoryList(
     list: List<AgeCalModel>,
 ) {
     LazyColumn(
-        modifier = Modifier.padding(top = 30.sdp).fillMaxSize(),
+        modifier = Modifier
+            .padding(top = 14.sdp)
+            .fillMaxSize(),
 
         ) {
         items(list.size) { item ->

@@ -35,7 +35,7 @@ fun BirthdayDetailsBottomSheet(
     birthday: BirthdayModel,
     onDismiss: () -> Unit
 ) {
-    val state  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     ModalBottomSheet(
         sheetState = state,
         onDismissRequest = onDismiss,

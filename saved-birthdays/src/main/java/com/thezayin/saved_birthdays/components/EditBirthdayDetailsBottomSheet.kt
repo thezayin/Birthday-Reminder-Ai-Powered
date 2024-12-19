@@ -17,7 +17,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ModalBottomSheet
 import androidx.compose.material3.RadioButton
 import androidx.compose.material3.RadioButtonDefaults
@@ -65,7 +64,7 @@ fun EditBirthdayDetailsBottomSheet(
 ) {
     val context = LocalContext.current
 
-    val state  = rememberModalBottomSheetState(skipPartiallyExpanded = true)
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     var isEditMode by remember { mutableStateOf(false) }
     var isNameError by remember { mutableStateOf(false) }
     var nameErrorMessage by remember { mutableStateOf("") }
@@ -111,7 +110,7 @@ fun EditBirthdayDetailsBottomSheet(
                             contentDescription = "Edit",
                             tint = colorResource(R.color.icon_color),
                             modifier = Modifier
-                                .size(18.sdp)
+                                .size(16.sdp)
                                 .clickable { isEditMode = true }
                         )
                         Spacer(modifier = Modifier.width(12.sdp))
@@ -120,7 +119,7 @@ fun EditBirthdayDetailsBottomSheet(
                             contentDescription = "Delete",
                             tint = Color.Red,
                             modifier = Modifier
-                                .size(18.sdp)
+                                .size(16.sdp)
                                 .clickable { onDelete() }
                         )
                     }
@@ -138,14 +137,15 @@ fun EditBirthdayDetailsBottomSheet(
                     Image(
                         painter = painterResource(R.drawable.ic_cake),
                         contentDescription = "Birthday Icon",
-                        modifier = Modifier.size(50.sdp)
+                        modifier = Modifier.size(35.sdp)
                     )
-                    Spacer(modifier = Modifier.height(12.sdp))
+                    Spacer(modifier = Modifier.height(5.sdp))
 
                     Text(
                         text = birthday.name,
                         color = colorResource(R.color.text_color),
-                        style = MaterialTheme.typography.titleLarge
+                        fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                        fontSize = 16.ssp
                     )
                     Spacer(modifier = Modifier.height(8.sdp))
 
@@ -210,7 +210,6 @@ fun EditBirthdayDetailsBottomSheet(
                 // Edit Mode Content
                 Column(horizontalAlignment = Alignment.Start) {
                     Spacer(modifier = Modifier.height(16.sdp))
-
                     TextField(
                         value = name,
                         onValueChange = {
@@ -227,7 +226,7 @@ fun EditBirthdayDetailsBottomSheet(
                         label = {
                             Text(
                                 "Name",
-                                fontSize = 10.ssp,
+                                fontSize = 8.ssp,
                                 color = colorResource(R.color.text_color),
                                 fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                             )
@@ -236,8 +235,7 @@ fun EditBirthdayDetailsBottomSheet(
                         singleLine = true,
                         shape = RoundedCornerShape(8.sdp),
                         modifier = Modifier
-                            .fillMaxWidth()
-                            .padding(end = 8.sdp),
+                            .fillMaxWidth(),
                         colors = TextFieldDefaults.colors(
                             focusedContainerColor = colorResource(id = R.color.txt_field),
                             unfocusedContainerColor = colorResource(id = R.color.txt_field),

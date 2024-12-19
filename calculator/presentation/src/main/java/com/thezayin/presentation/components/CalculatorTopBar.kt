@@ -26,7 +26,7 @@ fun CalculatorTopBar(
     Box(
         modifier = Modifier
             .padding(horizontal = 15.sdp)
-            .padding(top = 40.sdp)
+            .padding(top = 25.sdp)
             .fillMaxWidth()
     ) {
         Row(
@@ -39,7 +39,7 @@ fun CalculatorTopBar(
                 painter = painterResource(id = R.drawable.ic_back),
                 contentDescription = "Settings",
                 modifier = Modifier
-                    .size(20.sdp)
+                    .size(18.sdp)
                     .clickable { onBackClick() }
             )
 

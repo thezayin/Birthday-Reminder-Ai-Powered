@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.data"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdkVersion.get().toInt()
@@ -36,7 +36,7 @@ android {
 }
 
 dependencies {
-
+    implementation(project(":core:values"))
     implementation(project(":core:framework"))
     implementation(project(":databases:domain"))
 

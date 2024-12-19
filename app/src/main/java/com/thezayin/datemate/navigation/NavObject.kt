@@ -9,12 +9,6 @@ object SplashScreenNav
 object HomeScreenNav
 
 @Serializable
-data class ResultScreenNav(val number: String)
-
-@Serializable
-object ServerScreenNav
-
-@Serializable
 object CalHistoryScreenNav
 
 @Serializable

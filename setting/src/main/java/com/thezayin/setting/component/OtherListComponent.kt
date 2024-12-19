@@ -23,7 +23,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.thezayin.framework.extension.functions.openLink
+import com.thezayin.framework.extension.openLink
 import com.thezayin.framework.utils.Constants.ABOUT_US_URL
 import com.thezayin.values.R
 

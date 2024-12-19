@@ -28,7 +28,7 @@ fun BirthdayListWithSwipe(
             item {
                 Text(
                     text = group, // Month or Group name
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     color = colorResource(getMonthColor(group)), // Pass group to getMonthColor
                     fontFamily = FontFamily(Font(com.thezayin.values.R.font.noto_sans_bold)),
                     modifier = Modifier.padding(vertical = 8.sdp)

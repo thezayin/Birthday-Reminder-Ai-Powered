@@ -1,5 +1,6 @@
 package com.thezayin.add_birthday.component
 
+import android.app.Activity
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -20,6 +21,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
@@ -27,9 +29,8 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
-import com.thezayin.add_birthday.model.isValidDayForMonth
-import com.thezayin.add_birthday.model.updateButtonState
+import com.thezayin.add_birthday.utils.isValidDayForMonth
+import com.thezayin.add_birthday.utils.updateButtonState
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -37,51 +38,55 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun BirthdayDetails(
     modifier: Modifier = Modifier,
-    name: MutableState<TextFieldValue>,
-    day: MutableState<TextFieldValue>,
-    month: MutableState<TextFieldValue>,
-    year: MutableState<TextFieldValue>,
-    isButtonEnabled: MutableState<Boolean>,
+    name: MutableState<TextFieldValue>, // Holds the value for the name input field
+    day: MutableState<TextFieldValue>,  // Holds the value for the day input field
+    month: MutableState<TextFieldValue>, // Holds the value for the month input field
+    year: MutableState<TextFieldValue>,  // Holds the value for the year input field
+    isButtonEnabled: MutableState<Boolean>, // Tracks whether the Save button is enabled
 ) {
-    // Error States
-    var isNameError by remember { mutableStateOf(false) }
-    var nameErrorMessage by remember { mutableStateOf("") }
+    val activity = LocalContext.current as Activity
+    // Error states for validation
+    var isNameError by remember { mutableStateOf(false) } // Tracks if there's an error in the name field
+    var nameErrorMessage by remember { mutableStateOf("") } // Holds the error message for the name field
 
-    var isDayError by remember { mutableStateOf(false) }
-    var dayErrorMessage by remember { mutableStateOf("") }
+    var isDayError by remember { mutableStateOf(false) } // Tracks if there's an error in the day field
+    var dayErrorMessage by remember { mutableStateOf("") } // Holds the error message for the day field
 
-    var isMonthError by remember { mutableStateOf(false) }
-    var monthErrorMessage by remember { mutableStateOf("") }
+    var isMonthError by remember { mutableStateOf(false) } // Tracks if there's an error in the month field
+    var monthErrorMessage by remember { mutableStateOf("") } // Holds the error message for the month field
 
-    var isYearError by remember { mutableStateOf(false) }
-    var yearErrorMessage by remember { mutableStateOf("") }
+    var isYearError by remember { mutableStateOf(false) } // Tracks if there's an error in the year field
+    var yearErrorMessage by remember { mutableStateOf("") } // Holds the error message for the year field
 
+    // Main container for the component
     Column(
         modifier = modifier
-            .fillMaxWidth()
-            .padding(top = 20.dp),
+            .fillMaxWidth() // Ensures the component takes the full width of the parent
+            .padding(top = 10.dp), // Adds top padding
     ) {
-        // ***** Person Name Section *****
+        // ********** Name Input Section **********
         Text(
-            text = "Person Name:",
-            fontSize = 14.sp,
-            fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
-            color = colorResource(id = R.color.text_color),
-            fontWeight = FontWeight.Bold
+            text = activity.getString(R.string.person_name), // Label for the name input field
+            fontSize = 10.ssp, // Font size
+            fontFamily = FontFamily(Font(R.font.noto_sans_bold)), // Font style
+            color = colorResource(id = R.color.text_color), // Text color
+            fontWeight = FontWeight.Bold // Makes the label bold
         )
-        Spacer(modifier = Modifier.height(5.dp))
+
+        // Text field for entering the person's name
         TextField(
             value = name.value,
-            onValueChange = {
-                name.value = it
-                // Validate Name
-                if (it.text.isBlank()) {
+            onValueChange = { newValue ->
+                name.value = newValue
+                if (newValue.text.isBlank()) {
                     isNameError = true
-                    nameErrorMessage = "Name cannot be empty"
+                    nameErrorMessage =
+                        activity.getString(R.string.name_error_msg)// Error message if name is empty
                 } else {
                     isNameError = false
                     nameErrorMessage = ""
                 }
+                // Update the Save button state based on validations
                 updateButtonState(
                     name = name.value.text,
                     day = day.value.text,
@@ -95,75 +100,78 @@ fun BirthdayDetails(
                 )
             },
             textStyle = TextStyle(
-                color = colorResource(R.color.text_color),
-                fontSize = 10.ssp,
-                fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                color = colorResource(R.color.text_color), // Text color
+                fontSize = 8.ssp, // Font size
+                fontFamily = FontFamily(Font(R.font.noto_sans_medium)) // Font style
             ),
             placeholder = {
                 Text(
-                    text = "Enter Name",
-                    fontSize = 10.ssp,
+                    text = activity.getString(R.string.enter_name), // Placeholder text
+                    fontSize = 8.ssp,
                     color = colorResource(R.color.text_color),
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                 )
             },
-            isError = isNameError,
+            isError = isNameError, // Highlights the field red if there's an error
             colors = TextFieldDefaults.colors(
-                focusedContainerColor = colorResource(id = R.color.txt_field),
-                unfocusedContainerColor = colorResource(id = R.color.txt_field),
-                focusedIndicatorColor = if (isNameError) Color.Red else Color.Transparent,
+                focusedContainerColor = colorResource(id = R.color.txt_field), // Background color when focused
+                unfocusedContainerColor = colorResource(id = R.color.txt_field), // Background color when unfocused
+                focusedIndicatorColor = if (isNameError) Color.Red else Color.Transparent, // Red line if there's an error
                 unfocusedIndicatorColor = if (isNameError) Color.Red else Color.Transparent,
                 focusedTextColor = colorResource(id = R.color.black),
                 unfocusedTextColor = colorResource(id = R.color.black)
             ),
-            singleLine = true,
-            shape = RoundedCornerShape(8.sdp),
+            singleLine = true, // Restricts input to a single line
+            shape = RoundedCornerShape(8.sdp), // Rounds the edges of the text field
             modifier = Modifier.fillMaxWidth()
         )
+
+        // Displays the error message for the name field if any
         if (isNameError) {
             Text(
                 text = nameErrorMessage,
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 5.sdp, top = 5.sdp)
             )
         }
 
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(15.sdp)) // Adds vertical space between sections
 
-        // ***** Birthday Date Section *****
+        // ********** Birthday Date Section **********
         Text(
-            text = "Birthday Date:",
-            fontSize = 14.sp,
+            text = activity.getString(R.string.birth_date), // Label for the date input fields
+            fontSize = 10.ssp,
             fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
             color = colorResource(id = R.color.text_color),
             fontWeight = FontWeight.Bold
         )
+
         Text(
-            text = "Note: Year is optional",
-            fontSize = 10.sp,
+            text = activity.getString(R.string.year_optional), // Additional note for the year field
+            fontSize = 8.ssp,
             fontFamily = FontFamily(Font(R.font.noto_sans_italic)),
             color = colorResource(id = R.color.red)
         )
-        Spacer(modifier = Modifier.height(5.dp))
 
+        // Row for Day, Month, and Year input fields
         Row(
             modifier = Modifier.fillMaxWidth(),
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween
+            verticalAlignment = Alignment.CenterVertically, // Aligns fields vertically at the center
+            horizontalArrangement = Arrangement.SpaceBetween // Spreads fields evenly
         ) {
-            // ***** Day TextField *****
+            // ********** Day Input Field **********
             TextField(
                 value = day.value,
                 textStyle = TextStyle(
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     color = colorResource(R.color.text_color),
-                    fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
+                    fontFamily = FontFamily(Font(R.font.noto_sans_medium))
                 ),
                 onValueChange = { newValue ->
-                    day.value = newValue.copy(text = newValue.text.filter { it.isDigit() })
-                    // Validate Day
+                    day.value =
+                        newValue.copy(text = newValue.text.filter { it.isDigit() }) // Accepts only digits
                     val dayInt = day.value.text.toIntOrNull()
                     val monthInt = month.value.text.toIntOrNull()
                     val yearInt = year.value.text.toIntOrNull()
@@ -171,12 +179,12 @@ fun BirthdayDetails(
                     when {
                         day.value.text.isEmpty() -> {
                             isDayError = true
-                            dayErrorMessage = "Day is required"
+                            dayErrorMessage = activity.getString(R.string.day_required)
                         }
 
                         dayInt !in 1..31 -> {
                             isDayError = true
-                            dayErrorMessage = "Incorrect day"
+                            dayErrorMessage = activity.getString(R.string.incorrect_day)
                         }
 
                         monthInt != null && !isValidDayForMonth(
@@ -185,7 +193,7 @@ fun BirthdayDetails(
                             year = yearInt
                         ) -> {
                             isDayError = true
-                            dayErrorMessage = "Incorrect day for the selected month/year"
+                            dayErrorMessage = activity.getString(R.string.incorrect_date_msg)
                         }
 
                         else -> {
@@ -205,28 +213,19 @@ fun BirthdayDetails(
                         isButtonEnabled = isButtonEnabled
                     )
                 },
-                placeholder = {
-                    Text(
-                        text = "DD",
-                        fontSize = 10.ssp,
-                        color = colorResource(R.color.text_color),
-                        fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                    )
-                },
+                placeholder = { Text(text = activity.getString(R.string.dd), fontSize = 8.ssp) },
                 isError = isDayError,
                 colors = TextFieldDefaults.colors(
                     focusedContainerColor = colorResource(id = R.color.txt_field),
                     unfocusedContainerColor = colorResource(id = R.color.txt_field),
                     focusedIndicatorColor = if (isDayError) Color.Red else Color.Transparent,
-                    unfocusedIndicatorColor = if (isDayError) Color.Red else Color.Transparent,
-                    focusedTextColor = colorResource(id = R.color.black),
-                    unfocusedTextColor = colorResource(id = R.color.black)
+                    unfocusedIndicatorColor = if (isDayError) Color.Red else Color.Transparent
                 ),
                 singleLine = true,
                 shape = RoundedCornerShape(8.sdp),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.sdp) // Adjusts layout spacing
             )
 
             // ***** Month TextField *****
@@ -234,7 +233,7 @@ fun BirthdayDetails(
                 value = month.value,
                 textStyle = TextStyle(
                     color = colorResource(R.color.text_color),
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
                 ),
                 onValueChange = { newValue ->
@@ -243,10 +242,10 @@ fun BirthdayDetails(
                     val monthInt = month.value.text.toIntOrNull()
                     if (month.value.text.isEmpty()) {
                         isMonthError = true
-                        monthErrorMessage = "Month is required"
+                        monthErrorMessage = activity.getString(R.string.month_required)
                     } else if (monthInt !in 1..12) {
                         isMonthError = true
-                        monthErrorMessage = "Incorrect month"
+                        monthErrorMessage = activity.getString(R.string.incorrect_month)
                     } else {
                         isMonthError = false
                         monthErrorMessage = ""
@@ -262,7 +261,7 @@ fun BirthdayDetails(
                         )
                     ) {
                         isDayError = true
-                        dayErrorMessage = "Incorrect day for the selected month/year"
+                        dayErrorMessage = activity.getString(R.string.incorrect_date_msg)
                     } else if (dayInt != null && monthInt != null && dayInt in 1..31) {
                         isDayError = false
                         dayErrorMessage = ""
@@ -281,8 +280,8 @@ fun BirthdayDetails(
                 },
                 placeholder = {
                     Text(
-                        text = "MM",
-                        fontSize = 10.ssp,
+                        text = activity.getString(R.string.mm),
+                        fontSize = 8.ssp,
                         color = colorResource(R.color.text_color),
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     )
@@ -300,7 +299,7 @@ fun BirthdayDetails(
                 shape = RoundedCornerShape(8.sdp),
                 modifier = Modifier
                     .weight(1f)
-                    .padding(end = 8.dp)
+                    .padding(end = 8.sdp)
             )
 
             // ***** Year TextField *****
@@ -308,7 +307,7 @@ fun BirthdayDetails(
                 value = year.value,
                 textStyle = TextStyle(
                     color = colorResource(R.color.text_color),
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_medium)),
                 ),
                 onValueChange = { newValue ->
@@ -358,7 +357,7 @@ fun BirthdayDetails(
                 placeholder = {
                     Text(
                         text = "YYYY",
-                        fontSize = 10.ssp,
+                        fontSize = 8.ssp,
                         color = colorResource(R.color.text_color),
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     )
@@ -378,14 +377,14 @@ fun BirthdayDetails(
             )
         }
 
-        // ***** Display Error Messages *****
+        // Error messages for Day, Month, and Year
         if (isDayError) {
             Text(
                 text = dayErrorMessage,
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 8.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 8.sdp, top = 4.sdp)
             )
         }
 
@@ -393,9 +392,9 @@ fun BirthdayDetails(
             Text(
                 text = monthErrorMessage,
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 8.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 8.sdp, top = 4.sdp)
             )
         }
 
@@ -403,9 +402,9 @@ fun BirthdayDetails(
             Text(
                 text = yearErrorMessage,
                 color = Color.Red,
-                fontSize = 12.sp,
+                fontSize = 8.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                modifier = Modifier.padding(start = 8.dp, top = 4.dp)
+                modifier = Modifier.padding(start = 8.sdp, top = 4.sdp)
             )
         }
     }

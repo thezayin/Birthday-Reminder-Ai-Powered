@@ -9,7 +9,8 @@ interface DeleteBirthdayUseCase {
     suspend operator fun invoke(birthday: BirthdayModel): Flow<Response<Unit>>
 }
 
-class DeleteBirthdayUseCaseImpl(private val repository: BirthdayRepository) : DeleteBirthdayUseCase {
+class DeleteBirthdayUseCaseImpl(private val repository: BirthdayRepository) :
+    DeleteBirthdayUseCase {
     override suspend fun invoke(birthday: BirthdayModel): Flow<Response<Unit>> =
         repository.deleteBirthday(birthday)
 }

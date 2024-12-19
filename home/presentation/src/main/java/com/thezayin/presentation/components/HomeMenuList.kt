@@ -16,8 +16,8 @@ fun HomeMenuList(
     LazyVerticalGrid(
         columns = GridCells.Fixed(2),
         modifier = modifier
-            .padding(horizontal = 5.sdp)
-            .padding(top = 25.sdp),
+            .padding(horizontal = 10.sdp)
+            .padding(top = 15.sdp),
         verticalArrangement = Arrangement.spacedBy(10.sdp),
         horizontalArrangement = Arrangement.spacedBy(10.sdp),
     ) {

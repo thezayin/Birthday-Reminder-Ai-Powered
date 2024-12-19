@@ -22,7 +22,7 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
-import com.thezayin.framework.extension.functions.copyText
+import com.thezayin.framework.extension.copyText
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -59,15 +59,15 @@ fun CalHistoryItem(
             ) {
                 Text(
                     color = colorResource(id = R.color.text_color),
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     text = "Age of $name is:",
                     fontFamily = FontFamily(Font(R.font.noto_sans_bold))
                 )
                 Text(
                     color = colorResource(id = R.color.text_color),
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     text = "$years years, $months months, $days days",
-                    fontFamily = FontFamily(Font(R.font.noto_sans_medium))
+                    fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                 )
             }
             Image(

@@ -88,10 +88,6 @@ fun AddBirthdayScreenContent(
         notifyDay.value = TextFieldValue(nextBirthday.get(Calendar.DAY_OF_MONTH).toString())
         notifyMonth.value = TextFieldValue((nextBirthday.get(Calendar.MONTH) + 1).toString())
         notifyYear.value = TextFieldValue(nextBirthday.get(Calendar.YEAR).toString())
-        Log.d(
-            "AddBirthdayScreenContent",
-            "Notification Date updated to: ${notifyDay.value.text}/${notifyMonth.value.text}/${notifyYear.value.text}"
-        )
     }
 
     // Main layout with Scaffold

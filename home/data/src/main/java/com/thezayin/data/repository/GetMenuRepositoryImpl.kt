@@ -30,8 +30,15 @@ class GetMenuRepositoryImpl : GetMenuRepository {
                     id = 3,
                     title = "My Saved Birthdays",
                     icon = R.drawable.ic_catalog,
-                    color = R.color.light_orange,
+                    color = R.color.light_orange_3,
                     subColor = R.color.light_orange_1
+                ),
+                HomeMenu(
+                    id = 4,
+                    title = "AI Generated Gift Ideas",
+                    icon = R.drawable.ic_catalog,
+                    color = R.color.light_green,
+                    subColor = R.color.lightColor
                 ),
             )
             emit(Response.Success(menu))

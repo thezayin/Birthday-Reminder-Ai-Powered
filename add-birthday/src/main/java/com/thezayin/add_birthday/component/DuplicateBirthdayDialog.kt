@@ -22,10 +22,10 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.thezayin.values.R
+import ir.kaaveh.sdpcompose.sdp
+import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun DuplicateBirthdayDialog(
@@ -40,14 +40,14 @@ fun DuplicateBirthdayDialog(
             colors = CardDefaults.cardColors(
                 containerColor = colorResource(id = R.color.card_background)
             ),
-            shape = RoundedCornerShape(16.dp),
+            shape = RoundedCornerShape(18.sdp),
         ) {
             Box(
                 contentAlignment = Alignment.Center
             ) {
                 Column(
                     modifier = Modifier
-                        .padding(20.dp)
+                        .padding(20.sdp)
                         .fillMaxWidth(),
                     horizontalAlignment = Alignment.CenterHorizontally
                 ) {
@@ -56,61 +56,63 @@ fun DuplicateBirthdayDialog(
                         text = "Duplicate Birthday Reminder",
                         fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                         color = colorResource(id = R.color.text_color),
-                        fontSize = 20.sp,
+                        fontSize = 12.ssp,
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(16.dp))
+                    Spacer(modifier = Modifier.height(10.sdp))
 
                     // Message
                     Text(
                         text = "A birthday reminder for $personName is already set for $date at $time. Do you want to add it again?",
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                         color = colorResource(id = R.color.text_color),
-                        fontSize = 16.sp,
+                        fontSize = 10.ssp,
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(24.dp))
+                    Spacer(modifier = Modifier.height(20.sdp))
 
                     // Buttons
                     Row(
                         modifier = Modifier
                             .fillMaxWidth()
-                            .padding(horizontal = 16.dp),
+                            .padding(horizontal = 16.sdp),
                         horizontalArrangement = Arrangement.SpaceBetween
                     ) {
                         // Cancel Button
                         Button(
                             onClick = onCancel,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(id = R.color.dusty_grey)
+                                containerColor = colorResource(id = R.color.primary)
                             ),
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(8.sdp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
                                 text = "Cancel",
+                                fontSize = 10.ssp,
                                 color = colorResource(id = R.color.white),
-                                fontFamily = FontFamily(Font(R.font.noto_sans_bold))
+                                fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                             )
                         }
 
-                        Spacer(modifier = Modifier.width(16.dp))
+                        Spacer(modifier = Modifier.width(16.sdp))
 
                         // Add Again Button
                         Button(
                             onClick = onAddAgain,
                             colors = ButtonDefaults.buttonColors(
-                                containerColor = colorResource(id = R.color.primary)
+                                containerColor = colorResource(id = R.color.greyish)
                             ),
-                            shape = RoundedCornerShape(8.dp),
+                            shape = RoundedCornerShape(8.sdp),
                             modifier = Modifier.weight(1f)
                         ) {
                             Text(
                                 text = "Add",
+                                fontSize = 10.ssp,
                                 color = colorResource(id = R.color.white),
-                                fontFamily = FontFamily(Font(R.font.noto_sans_bold))
+                                fontFamily = FontFamily(Font(R.font.noto_sans_regular))
                             )
                         }
                     }

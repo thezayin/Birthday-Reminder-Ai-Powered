@@ -23,9 +23,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "DateMate"
 include(":app")
-include(":ads")
 include(":core:values")
-include(":analytics")
 include(":setting")
 include(":core:framework")
 include(":core:components")
@@ -44,3 +42,4 @@ include(":saved-birthdays")
 include(":gift-ideas:domain")
 include(":gift-ideas:data")
 include(":gift-ideas:presentation")
+include(":core:analytics")

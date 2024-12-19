@@ -9,7 +9,7 @@ import com.thezayin.domain.model.AgeCalModel
 @Dao
 interface CalDao {
     @Query("SELECT * FROM calc_table ORDER BY id DESC")
-    fun getAllCalHistory(): List<AgeCalModel>
+    suspend fun getAllCalHistory(): List<AgeCalModel>
 
     /**
      * Deletes all entries from the search history table.

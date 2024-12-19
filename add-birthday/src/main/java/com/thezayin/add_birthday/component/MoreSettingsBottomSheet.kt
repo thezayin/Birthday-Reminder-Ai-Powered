@@ -2,8 +2,6 @@ package com.thezayin.add_birthday.component
 
 import android.app.DatePickerDialog
 import android.app.TimePickerDialog
-import android.util.Log
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -50,7 +48,6 @@ fun MoreSettingsBottomSheet(
     notifyYear: MutableState<TextFieldValue>, // Notification Year
     birthdayDay: MutableState<TextFieldValue>, // Birthday Day
     birthdayMonth: MutableState<TextFieldValue>, // Birthday Month
-    birthdayYear: MutableState<TextFieldValue>, // Birthday Year
     selectedGroup: MutableState<String>,
     groups: List<String>,
     onSave: () -> Unit,
@@ -72,13 +69,13 @@ fun MoreSettingsBottomSheet(
     Column(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(16.sdp)
+            .padding(14.sdp)
     ) {
         if (isBirthdaySet) {
             // Notification Date Section
             Text(
                 text = "Notification Date:",
-                fontSize = 12.ssp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                 color = colorResource(id = R.color.text_color)
             )
@@ -95,7 +92,7 @@ fun MoreSettingsBottomSheet(
                     text = "${notifyDay.value.text}/${notifyMonth.value.text}${
                         if (notifyYear.value.text.isNotBlank()) "/${notifyYear.value.text}" else ""
                     }",
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     color = colorResource(id = R.color.black),
                     modifier = Modifier.weight(1f)
@@ -104,7 +101,7 @@ fun MoreSettingsBottomSheet(
                 // "Change" Text (Italic, Underlined)
                 Text(
                     text = "Edit",
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_italic)),
                     color = colorResource(id = R.color.primary),
                     modifier = Modifier
@@ -135,12 +132,12 @@ fun MoreSettingsBottomSheet(
                 )
             }
 
-            Spacer(modifier = Modifier.height(16.sdp))
+            Spacer(modifier = Modifier.height(14.sdp))
 
             // Notification Time Section
             Text(
                 text = "Notification Time:",
-                fontSize = 12.ssp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                 color = colorResource(id = R.color.text_color)
             )
@@ -154,7 +151,7 @@ fun MoreSettingsBottomSheet(
                 // Hardcoded Time Text
                 Text(
                     text = "${notifyHour.value.text}:${notifyMinute.value.text} ${notifyPeriod.value}",
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     color = colorResource(id = R.color.black),
                     modifier = Modifier.weight(1f)
@@ -163,7 +160,7 @@ fun MoreSettingsBottomSheet(
                 // "Change" Text (Italic, Underlined)
                 Text(
                     text = "Edit",
-                    fontSize = 10.ssp,
+                    fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_italic)),
                     color = colorResource(id = R.color.primary),
                     modifier = Modifier
@@ -200,7 +197,7 @@ fun MoreSettingsBottomSheet(
             // Notification Group Section
             Text(
                 text = "Notification Group:",
-                fontSize = 12.ssp,
+                fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                 color = colorResource(id = R.color.text_color)
             )
@@ -273,7 +270,7 @@ fun MoreSettingsBottomSheet(
             ) {
                 Text(
                     text = "Please add your birthday first to set notifications.",
-                    fontSize = 12.ssp,
+                    fontSize = 10.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                     color = colorResource(id = R.color.text_color)
                 )
@@ -291,7 +288,7 @@ fun MoreSettingsBottomSheet(
                 ) {
                     Text(
                         text = "Add Birthday",
-                        fontSize = 12.ssp,
+                        fontSize = 10.ssp,
                         fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                         color = colorResource(id = R.color.white)
                     )
@@ -302,7 +299,6 @@ fun MoreSettingsBottomSheet(
         // Handle DatePickerDialog
         if (showDatePicker) {
             LaunchedEffect(Unit) {
-                Log.d("MoreSettingsBottomSheet", "Showing DatePickerDialog")
                 DatePickerDialog(
                     context,
                     { _, selectedYear, selectedMonth, selectedDay ->
@@ -310,10 +306,6 @@ fun MoreSettingsBottomSheet(
                         notifyMonth.value = TextFieldValue((selectedMonth + 1).toString())
                         notifyYear.value = TextFieldValue(selectedYear.toString())
                         showDatePicker = false
-                        Log.d(
-                            "MoreSettingsBottomSheet",
-                            "Date Selected: $selectedDay/${selectedMonth + 1}/$selectedYear"
-                        )
                     },
                     notifyYear.value.text.toIntOrNull() ?: nextBirthday.get(Calendar.YEAR),
                     (notifyMonth.value.text.toIntOrNull()?.minus(1))

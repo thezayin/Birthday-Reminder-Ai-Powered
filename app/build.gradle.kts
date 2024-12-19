@@ -13,7 +13,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.datemate"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         applicationId = "com.thezayin.datemate"
@@ -58,13 +58,13 @@ android {
 
 
 dependencies {
-    implementation(project(":ads"))
-    implementation(project(":analytics"))
+    implementation(project(":core:analytics"))
 
     implementation(project(":core:components"))
     implementation(project(":core:values"))
     implementation(project(":core:framework"))
 
+    implementation(project(":databases:data"))
     implementation(project(":gift-ideas:presentation"))
     implementation(project(":saved-birthdays"))
     implementation(project(":home:presentation"))
@@ -123,6 +123,6 @@ dependencies {
 
     implementation(libs.timber)
 
-    implementation (libs.androidx.multidex)
+    implementation(libs.androidx.multidex)
     implementation(libs.grizzly)
 }

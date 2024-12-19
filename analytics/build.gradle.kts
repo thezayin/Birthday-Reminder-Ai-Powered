@@ -8,7 +8,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.analytics"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdkVersion.get().toInt()
@@ -47,7 +47,7 @@ dependencies {
     implementation(libs.firebase.analytics)
 
     implementation(libs.androidx.work.runtime)
-    implementation (libs.timber)
+    implementation(libs.timber)
 
     //koin dependency injection
     implementation(libs.koin.core)

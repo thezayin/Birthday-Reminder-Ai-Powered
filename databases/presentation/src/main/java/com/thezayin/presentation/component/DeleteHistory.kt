@@ -7,9 +7,6 @@ import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.Card
-import androidx.compose.material3.CardDefaults
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -27,40 +24,28 @@ fun DeleteHistory(
 ) {
     Row(
         modifier = Modifier
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .padding(horizontal = 15.sdp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.End
     ) {
-        Card(
-            modifier = Modifier
-                .padding(horizontal = 10.sdp, vertical = 3.sdp)
-                .clickable {
-                    onDeleteClick()
-                },
-            shape = RoundedCornerShape(15.sdp),
-            elevation = CardDefaults.cardElevation(1.sdp),
-            colors = CardDefaults.cardColors(
-                containerColor = colorResource(id = R.color.card_background),
-            )
+        Row(
+            modifier = Modifier.clickable { onDeleteClick() }
         ) {
-            Row(
+            Image(
+                painter = painterResource(id = R.drawable.ic_clear),
+                contentDescription = "Delete",
                 modifier = Modifier
-                    .padding(horizontal = 10.sdp, vertical = 10.sdp),
-                verticalAlignment = Alignment.CenterVertically,
-                horizontalArrangement = Arrangement.spacedBy(2.sdp),
-            ) {
-                Text(
-                    text = "Clear",
-                    fontSize = 12.ssp,
-                    color = colorResource(id = R.color.text_color),
-                )
-                Image(
-                    painter = painterResource(id = R.drawable.ic_delete),
-                    contentDescription = "Delete",
-                    modifier = Modifier.size(15.sdp)
-                )
-            }
+                    .padding(end = 5.sdp)
+                    .size(13.sdp)
+            )
+            Text(
+                text = "Clear",
+                fontSize = 12.ssp,
+                color = colorResource(id = R.color.text_color),
+            )
         }
+
     }
 }
 

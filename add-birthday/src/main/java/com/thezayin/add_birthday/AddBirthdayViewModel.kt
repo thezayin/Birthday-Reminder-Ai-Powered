@@ -1,18 +1,14 @@
 package com.thezayin.add_birthday
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.ads.GoogleManager
+import com.thezayin.add_birthday.event.BirthdayUiEvent
+import com.thezayin.add_birthday.state.BirthdayUiState
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.usecase.AddBirthdayUseCase
 import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
-import com.thezayin.add_birthday.event.BirthdayUiEvent
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
-import com.thezayin.add_birthday.state.BirthdayUiState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -20,7 +16,6 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddBirthdayViewModel(
-    private val googleManager: GoogleManager,
     val remoteConfig: RemoteConfig,
     private val addBirthdayUseCase: AddBirthdayUseCase,
     private val getAllBirthdaysUseCase: GetAllBirthdaysUseCase,
@@ -28,17 +23,8 @@ class AddBirthdayViewModel(
     private val _uiState = MutableStateFlow(BirthdayUiState())
     val uiState: StateFlow<BirthdayUiState> = _uiState.asStateFlow()
 
-    var nativeAd = mutableStateOf<NativeAd?>(null)
-        private set
-
     private var forceSave = false // Flag to bypass duplicate check
 
-    fun getNativeAd() = viewModelScope.launch {
-        nativeAd.value = googleManager.createNativeAd().apply {} ?: run {
-            delay(3000)
-            googleManager.createNativeAd()
-        }
-    }
 
     init {
         fetchAllBirthdays()
@@ -126,7 +112,7 @@ class AddBirthdayViewModel(
         handleEvent(BirthdayUiEvent.FetchAllBirthdays(birthday))
     }
 
-     fun isLoading(isLoading: Boolean) {
+    fun isLoading(isLoading: Boolean) {
         handleEvent(BirthdayUiEvent.IsLoading(isLoading))
     }
 
@@ -134,7 +120,7 @@ class AddBirthdayViewModel(
         handleEvent(BirthdayUiEvent.IsError(isError))
     }
 
-     fun isAdded(isAdded: Boolean) {
+    fun isAdded(isAdded: Boolean) {
         handleEvent(BirthdayUiEvent.IsAdded(isAdded))
     }
 

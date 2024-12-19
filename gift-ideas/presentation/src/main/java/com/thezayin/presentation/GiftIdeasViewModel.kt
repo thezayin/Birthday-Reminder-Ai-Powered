@@ -1,11 +1,7 @@
 package com.thezayin.presentation
 
-import android.util.Log
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.ads.GoogleManager
 import com.thezayin.domain.model.GiftRecommendationModel
 import com.thezayin.domain.usecase.GetGiftIdeasUseCase
 import com.thezayin.framework.remote.RemoteConfig
@@ -21,26 +17,16 @@ import kotlin.system.measureTimeMillis
 
 class GiftIdeasViewModel(
     private val getGiftIdeasUseCase: GetGiftIdeasUseCase,
-    private val googleManager: GoogleManager,
     val remoteConfig: RemoteConfig,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GiftUiState())
     val uiState = _uiState.asStateFlow()
 
-    var nativeAd = mutableStateOf<NativeAd?>(null)
-        private set
-
     // Add thoughtDuration to track the time taken
     var thoughtDuration: Int = 0
         private set
 
-    fun getNativeAd() = viewModelScope.launch {
-        nativeAd.value = googleManager.createNativeAd().apply {} ?: run {
-            delay(3000)
-            googleManager.createNativeAd()
-        }
-    }
 
     private fun handleEvent(event: GiftUiEvent) {
         when (event) {
@@ -111,13 +97,11 @@ class GiftIdeasViewModel(
                 getGiftIdeasUseCase(budget, relation, likes, dislikes).collect {
                     when (it) {
                         is Response.Success -> {
-                            Log.e("GiftIdeasViewModel", "${it.data}")
                             giftIdeas(it.data)
                             isLoading(false)
                         }
 
                         is Response.Error -> {
-                            Log.e("GiftIdeasViewModel", "${it.e}")
                             isLoading(false)
                             isError(true)
                             errorMessage("Please check your internet connection and try again.")
@@ -135,15 +119,11 @@ class GiftIdeasViewModel(
             }
 
             // Set thoughtDuration to at least 10 seconds
-            thoughtDuration = ((timeTaken + if (remainingTime > 0) remainingTime else 0) / 1000).toInt()
+            thoughtDuration =
+                ((timeTaken + if (remainingTime > 0) remainingTime else 0) / 1000).toInt()
 
             finishWriting()
 
         }
-    }
-
-    override fun onCleared() {
-        super.onCleared()
-        nativeAd.value?.destroy()
     }
 }

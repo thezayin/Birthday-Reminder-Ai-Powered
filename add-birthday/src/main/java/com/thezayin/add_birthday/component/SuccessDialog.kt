@@ -50,18 +50,18 @@ fun SuccessDialog(
                         text = "Success!",
                         fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                         color = colorResource(id = R.color.primary),
-                        fontSize = 14.ssp,
+                        fontSize = 12.ssp,
                         textAlign = TextAlign.Center
                     )
 
-                    Spacer(modifier = Modifier.height(16.sdp))
+                    Spacer(modifier = Modifier.height(14.sdp))
 
                     // Message
                     Text(
                         text = message,
                         fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
                         color = colorResource(id = R.color.text_color),
-                        fontSize = 10.ssp,
+                        fontSize = 8.ssp,
                         textAlign = TextAlign.Center
                     )
 
@@ -78,6 +78,7 @@ fun SuccessDialog(
                     ) {
                         Text(
                             text = "Done",
+                            fontSize = 10.ssp,
                             color = colorResource(id = R.color.white),
                             fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                             textAlign = TextAlign.Center

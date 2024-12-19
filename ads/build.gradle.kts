@@ -43,7 +43,7 @@ android {
 
 dependencies {
     implementation(project(":core:values"))
-    implementation(project(":analytics"))
+    implementation(project(":core:analytics"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)

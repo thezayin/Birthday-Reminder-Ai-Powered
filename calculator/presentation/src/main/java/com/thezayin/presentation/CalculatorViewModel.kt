@@ -1,11 +1,7 @@
 package com.thezayin.presentation
 
-import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.google.android.gms.ads.nativead.NativeAd
-import com.thezayin.ads.GoogleManager
-import com.thezayin.analytics.analytics.Analytics
 import com.thezayin.domain.model.CalculateModel
 import com.thezayin.domain.usecase.CalculateUseCase
 import com.thezayin.domain.usecase.InsertCalcHistory
@@ -13,7 +9,6 @@ import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.event.CalculatorEvents
 import com.thezayin.presentation.state.CalculatorState
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
@@ -21,8 +16,6 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 class CalculatorViewModel(
-    val googleManager: GoogleManager,
-    val analytics: Analytics,
     val remoteConfig: RemoteConfig,
     val calculateUseCase: CalculateUseCase,
     val insertCalcHistory: InsertCalcHistory
@@ -40,16 +33,6 @@ class CalculatorViewModel(
             CalculatorEvents.HideLoading -> _calculatorState.update { it.copy(isLoading = false) }
             CalculatorEvents.ShowLoading -> _calculatorState.update { it.copy(isLoading = true) }
             CalculatorEvents.ShowError -> _calculatorState.update { it.copy(isError = true) }
-        }
-    }
-
-    var nativeAd = mutableStateOf<NativeAd?>(null)
-        private set
-
-    fun getNativeAd() = viewModelScope.launch {
-        nativeAd.value = googleManager.createNativeAd().apply {} ?: run {
-            delay(3000)
-            googleManager.createNativeAd()
         }
     }
 
@@ -85,7 +68,6 @@ class CalculatorViewModel(
         ).collect { response ->
             when (response) {
                 is Response.Success -> {
-                    delay(5000L)
                     hideLoading()
                     calculatedValue(response.data)
                     addCalcHistory(

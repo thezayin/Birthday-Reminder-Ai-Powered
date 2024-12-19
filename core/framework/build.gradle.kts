@@ -10,7 +10,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.framework"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdkVersion.get().toInt()
@@ -43,8 +43,7 @@ android {
 }
 
 dependencies {
-    implementation(project(":ads"))
-    implementation(project(":analytics"))
+    implementation(project(":core:analytics"))
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -89,6 +88,12 @@ dependencies {
     implementation(libs.koin.android)
     testImplementation(libs.koin.test.junit4)
     implementation(libs.koin.androidx.navigation)
+
+
+    implementation(libs.user.messaging.platform)
+    api(libs.play.services.ads)
+
+    implementation(libs.timber)
 
     implementation("androidx.constraintlayout:constraintlayout:2.1.4")
     implementation("androidx.cardview:cardview:1.0.0")

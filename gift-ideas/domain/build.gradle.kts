@@ -6,7 +6,7 @@ plugins {
 
 android {
     namespace = "com.thezayin.domain"
-    compileSdk =  libs.versions.compileSdkVersion.get().toInt()
+    compileSdk = libs.versions.compileSdkVersion.get().toInt()
 
     defaultConfig {
         minSdk = libs.versions.minSdkVersion.get().toInt()

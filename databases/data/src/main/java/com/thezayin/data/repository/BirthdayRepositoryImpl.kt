@@ -1,19 +1,27 @@
 package com.thezayin.data.repository
 
+import android.content.Context
+import com.thezayin.data.alarm.AlarmScheduler
+import com.thezayin.data.dao.BirthdayDao
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.repository.BirthdayRepository
 import com.thezayin.framework.utils.Response
-import com.thezayin.data.dao.BirthdayDao
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 
-class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao) : BirthdayRepository {
+class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao, private val context: Context) :
+    BirthdayRepository {
 
     override fun addBirthday(birthday: BirthdayModel): Flow<Response<Unit>> = flow {
         try {
             emit(Response.Loading)
             val result = birthdayDao.addBirthday(birthday)
             if (result > 0) {
+                // Update the birthday with the generated ID
+                val updatedBirthday = birthday.copy(id = result.toInt())
+                // Schedule notification
+                AlarmScheduler.scheduleBirthdayAlarm(context, updatedBirthday)
+                AlarmScheduler.scheduleBirthdayNotification(context, updatedBirthday)
                 emit(Response.Success(Unit))
             } else {
                 emit(Response.Error("Failed to add birthday"))
@@ -26,6 +34,9 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao) : BirthdayRep
     override fun deleteBirthday(birthday: BirthdayModel): Flow<Response<Unit>> = flow {
         try {
             emit(Response.Loading)
+            // Cancel notification
+            AlarmScheduler.cancelBirthdayAlarm(context, birthday)
+            AlarmScheduler.cancelBirthdayNotification(context, birthday)
             val rowsDeleted = birthdayDao.deleteBirthday(birthday)
             if (rowsDeleted > 0) {
                 emit(Response.Success(Unit))
@@ -42,20 +53,15 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao) : BirthdayRep
             emit(Response.Loading)
             val rowsUpdated = birthdayDao.updateBirthday(birthday)
             if (rowsUpdated > 0) {
+                // Reschedule notification
+                AlarmScheduler.cancelBirthdayNotification(context, birthday)
+                AlarmScheduler.cancelBirthdayAlarm(context, birthday)
+                AlarmScheduler.scheduleBirthdayNotification(context, birthday)
+                AlarmScheduler.scheduleBirthdayAlarm(context, birthday)
                 emit(Response.Success(Unit))
             } else {
                 emit(Response.Error("Failed to update birthday"))
             }
-        } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
-        }
-    }
-
-    override fun getBirthday(id: Int): Flow<Response<BirthdayModel?>> = flow {
-        try {
-            emit(Response.Loading)
-            val birthday = birthdayDao.getBirthday(id)
-            emit(Response.Success(birthday))
         } catch (e: Exception) {
             emit(Response.Error(e.localizedMessage ?: "An error occurred"))
         }
@@ -74,6 +80,13 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao) : BirthdayRep
     override fun clearAllBirthdays(): Flow<Response<Unit>> = flow {
         try {
             emit(Response.Loading)
+            val birthdays = birthdayDao.getAllBirthdays()
+            // Cancel all notifications
+
+            birthdays.forEach {
+                AlarmScheduler.cancelBirthdayAlarm(context, it)
+                AlarmScheduler.cancelBirthdayNotification(context, it)
+            }
             val rowsDeleted = birthdayDao.clearAllBirthdays()
             if (rowsDeleted > 0) {
                 emit(Response.Success(Unit))
@@ -85,53 +98,29 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao) : BirthdayRep
         }
     }
 
-    override fun getBirthdayCount(): Flow<Response<Int>> = flow {
+    override fun scheduleBirthdayNotification(
+        context: Context,
+        birthday: BirthdayModel
+    ): Flow<Response<Unit>> = flow {
         try {
-            emit(Response.Loading)
-            val count = birthdayDao.getBirthdayCount()
-            emit(Response.Success(count))
+            AlarmScheduler.scheduleBirthdayAlarm(context, birthday)
+            AlarmScheduler.scheduleBirthdayNotification(context, birthday)
+            emit(Response.Success(Unit))
         } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
+            emit(Response.Error(e.localizedMessage ?: "Failed to schedule notification"))
         }
     }
 
-    override fun getBirthdayCountByGroup(group: String): Flow<Response<Int>> = flow {
+    override fun cancelBirthdayNotification(
+        context: Context,
+        birthday: BirthdayModel
+    ): Flow<Response<Unit>> = flow {
         try {
-            emit(Response.Loading)
-            val count = birthdayDao.getBirthdayCountByGroup(group)
-            emit(Response.Success(count))
+            AlarmScheduler.cancelBirthdayAlarm(context, birthday)
+            AlarmScheduler.cancelBirthdayNotification(context, birthday)
+            emit(Response.Success(Unit))
         } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
-        }
-    }
-
-    override fun getBirthdayCountByMonth(month: Int): Flow<Response<Int>> = flow {
-        try {
-            emit(Response.Loading)
-            val count = birthdayDao.getBirthdayCountByMonth(month)
-            emit(Response.Success(count))
-        } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
-        }
-    }
-
-    override fun getBirthdayCountByDay(day: Int): Flow<Response<Int>> = flow {
-        try {
-            emit(Response.Loading)
-            val count = birthdayDao.getBirthdayCountByDay(day)
-            emit(Response.Success(count))
-        } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
-        }
-    }
-
-    override fun getBirthdayCountByYear(year: Int): Flow<Response<Int>> = flow {
-        try {
-            emit(Response.Loading)
-            val count = birthdayDao.getBirthdayCountByYear(year)
-            emit(Response.Success(count))
-        } catch (e: Exception) {
-            emit(Response.Error(e.localizedMessage ?: "An error occurred"))
+            emit(Response.Error(e.localizedMessage ?: "Failed to cancel notification"))
         }
     }
 }

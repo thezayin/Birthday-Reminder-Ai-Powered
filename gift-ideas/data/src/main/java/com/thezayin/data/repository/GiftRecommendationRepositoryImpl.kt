@@ -2,7 +2,6 @@
 
 package com.thezayin.data.repository
 
-import android.util.Log
 import com.thezayin.data.api.GiftIdeasApiService
 import com.thezayin.domain.model.GiftRecommendationModel
 import com.thezayin.domain.model.GiftRequest
@@ -46,10 +45,8 @@ class GiftRecommendationRepositoryImpl(
             val response = apiService.getGiftRecommendations(request)
 
             // Extract the full text from the response
-            val responseText = response.candidates.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
-
-            // Log the raw response for debugging
-            Log.e("GiftRecommendationParsing","Raw Response Text: $responseText")
+            val responseText =
+                response.candidates.firstOrNull()?.content?.parts?.firstOrNull()?.text ?: ""
 
             // Define regex pattern to capture title, description, and price
             val giftRegex = Regex(
@@ -69,8 +66,6 @@ class GiftRecommendationRepositoryImpl(
                     price = price.trim()
                 )
             }.toList()
-
-            Log.e("GiftRecommendationParsing","Parsed Suggestions: $suggestions")
 
             // Emit only if suggestions are found
             if (suggestions.isNotEmpty()) {

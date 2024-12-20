@@ -1,4 +1,4 @@
-package com.thezayin.data.alarm
+package com.thezayin.data.scheduler.alarm
 
 import android.content.BroadcastReceiver
 import android.content.Context

@@ -10,7 +10,7 @@ import com.thezayin.domain.model.BirthdayModel
 
 @Database(
     entities = [AgeCalModel::class, BirthdayModel::class],
-    version = 2, // Incremented version due to schema change
+    version = 3, // Incremented version due to schema change
     exportSchema = false
 )
 abstract class AppDatabase : RoomDatabase() {

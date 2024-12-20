@@ -21,14 +21,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             DateMateTheme {
                 val navController = rememberNavController()
-
-                // Centralized Permission Handling
-                PermissionsHandler(
-                    onAllPermissionsGranted = {
-                        // Initialize components that require permissions
-                    }
-                )
-
                 NavHost(navController = navController)
             }
         }

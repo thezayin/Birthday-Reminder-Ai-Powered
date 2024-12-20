@@ -9,7 +9,7 @@ import com.thezayin.data.db.AppDatabase
 
 val MIGRATION_1_2: Migration = object : Migration(1, 2) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        // Create the birthday_table
+        // Create the birthday_table with all fields
         database.execSQL(
             """
             CREATE TABLE IF NOT EXISTS `birthday_table` (
@@ -19,9 +19,13 @@ val MIGRATION_1_2: Migration = object : Migration(1, 2) {
                 `month` INTEGER NOT NULL,
                 `year` INTEGER,
                 `group` TEXT NOT NULL,
-                `notifyAt` INTEGER NOT NULL
+                `notifyAt` INTEGER NOT NULL,
+                `phoneCountryCode` TEXT,
+                `phoneNumber` TEXT,
+                `notificationMethod` TEXT,
+                `birthdayMessage` TEXT
             )
-        """.trimIndent()
+            """.trimIndent()
         )
     }
 }

@@ -94,7 +94,7 @@ fun MoreSettingsBottomSheet(
                     }",
                     fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                    color = colorResource(id = R.color.black),
+                    color = colorResource(id = R.color.text_color),
                     modifier = Modifier.weight(1f)
                 )
 
@@ -153,7 +153,7 @@ fun MoreSettingsBottomSheet(
                     text = "${notifyHour.value.text}:${notifyMinute.value.text} ${notifyPeriod.value}",
                     fontSize = 8.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_regular)),
-                    color = colorResource(id = R.color.black),
+                    color = colorResource(id = R.color.text_color),
                     modifier = Modifier.weight(1f)
                 )
 

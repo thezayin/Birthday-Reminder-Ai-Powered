@@ -1,5 +1,6 @@
 package com.thezayin.data.scheduler.alarm
 
+import android.annotation.SuppressLint
 import android.app.Notification
 import android.app.NotificationChannel
 import android.app.NotificationManager
@@ -7,12 +8,14 @@ import android.app.PendingIntent
 import android.app.Service
 import android.content.Context
 import android.content.Intent
+import android.content.pm.ServiceInfo
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.os.Build
 import android.os.IBinder
 import android.util.Log
 import androidx.core.app.NotificationCompat
+import com.thezayin.values.R
 
 class AlarmService : Service() {
     private var mediaPlayer: MediaPlayer? = null
@@ -25,6 +28,7 @@ class AlarmService : Service() {
         Log.d(TAG, "Service Created")
     }
 
+    @SuppressLint("NewApi")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         var action = intent?.action
         Log.d(TAG, "onStartCommand called with action: $action")
@@ -38,13 +42,19 @@ class AlarmService : Service() {
             else -> {
                 // Initialize alarm
                 val name = intent?.getStringExtra("name") ?: "Friend"
-                val id = intent?.getIntExtra("id", 0) ?: 0
+                val id = intent?.getIntExtra("id", -1) ?: -1 // Use -1 to detect invalid IDs
+
+                if (id == -1) {
+                    Log.e(TAG, "Invalid ID received: $id")
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
 
                 Log.d(TAG, "Starting alarm for: $name with ID: $id")
 
                 // Initialize MediaPlayer with the alarm sound
                 mediaPlayer =
-                    MediaPlayer.create(this, com.thezayin.values.R.raw.happy_birthday).apply {
+                    MediaPlayer.create(this, R.raw.happy_birthday)?.apply {
                         isLooping = true
                         setAudioAttributes(
                             AudioAttributes.Builder()
@@ -56,6 +66,12 @@ class AlarmService : Service() {
                         Log.d(TAG, "MediaPlayer started")
                     }
 
+                if (mediaPlayer == null) {
+                    Log.e(TAG, "Failed to create MediaPlayer")
+                    stopSelf()
+                    return START_NOT_STICKY
+                }
+
                 // Create a notification with a stop action
                 val stopIntent = Intent(this, AlarmService::class.java).apply {
                     action = "STOP_ALARM"
@@ -63,7 +79,7 @@ class AlarmService : Service() {
 
                 val stopPendingIntent = PendingIntent.getService(
                     this,
-                    id,
+                    id, // Ensure this is unique and non-zero
                     stopIntent,
                     PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
                 )
@@ -71,9 +87,9 @@ class AlarmService : Service() {
                 val notification: Notification = NotificationCompat.Builder(this, CHANNEL_ID)
                     .setContentTitle("Birthday Alarm")
                     .setContentText("It's $name's birthday today!")
-                    .setSmallIcon(com.thezayin.values.R.drawable.ic_main) // Ensure you have this drawable
+                    .setSmallIcon(R.drawable.ic_main) // Ensure this drawable exists
                     .addAction(
-                        com.thezayin.values.R.drawable.ic_delete, // Icon for the stop action
+                        R.drawable.ic_delete, // Icon for the stop action
                         "Stop Alarm",
                         stopPendingIntent
                     )
@@ -81,8 +97,12 @@ class AlarmService : Service() {
                     .setPriority(NotificationCompat.PRIORITY_HIGH)
                     .build()
 
-                // Start the service in the foreground
-                startForeground(id, notification)
+                // Start the service in the foreground with a unique notification ID and service type
+                startForeground(
+                    id,
+                    notification,
+                    ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
+                )
                 Log.d(TAG, "Foreground service started with notification ID: $id")
             }
         }

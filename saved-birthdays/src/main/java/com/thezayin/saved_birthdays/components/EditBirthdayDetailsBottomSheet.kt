@@ -15,6 +15,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.ModalBottomSheet
@@ -404,9 +405,21 @@ fun EditBirthdayDetailsBottomSheet(
                             isEditMode = false
                         },
                         enabled = isSaveEnabled,
-                        modifier = Modifier.fillMaxWidth()
+                        modifier = Modifier
+                            .fillMaxWidth()
+                            .height(35.sdp),
+                        shape = RoundedCornerShape(8.sdp),
+                        colors = ButtonDefaults.buttonColors(
+                            containerColor = colorResource(id = R.color.primary),
+                            disabledContainerColor = colorResource(id = R.color.telenor_blue),
+                        )
                     ) {
-                        Text("Save")
+                        Text(
+                            "Save",
+                            fontSize = 10.ssp,
+                            fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                            color = colorResource(id = R.color.white)
+                        )
                     }
                 }
             }

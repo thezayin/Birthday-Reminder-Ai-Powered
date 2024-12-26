@@ -34,6 +34,6 @@ val defaultAdConfigs = """
    "interstitialAdOnDelete": false,
    "interstitialAdOnUpdate": false,
    "rewardedAdOnDelete": false,
-   "interstitialAdOnSplash": false,
+   "interstitialAdOnSplash": false
 }
 """.trimIndent()

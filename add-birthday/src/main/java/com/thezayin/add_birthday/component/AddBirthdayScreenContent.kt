@@ -226,18 +226,18 @@ fun AddBirthdayScreenContent(
 
             Spacer(modifier = Modifier.height(20.sdp))
 
-            // ********** New Phone and Message Input Section **********
-            PhoneAndMessageSection(
-                sendCustomMessage = sendCustomMessage,
-                phoneCountryCode = phoneCountryCode,
-                phoneNumber = phoneNumber,
-                notificationMethod = notificationMethod,
-                birthdayMessage = birthdayMessage,
-                showPhoneError = showPhoneError,
-                phoneError = phoneError,
-                showMessageError = showMessageError,
-                messageError = messageError
-            )
+//            // ********** New Phone and Message Input Section **********
+//            PhoneAndMessageSection(
+//                sendCustomMessage = sendCustomMessage,
+//                phoneCountryCode = phoneCountryCode,
+//                phoneNumber = phoneNumber,
+//                notificationMethod = notificationMethod,
+//                birthdayMessage = birthdayMessage,
+//                showPhoneError = showPhoneError,
+//                phoneError = phoneError,
+//                showMessageError = showMessageError,
+//                messageError = messageError
+//            )
 
             Spacer(modifier = Modifier.height(20.sdp))
 

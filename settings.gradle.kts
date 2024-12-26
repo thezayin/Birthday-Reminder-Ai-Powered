@@ -21,7 +21,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "DateMate"
+rootProject.name = "BirthdayReminder"
 include(":app")
 include(":core:values")
 include(":setting")

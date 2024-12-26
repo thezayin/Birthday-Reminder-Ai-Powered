@@ -62,13 +62,13 @@ object AlarmScheduler {
             putExtra("name", birthday.name)
             putExtra("day", birthday.day)
             putExtra("month", birthday.month)
-            putExtra("id", birthday.id) // Pass the ID
+            putExtra("id", birthday.id) // Ensure this is correctly set
             putExtra("year", birthday.year ?: 0) // If applicable
         }
 
         val pendingIntent = PendingIntent.getBroadcast(
             context,
-            birthday.id, // Use birthday ID as requestCode for uniqueness
+            birthday.id, // Use unique and non-zero ID
             intent,
             PendingIntent.FLAG_UPDATE_CURRENT or PendingIntent.FLAG_IMMUTABLE
         )

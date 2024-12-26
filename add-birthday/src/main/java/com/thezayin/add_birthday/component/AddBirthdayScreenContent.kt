@@ -1,3 +1,4 @@
+// AddBirthdayScreenContent.kt
 package com.thezayin.add_birthday.component
 
 import android.app.Activity
@@ -14,7 +15,9 @@ import androidx.compose.foundation.layout.navigationBarsPadding
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.ExperimentalMaterial3Api
@@ -48,35 +51,48 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddBirthdayScreenContent(
-    // Various states and parameters passed to the screen
-    name: MutableState<TextFieldValue>, // Name of the person
-    day: MutableState<TextFieldValue>, // Birthday day input
-    month: MutableState<TextFieldValue>, // Birthday month input
-    year: MutableState<TextFieldValue>, // Birthday year input
-    selectedGroup: MutableState<String>, // Selected group for categorization
-    groups: List<String>, // List of available groups
-    error: String?, // Error message string
-    isAdded: Boolean, // Flag to indicate if the birthday is successfully added
-    isButtonEnabled: MutableState<Boolean>, // State to enable/disable the "Save" button
-    notifyHour: MutableState<TextFieldValue>, // Notification time hour
-    notifyMinute: MutableState<TextFieldValue>, // Notification time minute
-    notifyPeriod: MutableState<String>, // AM/PM for the notification time
-    notifyDay: MutableState<TextFieldValue>, // Notification date day
-    notifyMonth: MutableState<TextFieldValue>, // Notification date month
-    notifyYear: MutableState<TextFieldValue>, // Notification date year
-    isLoading: Boolean, // Indicates if a loading dialog should be shown
-    showError: Boolean, // Indicates if an error dialog should be shown
-    navigateBack: () -> Unit, // Callback to navigate back
-    dismissErrorDialog: () -> Unit, // Callback to dismiss error dialog
-    onAddBirthdayClick: () -> Unit, // Callback to handle "Save" button click
-    isDuplicate: Boolean, // Indicates if the birthday being added is a duplicate
-    onDismissDuplicateDialog: () -> Unit, // Callback to dismiss the duplicate dialog
-    onConfirmAddDuplicate: () -> Unit, // Callback to confirm adding a duplicate birthday
-    setAdded: () -> Unit // Callback to reset the added state
+    name: MutableState<TextFieldValue>,
+    day: MutableState<TextFieldValue>,
+    month: MutableState<TextFieldValue>,
+    year: MutableState<TextFieldValue>,
+    selectedGroup: MutableState<String>,
+    groups: List<String>,
+    error: String?,
+    isAdded: Boolean,
+    isButtonEnabled: MutableState<Boolean>,
+    notifyHour: MutableState<TextFieldValue>,
+    notifyMinute: MutableState<TextFieldValue>,
+    notifyPeriod: MutableState<String>,
+    notifyDay: MutableState<TextFieldValue>,
+    notifyMonth: MutableState<TextFieldValue>,
+    notifyYear: MutableState<TextFieldValue>,
+    isLoading: Boolean,
+    showError: Boolean,
+    navigateBack: () -> Unit,
+    dismissErrorDialog: () -> Unit,
+    onAddBirthdayClick: () -> Unit,
+    isDuplicate: Boolean,
+    onDismissDuplicateDialog: () -> Unit,
+    onConfirmAddDuplicate: () -> Unit,
+    setAdded: () -> Unit,
+
+    // New parameters for PhoneAndMessageSection
+    phoneCountryCode: MutableState<TextFieldValue>,
+    phoneNumber: MutableState<TextFieldValue>,
+    notificationMethod: MutableState<String>, // "Text" or "WhatsApp"
+    sendCustomMessage: MutableState<Boolean>,
+    birthdayMessage: MutableState<TextFieldValue>,
 ) {
-    val state =
-        rememberModalBottomSheetState(skipPartiallyExpanded = true) // State for the modal bottom sheet
+    val scrollState = rememberScrollState()
+    val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
     val activity = LocalContext.current as Activity
+
+    // Error states for phone and message
+    var showPhoneError by remember { mutableStateOf(false) }
+    var phoneError by remember { mutableStateOf("") }
+    var showMessageError by remember { mutableStateOf(false) }
+    var messageError by remember { mutableStateOf("") }
+
     // Show error dialog if there's an error
     if (showError) {
         ErrorQueryDialog(
@@ -147,8 +163,8 @@ fun AddBirthdayScreenContent(
     Scaffold(
         modifier = Modifier
             .statusBarsPadding()
-            .navigationBarsPadding(), // Adds padding to account for system UI
-        containerColor = colorResource(id = R.color.background), // Background color for the screen
+            .navigationBarsPadding(),
+        containerColor = colorResource(id = R.color.background),
         topBar = {
             // Top bar with a back button
             Row(
@@ -163,7 +179,7 @@ fun AddBirthdayScreenContent(
                     contentDescription = activity.getString(R.string.back_button),
                     modifier = Modifier
                         .size(18.sdp)
-                        .clickable { navigateBack() } // Navigate back when clicked
+                        .clickable { navigateBack() }
                 )
             }
         },
@@ -175,7 +191,7 @@ fun AddBirthdayScreenContent(
                     .fillMaxWidth()
                     .padding(16.sdp)
                     .height(35.sdp),
-                enabled = isButtonEnabled.value, // Enable/disable based on input validation
+                enabled = isButtonEnabled.value,
                 shape = RoundedCornerShape(8.sdp),
                 colors = ButtonDefaults.buttonColors(
                     containerColor = colorResource(id = R.color.primary),
@@ -183,7 +199,7 @@ fun AddBirthdayScreenContent(
                 ),
             ) {
                 Text(
-                    text = activity.getString(R.string.save), // Button text
+                    text = activity.getString(R.string.save),
                     fontSize = 12.ssp,
                     fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                     color = colorResource(id = R.color.white)
@@ -195,9 +211,10 @@ fun AddBirthdayScreenContent(
             modifier = Modifier
                 .padding(paddingValues)
                 .fillMaxSize()
+                .verticalScroll(scrollState) // Make the Column scrollable
                 .padding(horizontal = 16.sdp, vertical = 8.sdp)
         ) {
-            // Input fields for birthday details
+            // Existing Input Fields
             BirthdayDetails(
                 modifier = Modifier.fillMaxWidth(),
                 name = name,
@@ -209,9 +226,24 @@ fun AddBirthdayScreenContent(
 
             Spacer(modifier = Modifier.height(20.sdp))
 
-            // "More Settings" clickable text
+//            // ********** New Phone and Message Input Section **********
+//            PhoneAndMessageSection(
+//                sendCustomMessage = sendCustomMessage,
+//                phoneCountryCode = phoneCountryCode,
+//                phoneNumber = phoneNumber,
+//                notificationMethod = notificationMethod,
+//                birthdayMessage = birthdayMessage,
+//                showPhoneError = showPhoneError,
+//                phoneError = phoneError,
+//                showMessageError = showMessageError,
+//                messageError = messageError
+//            )
+
+            Spacer(modifier = Modifier.height(20.sdp))
+
+            // Existing "More Settings" Clickable Text
             Text(
-                text = activity.getString(R.string.more_settings),
+                text = "More Settings",
                 fontSize = 10.ssp,
                 fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
                 color = colorResource(id = R.color.primary),
@@ -221,15 +253,16 @@ fun AddBirthdayScreenContent(
                     }
                     .padding(8.sdp)
             )
+
             Spacer(modifier = Modifier.weight(1f)) // Pushes content to the top
         }
 
-        // Bottom sheet for additional settings
+        // Bottom Sheet for More Settings
         if (showMoreSettings) {
             ModalBottomSheet(
                 sheetState = state,
                 containerColor = colorResource(id = R.color.card_background),
-                onDismissRequest = { showMoreSettings = false }, // Close the sheet on dismiss
+                onDismissRequest = { showMoreSettings = false },
             ) {
                 MoreSettingsBottomSheet(
                     notifyHour = notifyHour,
@@ -243,11 +276,78 @@ fun AddBirthdayScreenContent(
                     selectedGroup = selectedGroup,
                     groups = groups,
                     onSave = {
-                        showMoreSettings = false // Close the bottom sheet on save
+                        showMoreSettings = false
                     },
                     nextBirthday = nextBirthday
                 )
             }
+        }
+
+        // ********** Validation Logic **********
+        // Observe changes to relevant states and update validation accordingly
+        LaunchedEffect(
+            name.value,
+            day.value,
+            month.value,
+            year.value,
+            phoneCountryCode.value,
+            phoneNumber.value,
+            notificationMethod.value,
+            sendCustomMessage.value,
+            birthdayMessage.value
+        ) {
+            // Basic validation for existing fields
+            val isExistingValid = name.value.text.isNotEmpty() &&
+                    day.value.text.isNotEmpty() &&
+                    month.value.text.isNotEmpty()
+
+            // Basic validation for phone number
+            val isPhoneValid = if (sendCustomMessage.value) {
+                phoneCountryCode.value.text.isNotEmpty() &&
+                        phoneNumber.value.text.length >= 7 // Adjust as per country standards
+            } else {
+                true
+            }
+
+            // Validation for birthday message
+            if (sendCustomMessage.value) {
+                if (birthdayMessage.value.text.isBlank()) {
+                    showMessageError = true
+                    messageError = "Please enter a birthday message."
+                } else {
+                    showMessageError = false
+                    messageError = ""
+                }
+            } else {
+                // No message required
+                showMessageError = false
+                messageError = ""
+            }
+
+            // Validation for phone number fields
+            if (sendCustomMessage.value) {
+                if (phoneCountryCode.value.text.isBlank() || phoneNumber.value.text.isBlank()) {
+                    showPhoneError = true
+                    phoneError = "Please enter a valid phone number."
+                } else {
+                    showPhoneError = false
+                    phoneError = ""
+                }
+            } else {
+                showPhoneError = false
+                phoneError = ""
+            }
+
+            // Enable Save button if:
+            // - Existing fields are valid
+            // - If Send Custom Message is checked:
+            //   - Phone fields are valid
+            //   - Birthday message is not empty
+            isButtonEnabled.value = isExistingValid &&
+                    isPhoneValid &&
+                    (!sendCustomMessage.value || (
+                            !showMessageError && !showPhoneError
+                            ))
         }
     }
 }

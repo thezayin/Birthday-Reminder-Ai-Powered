@@ -20,7 +20,7 @@ android {
         minSdk = libs.versions.minSdkVersion.get().toInt()
         targetSdk = libs.versions.targetSdkVersion.get().toInt()
         versionCode = 1
-        versionName = "1.0"
+        versionName = "1.0.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
@@ -125,4 +125,6 @@ dependencies {
 
     implementation(libs.androidx.multidex)
     implementation(libs.grizzly)
+
+    implementation(libs.accompanist.permissions)
 }

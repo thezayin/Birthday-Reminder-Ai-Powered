@@ -1,6 +1,7 @@
 package com.thezayin.presentation
 
 import android.app.Activity
+import androidx.activity.compose.BackHandler
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
@@ -59,4 +60,8 @@ fun HomeScreen(
                 },
             )
         })
+
+    BackHandler {
+        activity.finish()
+    }
 }

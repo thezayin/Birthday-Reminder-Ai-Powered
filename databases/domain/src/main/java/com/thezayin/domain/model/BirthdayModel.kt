@@ -13,5 +13,9 @@ data class BirthdayModel(
     val month: Int,
     val year: Int?, // Make year optional if not always provided
     val group: String,
-    val notifyAt: Long // Timestamp for notification
+    val notifyAt: Long,// Timestamp for notification
+    val phoneCountryCode: String? = null,
+    val phoneNumber: String? = null,
+    val notificationMethod: String? = null, // "Text" or "WhatsApp"
+    val birthdayMessage: String? = null
 )

@@ -1,8 +1,9 @@
 package com.thezayin.data.repository
 
 import android.content.Context
-import com.thezayin.data.alarm.AlarmScheduler
 import com.thezayin.data.dao.BirthdayDao
+import com.thezayin.data.scheduler.alarm.AlarmScheduler
+import com.thezayin.data.scheduler.sms.SmsScheduler
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.repository.BirthdayRepository
 import com.thezayin.framework.utils.Response
@@ -17,9 +18,7 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao, private val c
             emit(Response.Loading)
             val result = birthdayDao.addBirthday(birthday)
             if (result > 0) {
-                // Update the birthday with the generated ID
                 val updatedBirthday = birthday.copy(id = result.toInt())
-                // Schedule notification
                 AlarmScheduler.scheduleBirthdayAlarm(context, updatedBirthday)
                 AlarmScheduler.scheduleBirthdayNotification(context, updatedBirthday)
                 emit(Response.Success(Unit))
@@ -34,7 +33,6 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao, private val c
     override fun deleteBirthday(birthday: BirthdayModel): Flow<Response<Unit>> = flow {
         try {
             emit(Response.Loading)
-            // Cancel notification
             AlarmScheduler.cancelBirthdayAlarm(context, birthday)
             AlarmScheduler.cancelBirthdayNotification(context, birthday)
             val rowsDeleted = birthdayDao.deleteBirthday(birthday)
@@ -53,7 +51,9 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao, private val c
             emit(Response.Loading)
             val rowsUpdated = birthdayDao.updateBirthday(birthday)
             if (rowsUpdated > 0) {
-                // Reschedule notification
+                if (birthday.notificationMethod == "Text") {
+                    SmsScheduler.cancelSms(context, birthday)
+                }
                 AlarmScheduler.cancelBirthdayNotification(context, birthday)
                 AlarmScheduler.cancelBirthdayAlarm(context, birthday)
                 AlarmScheduler.scheduleBirthdayNotification(context, birthday)
@@ -81,8 +81,6 @@ class BirthdayRepositoryImpl(private val birthdayDao: BirthdayDao, private val c
         try {
             emit(Response.Loading)
             val birthdays = birthdayDao.getAllBirthdays()
-            // Cancel all notifications
-
             birthdays.forEach {
                 AlarmScheduler.cancelBirthdayAlarm(context, it)
                 AlarmScheduler.cancelBirthdayNotification(context, it)

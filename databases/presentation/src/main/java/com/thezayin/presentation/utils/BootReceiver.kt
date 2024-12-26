@@ -4,7 +4,7 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
-import com.thezayin.data.alarm.AlarmScheduler
+import com.thezayin.data.scheduler.alarm.AlarmScheduler
 import com.thezayin.domain.repository.BirthdayRepository
 import com.thezayin.framework.utils.Response
 import kotlinx.coroutines.CoroutineScope

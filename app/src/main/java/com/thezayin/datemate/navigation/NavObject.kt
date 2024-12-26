@@ -25,3 +25,6 @@ object SavedBirthdayScreenNav
 
 @Serializable
 object GiftIdeasScreenNav
+
+@Serializable
+object RequestPermissionsScreenNav

@@ -1,10 +1,12 @@
 package com.thezayin.framework.ads.loader
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.rewarded.RewardedAd
 import com.google.android.gms.ads.rewarded.RewardedAdLoadCallback
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object GoogleRewardedAdLoader {
     fun loadAd(
@@ -19,6 +21,8 @@ object GoogleRewardedAdLoader {
             context, adUnitId, AdRequest.Builder().build(),
             object : RewardedAdLoadCallback() {
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
+                    Log.e("GoogleRewardedAdLoader", "Ad failed to load: $loadAdError")
+                    FirebaseCrashlytics.getInstance().recordException(Exception("Ad failed to load: $loadAdError"))
                     onAdFailed()
                 }
 

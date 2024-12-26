@@ -44,6 +44,15 @@ fun AddBirthdayScreen(
     val notifyMinute = remember { mutableStateOf(TextFieldValue("00")) } // Default to 00
     val notifyPeriod = remember { mutableStateOf("AM") } // Default to AM
 
+    // ********** New States for Phone Number and Message **********
+    val phoneCountryCode =
+        remember { mutableStateOf(TextFieldValue("00")) } // Default country code for Pakistan
+    val phoneNumber = remember { mutableStateOf(TextFieldValue()) }
+    val notificationMethod = remember { mutableStateOf("WhatsApp") } // Default to "WhatsApp"
+    val sendCustomMessage = remember { mutableStateOf(false) } // Checkbox state
+    val birthdayMessage = remember { mutableStateOf(TextFieldValue("Happy Birthday! 🎉")) }
+
+
     val groups = listOf("Family", "Friends", "Work", "Other") // Example groups
 
     if (showLoadingAd.value) {
@@ -136,7 +145,10 @@ fun AddBirthdayScreen(
                         notifyDayInt != null && notifyDayInt in 1..31 &&
                         notifyMonthInt != null && notifyMonthInt in 1..12 &&
                         hourInt != null && hourInt in 1..12 &&
-                        minuteInt != null && minuteInt in 0..59
+                        minuteInt != null && minuteInt in 0..59 && (!sendCustomMessage.value || (phoneCountryCode.value.text.isNotEmpty() &&
+                                phoneNumber.value.text.isNotEmpty() &&
+                                birthdayMessage.value.text.isNotEmpty() &&
+                                (notificationMethod.value == "Text" || notificationMethod.value == "WhatsApp")))
                     ) {
                         // Additional date validation
                         val notifyAt = calculateNotifyAt(
@@ -153,6 +165,7 @@ fun AddBirthdayScreen(
                             year = year.value.text.toIntOrNull(), // Optional Year
                             group = groupStr,
                             notifyAt = notifyAt
+                            // Add phone details here if needed in the future
                         )
                         viewModel.addBirthday(birthday)
                     } else {
@@ -163,6 +176,12 @@ fun AddBirthdayScreen(
                         ).show()
                     }
                 })
-        }
+        },
+        // ********** New States Passed **********
+        phoneCountryCode = phoneCountryCode,
+        phoneNumber = phoneNumber,
+        notificationMethod = notificationMethod,
+        sendCustomMessage = sendCustomMessage,
+        birthdayMessage = birthdayMessage
     )
 }

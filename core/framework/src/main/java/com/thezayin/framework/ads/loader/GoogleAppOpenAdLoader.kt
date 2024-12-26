@@ -1,12 +1,12 @@
 package com.thezayin.framework.ads.loader
 
 import android.content.Context
+import android.util.Log
 import com.google.android.gms.ads.AdRequest
 import com.google.android.gms.ads.LoadAdError
 import com.google.android.gms.ads.appopen.AppOpenAd
 import com.google.android.gms.ads.appopen.AppOpenAd.AppOpenAdLoadCallback
-import com.thezayin.analytics.analytics.Analytics
-import com.thezayin.events.AnalyticsEvent
+import com.google.firebase.crashlytics.FirebaseCrashlytics
 
 object GoogleAppOpenAdLoader {
     fun loadAd(
@@ -22,13 +22,11 @@ object GoogleAppOpenAdLoader {
             context, adUnitId, AdRequest.Builder().build(),
             object : AppOpenAdLoadCallback() {
                 override fun onAdFailedToLoad(loadAdError: LoadAdError) {
-//                    analytics.logEvent(
-//                        AnalyticsEvent.AppOpenAdEvent(
-//                            status = "App_Open_Ad_Failed",
-//                            error = loadAdError.message
-//                        )
-//                    )
+                    Log.e("GoogleAppOpenAdLoader", "Ad failed to load: $loadAdError")
+                    FirebaseCrashlytics.getInstance()
+                        .recordException(Exception("Ad failed to load: $loadAdError"))
                     onAdFailed()
+                    FirebaseCrashlytics.getInstance().log("Ad failed to load: $loadAdError")
                 }
 
                 override fun onAdLoaded(appOpenAd: AppOpenAd) {

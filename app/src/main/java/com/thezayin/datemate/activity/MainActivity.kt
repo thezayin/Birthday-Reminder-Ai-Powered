@@ -5,7 +5,6 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
 import androidx.navigation.compose.rememberNavController
-import com.thezayin.components.PermissionsHandler
 import com.thezayin.datemate.navigation.NavHost
 import com.thezayin.datemate.theme.DateMateTheme
 import com.thezayin.framework.ads.functions.appOpenAd
@@ -21,14 +20,6 @@ class MainActivity : ComponentActivity() {
         setContent {
             DateMateTheme {
                 val navController = rememberNavController()
-
-                // Centralized Permission Handling
-                PermissionsHandler(
-                    onAllPermissionsGranted = {
-                        // Initialize components that require permissions
-                    }
-                )
-
                 NavHost(navController = navController)
             }
         }

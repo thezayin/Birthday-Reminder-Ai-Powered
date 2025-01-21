@@ -1,6 +1,6 @@
 # Birthday Reminder - AI Powered
 
-![App Icon](https://raw.githubusercontent.com/thezayin/AI-Birthday-Reminder/main/core/values/src/main/res/drawable/ic_main.png)
+![App Icon]([https://raw.githubusercontent.com/thezayin/AI-Birthday-Reminder/main/core/values/src/main/res/drawable/ic_main.png](https://github.com/thezayin/AI-Birthday-Reminder/blob/main/core/values/src/main/res/drawable/ic_main.png))
 
 A smart and intuitive Android app designed to help users remember birthdays, calculate age, and suggest thoughtful gift ideas with the help of AI. Built with Clean Architecture, MVI (Model-View-Intent), and multi-modular setup, the app leverages Koin for dependency injection and Ktor for network requests. Firebase analytics, crash reporting, and remote configuration for ads ensure a seamless and robust experience.
 

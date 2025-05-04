@@ -2,13 +2,10 @@ package com.thezayin.presentation
 
 import android.app.Activity
 import androidx.activity.compose.BackHandler
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import com.thezayin.components.AdLoadingDialog
-import com.thezayin.framework.ads.functions.interstitialAd
 import com.thezayin.presentation.components.HomeScreenContent
 import org.koin.compose.koinInject
 
@@ -22,35 +19,26 @@ fun HomeScreen(
 ) {
     val viewModel: HomeViewModel = koinInject()
     val state = viewModel.homeUiState.collectAsState().value
-    val activity = LocalContext.current as Activity
-    val showAdLoading = remember { mutableStateOf(false) }
+    val activity = LocalActivity.current as Activity
+    val adManager = viewModel.adManager
 
-    if (showAdLoading.value) {
-        AdLoadingDialog()
+    LaunchedEffect(Unit) {
+        adManager.loadAd(activity)
     }
 
-    HomeScreenContent(isLoading = state.isLoading,
+    HomeScreenContent(
+        isLoading = state.isLoading,
         list = state.menuItems,
-        onSettingsClick = {
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnSettingClick,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnSettingClick,
-                showLoading = { showAdLoading.value = true },
-                hideLoading = { showAdLoading.value = false },
-                callback = {
-                    onSettingsClick()
-                },
-            )
-        },
+        onSettingsClick = onSettingsClick,
         onPremiumClick = {},
         upcomingBirthdays = state.upcomingBirthdays,
+        showAd = viewModel.remoteConfig.adConfigs.bannerAdOnHome,
         onMenuClick = { menuIndex ->
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnHomeFeatures,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnHomeFeatures,
-                showLoading = { showAdLoading.value = true },
-                hideLoading = { showAdLoading.value = false },
-                callback = {
+            adManager.showAd(
+                showAd = viewModel.remoteConfig.adConfigs.adOnHomeFeatures,
+                activity = activity,
+                adImpression = {},
+                onNext = {
                     when (menuIndex) {
                         0 -> onAddBirthdayClick()
                         1 -> onCalculatorClick()

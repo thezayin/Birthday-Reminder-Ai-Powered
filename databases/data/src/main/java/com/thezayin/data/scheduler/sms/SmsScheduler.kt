@@ -38,7 +38,6 @@ object SmsScheduler {
 
         // Ensure the alarm is set for a future time
         if (calendar.timeInMillis <= System.currentTimeMillis()) {
-            Log.e(TAG, "Cannot schedule SMS in the past for birthday: $birthday")
             return
         }
 
@@ -49,7 +48,6 @@ object SmsScheduler {
             pendingIntent
         )
 
-        Log.d(TAG, "Scheduled SMS for birthday: $birthday at ${calendar.time}")
     }
 
     fun cancelSms(context: Context, birthday: BirthdayModel) {
@@ -65,6 +63,5 @@ object SmsScheduler {
         )
 
         alarmManager.cancel(pendingIntent)
-        Log.d(TAG, "Canceled SMS for birthday: $birthday")
     }
 }

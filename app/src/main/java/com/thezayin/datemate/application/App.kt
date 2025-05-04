@@ -1,6 +1,8 @@
 package com.thezayin.datemate.application
 
 import android.app.Application
+import com.google.android.gms.ads.MobileAds
+import com.google.firebase.FirebaseApp
 import com.google.firebase.crashlytics.FirebaseCrashlytics
 import com.thezayin.add_birthday.di.addBirthdayModule
 import com.thezayin.di.analyticsModule
@@ -17,11 +19,15 @@ import org.koin.android.ext.koin.androidContext
 import org.koin.android.ext.koin.androidLogger
 import org.koin.core.context.startKoin
 import org.koin.core.logger.Level
+import timber.log.Timber
 
 class App : Application() {
     override fun onCreate() {
         super.onCreate()
         NotificationUtil.createNotificationChannel(this)
+        MobileAds.initialize(this)
+        FirebaseApp.initializeApp(this)
+        Timber.plant(Timber.DebugTree())
         startKoin {
             androidLogger(Level.ERROR)
             androidContext(this@App)

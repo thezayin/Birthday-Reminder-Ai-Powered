@@ -15,10 +15,6 @@ class AnalyticsImpl(
 
     @SuppressLint("BinaryOperationInTimber")
     override fun logEvent(event: AnalyticsEvent) {
-        Log.d(
-            "Analytics",
-            "FirebaseAnalyticsRepository eventName...." + event.event + " arguments... " + event.args + " "
-        )
         event.event?.let { eventName ->
             analytics.logEvent(eventName, event.args)
         }

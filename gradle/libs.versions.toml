@@ -5,15 +5,13 @@ targetSdkVersion = "34"
 
 grizzly = "2.1"
 multidex = "2.0.1"
-agp = "8.5.2"
-cardview = "1.0.0"
-constraintlayout = "2.1.4"
+agp = "8.6.1"
 gradle = "8.4.2"
 koin = "4.0.0-RC2"
 koin-version = "3.6.0-wasm-alpha2"
 koinAndroid = "3.5.6"
 kotlin = "2.0.20"
-coreKtx = "1.13.1"
+coreKtx = "1.16.0"
 junit = "4.13.2"
 junitVersion = "1.2.1"
 espressoCore = "3.6.1"
@@ -21,47 +19,38 @@ kotlinxSerializationJson = "1.7.2"
 ktorClientCio = "2.3.12"
 ktorSerializationKotlinxJson = "2.3.12"
 ktorServerContentNegotiation = "2.3.12"
-orgSerlize = "2.0.10"
-lifecycle = "2.8.4"
-activityCompose = "1.9.2"
-composeBom = "2024.09.02"
+orgSerlize = "2.1.10"
+lifecycle = "2.8.7"
+activityCompose = "1.10.1"
+composeBom = "2025.04.00"
 ktor = "2.3.12"
 sdpCompose = "1.1.0"
 ktorSerialize = "2.3.12"
 googleServicesVersion = "4.4.2"
-firebaseAnalytics = "22.1.0"
-firebaseCrashlytics = "19.1.0"
-firebaseCrashlyticsGradle = "3.0.2"
-firebasePerf = "21.0.1"
+firebaseAnalytics = "22.4.0"
+firebaseCrashlytics = "19.4.2"
+firebaseCrashlyticsGradle = "3.0.3"
+firebasePerf = "21.0.5"
 perfPlugin = "1.4.2"
-room = "2.6.1"
-firebaseAppdistributionGradle = "5.0.0"
-firebaseMessaging = "24.0.1"
-firebaseInappmessagingDisplay = "21.0.0"
-firebaseConfig = "22.0.0"
-playServicesAds = "23.3.0"
+room = "2.7.0"
+firebaseAppdistributionGradle = "5.1.1"
+firebaseMessaging = "24.1.1"
+firebaseInappmessagingDisplay = "21.0.2"
+firebaseConfig = "22.1.0"
+playServicesAds = "24.2.0"
 timber = "5.0.1"
-userMessagingPlatform = "3.0.0"
-vungle = "7.4.1.0"
-workRuntime = "2.9.1"
+userMessagingPlatform = "3.2.0"
 appcompat = "1.7.0"
 material = "1.12.0"
-accompanistNavigationAnimation = "0.34.0"
-animation = "1.7.2"
 jsoupVersion = "1.18.1"
-navigationCompose ="2.8.0-rc01"
-playServicesMeasurementApi = "22.1.0"
+navigationCompose ="2.8.9"
 ksp = "2.0.10-1.0.24"
 storage = "1.5.0"
-firebaseCrashlyticsBuildtools = "3.0.2"
+firebaseCrashlyticsBuildtools = "3.0.3"
 accompanistPermissions = "0.30.1"
 
 [libraries]
-accompanist-navigation-animation = { module = "com.google.accompanist:accompanist-navigation-animation", version.ref = "accompanistNavigationAnimation" }
 accompanist-permissions = { module = "com.google.accompanist:accompanist-permissions", version.ref = "accompanistPermissions" }
-androidx-animation = { module = "androidx.compose.animation:animation", version.ref = "animation" }
-androidx-cardview = { module = "androidx.cardview:cardview", version.ref = "cardview" }
-androidx-constraintlayout = { module = "androidx.constraintlayout:constraintlayout", version.ref = "constraintlayout" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 androidx-multidex = { module = "androidx.multidex:multidex", version.ref = "multidex" }
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigationCompose" }
@@ -118,13 +107,9 @@ material = { group = "com.google.android.material", name = "material", version.r
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 user-messaging-platform = { module = "com.google.android.ump:user-messaging-platform", version.ref = "userMessagingPlatform" }
 play-services-ads = { module = "com.google.android.gms:play-services-ads", version.ref = "playServicesAds" }
-androidx-work-runtime = { module = "androidx.work:work-runtime", version.ref = "workRuntime" }
-play-services-measurement-api = { group = "com.google.android.gms", name = "play-services-measurement-api", version.ref = "playServicesMeasurementApi" }
 sdp-compose = { module = "com.github.Kaaveh:sdp-compose", version.ref = "sdpCompose" }
-vungle = { module = "com.google.ads.mediation:vungle", version.ref = "vungle" }
 
 
-androidx-room-paging = { module = "androidx.room:room-paging", version.ref = "room" }
 androidx-room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 androidx-room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 androidx-room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }

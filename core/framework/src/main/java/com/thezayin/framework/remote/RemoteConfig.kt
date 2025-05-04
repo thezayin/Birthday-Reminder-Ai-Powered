@@ -10,8 +10,8 @@ import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 
-private const val AD_CONFIGS = "ad_configs"
-private const val AD_UNITS = "ad_units"
+private const val AD_CONFIGS = "ad_configss"
+private const val AD_UNITS = "ad_unitss"
 
 class RemoteConfig(
     private val json: Json

@@ -1,14 +1,11 @@
 package com.thezayin.saved_birthdays
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
-import com.thezayin.components.AdLoadingDialog
-import com.thezayin.framework.ads.functions.interstitialAd
 import com.thezayin.saved_birthdays.components.SavedBirthdayContent
 import org.koin.compose.koinInject
 
@@ -18,46 +15,34 @@ fun SavedBirthdaysScreen(
 ) {
     val viewModel: SavedBirthdaysViewModel = koinInject()
     val uiState by viewModel.uiState.collectAsState()
-    val activity = LocalContext.current as Activity
-    val showLoadingAd = remember { mutableStateOf(false) }
+    val activity = LocalActivity.current as Activity
+    val interstitialAd = viewModel.interstitialAdManager
+    val rewardedAd = viewModel.rewardedAdManager
 
-    if (showLoadingAd.value) {
-        AdLoadingDialog()
+    LaunchedEffect(Unit) {
+        interstitialAd.loadAd(activity)
+        rewardedAd.loadAd(activity)
     }
 
     SavedBirthdayContent(
         selectedGroup = uiState.selectedGroup,
         onDelete = { birthday ->
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnDelete,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnDelete,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = { viewModel.deleteBirthday(birthday) }
-            )
+            interstitialAd.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnBirthdayDelete,
+                onNext = { viewModel.deleteBirthday(birthday) })
         },
         onUpdate = { birthday ->
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnUpdate,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnUpdate,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = { viewModel.updateBirthday(birthday) })
+            rewardedAd.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnUpdate,
+                onNext = { viewModel.updateBirthday(birthday) })
         },
         error = uiState.errorMessage,
         isLoading = uiState.isLoading,
         showError = uiState.isError,
-        navigateBack = {
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnBack,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnBack,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = { navigateBack() }
-            )
-        },
+        navigateBack = navigateBack,
         filteredBirthdays = uiState.filteredBirthdays,
         dismissErrorDialog = { viewModel.setError(isError = false) },
-        onSelectedGroup = { group -> viewModel.setGroupFilter(group) }
-    )
+        onSelectedGroup = { group -> viewModel.setGroupFilter(group) })
 }

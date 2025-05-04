@@ -6,6 +6,8 @@ import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.usecase.DeleteBirthdayUseCase
 import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
 import com.thezayin.domain.usecase.UpdateBirthdayUseCase
+import com.thezayin.dslrblur.framework.ads.admob.domain.repository.RewardedAdManager
+import com.thezayin.framework.ads.admob.domain.repository.InterstitialAdManager
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.saved_birthdays.events.SavedBirthdayUiEvent
@@ -21,6 +23,8 @@ class SavedBirthdaysViewModel(
     private val deleteBirthdayUseCase: DeleteBirthdayUseCase,
     private val updateBirthdayUseCase: UpdateBirthdayUseCase,
     val remoteConfig: RemoteConfig,
+    val rewardedAdManager: RewardedAdManager,
+    val interstitialAdManager: InterstitialAdManager,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(SavedBirthdayUiState())
     val uiState: StateFlow<SavedBirthdayUiState> = _uiState.asStateFlow()

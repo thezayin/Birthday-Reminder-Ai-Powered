@@ -31,7 +31,7 @@ fun RequestPermissionsScreen(
 
     // Define all required permissions
     val requiredPermissions = listOf(
-        Permissions.SEND_SMS,
+//        Permissions.SEND_SMS,
         Permissions.POST_NOTIFICATIONS
     )
 
@@ -357,7 +357,7 @@ fun DefaultPermissionRequestUI(
 // Utility function to get a user-friendly name for permissions
 fun getPermissionFriendlyName(permission: String): String {
     return when (permission) {
-        Permissions.SEND_SMS -> "Send SMS"
+//        Permissions.SEND_SMS -> "Send SMS"
         Permissions.POST_NOTIFICATIONS -> "Post Notifications"
         else -> permission
     }

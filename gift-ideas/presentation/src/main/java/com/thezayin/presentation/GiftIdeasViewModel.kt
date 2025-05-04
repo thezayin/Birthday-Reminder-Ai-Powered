@@ -4,6 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thezayin.domain.model.GiftRecommendationModel
 import com.thezayin.domain.usecase.GetGiftIdeasUseCase
+import com.thezayin.dslrblur.framework.ads.admob.domain.repository.RewardedAdManager
+import com.thezayin.framework.ads.admob.domain.repository.InterstitialAdManager
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.event.GiftUiEvent
@@ -18,6 +20,7 @@ import kotlin.system.measureTimeMillis
 class GiftIdeasViewModel(
     private val getGiftIdeasUseCase: GetGiftIdeasUseCase,
     val remoteConfig: RemoteConfig,
+    val rewardedAdManager: RewardedAdManager
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow(GiftUiState())

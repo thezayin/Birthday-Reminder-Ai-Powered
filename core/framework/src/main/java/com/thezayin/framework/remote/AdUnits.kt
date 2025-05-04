@@ -21,7 +21,7 @@ data class AdUnits(
 
 val defaultAdUnits = """
    {
-   "appOpenAd": "ca-app-pub-3940256099942544/3419835294",
+   "appOpenAd": "ca-app-pub-3940256099942544/9257395921",
    "interstitialAdOnSplash": "ca-app-pub-3940256099942544/1033173712",
    "rewardedAdOnDelete": "ca-app-pub-3940256099942544/5224354917",
    "interstitialAdOnDelete": "ca-app-pub-3940256099942544/1033173712",
@@ -30,8 +30,8 @@ val defaultAdUnits = """
    "rewardedAdOnGenerateIdea": "ca-app-pub-3940256099942544/5224354917",
    "interstitialAdOnBack": "ca-app-pub-3940256099942544/1033173712",
    "rewardedAdOnHistoryClick": "ca-app-pub-3940256099942544/5224354917",
-    "interstitialAdOnHomeFeatures": "ca-app-pub-3940256099942544/1033173712",
-    "interstitialAdOnSettingClick": "ca-app-pub-3940256099942544/1033173712",
-    "rewardedAdOnCalculateClick": "ca-app-pub-3940256099942544/5224354917"
+   "interstitialAdOnHomeFeatures": "ca-app-pub-3940256099942544/1033173712",
+   "interstitialAdOnSettingClick": "ca-app-pub-3940256099942544/1033173712",
+   "rewardedAdOnCalculateClick": "ca-app-pub-3940256099942544/5224354917"
 }
 """.trimIndent()

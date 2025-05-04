@@ -1,16 +1,14 @@
 package com.thezayin.presentation
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
-import com.thezayin.components.AdLoadingDialog
-import com.thezayin.framework.ads.functions.interstitialAd
-import com.thezayin.framework.ads.functions.rewardedAd
+import com.thezayin.events.AnalyticsEvent
 import com.thezayin.presentation.components.CalculatorScreenContent
 import org.koin.compose.koinInject
 import java.util.Calendar
@@ -21,14 +19,15 @@ fun CalculatorScreen(
 ) {
     val viewModel: CalculatorViewModel = koinInject()
     val state = viewModel.calculatorState.collectAsState().value
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current as Activity
     val showAdLoading = remember { mutableStateOf(false) }
-
+    val analytics = viewModel.analytics
     val calendar = Calendar.getInstance()
     val year = calendar.get(Calendar.YEAR)
     val month = calendar.get(Calendar.MONTH)
     val day = calendar.get(Calendar.DAY_OF_MONTH)
-
+    val adManager = viewModel.adManager
+    val rewardedAdManager = viewModel.rewardAdManager
     val name = remember {
         mutableStateOf(TextFieldValue(""))
     }
@@ -45,6 +44,11 @@ fun CalculatorScreen(
         mutableStateOf(false)
     }
 
+    LaunchedEffect(Unit) {
+        adManager.loadAd(activity)
+        rewardedAdManager.loadAd(activity)
+    }
+
     LaunchedEffect(
         key1 = startDate.value.text, key2 = endDate.value.text, key3 = name.value.text
     ) {
@@ -52,14 +56,14 @@ fun CalculatorScreen(
             startDate.value.text.isNotEmpty() && endDate.value.text.isNotEmpty() && name.value.text.isNotEmpty()
     }
 
-    if (showAdLoading.value) {
-        AdLoadingDialog()
-    }
 
-    CalculatorScreenContent(day = day,
+    CalculatorScreenContent(
+        showAd = viewModel.remoteConfig.adConfigs.bannerOnCalculatorScreen,
+        day = day,
         name = name,
         year = year,
         month = month,
+        analytics = analytics,
         result = state.calculatedValue,
         endDate = endDate,
         startDate = startDate,
@@ -67,36 +71,31 @@ fun CalculatorScreen(
         showError = state.isError,
         isButtonEnables = isButtonEnables,
         showCalculatedAge = showCalculatedAge,
-        onBackClick = {
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnBack,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnBack,
-                showLoading = { showAdLoading.value = true },
-                hideLoading = { showAdLoading.value = false },
-                callback = { onBackPress() }
-            )
-        },
+        onBackClick = onBackPress,
         onHistoryClick = {
-            activity.rewardedAd(
-                showAd = viewModel.remoteConfig.adConfigs.rewardedAdOnHistoryClick,
-                adUnitId = viewModel.remoteConfig.adUnits.rewardedAdOnHistoryClick,
-                showLoading = { showAdLoading.value = true },
-                hideLoading = { showAdLoading.value = false },
-                callback = { onHistoryClick() }
+            adManager.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnHistoryClick,
+                onNext = {
+                    analytics.logEvent(AnalyticsEvent.AdShown(adType = "Rewarded"))
+                    onHistoryClick()
+                    analytics.logEvent(AnalyticsEvent.AdClosed(adType = "Rewarded"))
+                }
             )
         },
         dismissErrorDialog = { viewModel.hideErrorDialog() },
         onCalculateClick = {
-            activity.rewardedAd(showAd = viewModel.remoteConfig.adConfigs.rewardedAdOnCalculateClick,
-                adUnitId = viewModel.remoteConfig.adUnits.rewardedAdOnCalculateClick,
-                showLoading = { showAdLoading.value = true },
-                hideLoading = { showAdLoading.value = false },
-                callback = {
+            rewardedAdManager.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnCalculateClick,
+                onNext = {
+                    analytics.logEvent(AnalyticsEvent.AdShown(adType = "Rewarded"))
                     viewModel.calculateAge(
                         name = name.value.text,
                         startDate = startDate.value.text,
                         endDate = endDate.value.text
                     )
+                    analytics.logEvent(AnalyticsEvent.AdClosed(adType = "Rewarded"))
                 })
 
         },

@@ -16,8 +16,6 @@ class AlarmReceiver : BroadcastReceiver() {
         val month = intent.getIntExtra("month", 1)
         val year = intent.getIntExtra("year", 0) // If applicable
 
-        Log.d(TAG, "Alarm triggered for: $name (ID: $id)")
-
         // Start AlarmService to handle the alarm sound
         val serviceIntent = Intent(context, AlarmService::class.java).apply {
             putExtra("name", name)
@@ -28,6 +26,5 @@ class AlarmReceiver : BroadcastReceiver() {
         }
 
         ContextCompat.startForegroundService(context, serviceIntent)
-        Log.d(TAG, "AlarmService started for ID: $id")
     }
 }

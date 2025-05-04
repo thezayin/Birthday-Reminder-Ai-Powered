@@ -24,6 +24,7 @@ import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import com.thezayin.components.BannerAd
 import com.thezayin.domain.model.GiftRecommendationModel
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
@@ -31,6 +32,7 @@ import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun GiftIdeasScreenContent(
+    showAd: Boolean,
     onGenerateClick: (String, String, String, String) -> Unit,
     showError: Boolean,
     error: String,
@@ -51,10 +53,8 @@ fun GiftIdeasScreenContent(
     var budget by remember { mutableStateOf("") }
 
     // Determine button enabled state
-    val isButtonEnabled = interests.isNotBlank() &&
-            dislikes.isNotBlank() &&
-            relationship.isNotBlank() &&
-            budget.isNotBlank()
+    val isButtonEnabled =
+        interests.isNotBlank() && dislikes.isNotBlank() && relationship.isNotBlank() && budget.isNotBlank()
 
     Scaffold(
         modifier = Modifier
@@ -72,7 +72,8 @@ fun GiftIdeasScreenContent(
                 verticalAlignment = Alignment.CenterVertically  // Align items vertically in the center
             ) {
                 // Back Button (represented as an icon image)
-                Image(painter = painterResource(id = R.drawable.ic_back),
+                Image(
+                    painter = painterResource(id = R.drawable.ic_back),
                     contentDescription = "Back Button",  // Added content description for accessibility
                     modifier = Modifier
                         .size(18.sdp)
@@ -81,15 +82,16 @@ fun GiftIdeasScreenContent(
             }
         },
         bottomBar = {
-            // Generate Button
-            if (!isWriting && !isWritingCompleted) {
-                GenerateButton(
-                    enabled = isButtonEnabled,
-                    onClick = { onGenerateClick(interests, dislikes, relationship, budget) }
-                )
+            Column {
+                // Generate Button
+                if (!isWriting && !isWritingCompleted) {
+                    GenerateButton(
+                        enabled = isButtonEnabled,
+                        onClick = { onGenerateClick(interests, dislikes, relationship, budget) })
+                }
+                BannerAd(showAd)
             }
-        }
-    ) { paddingValues ->
+        }) { paddingValues ->
         Column(
             modifier = Modifier
                 .fillMaxSize()
@@ -132,8 +134,7 @@ fun GiftIdeasScreenContent(
                     onInterestChange = { interests = it },
                     onDislikesChange = { dislikes = it },
                     onRelationshipChange = { relationship = it },
-                    onBudgetChange = { budget = it }
-                )
+                    onBudgetChange = { budget = it })
             }
         }
     }

@@ -2,9 +2,13 @@ package com.thezayin.presentation
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.thezayin.analytics.analytics.Analytics
 import com.thezayin.domain.model.CalculateModel
 import com.thezayin.domain.usecase.CalculateUseCase
 import com.thezayin.domain.usecase.InsertCalcHistory
+import com.thezayin.framework.ads.admob.domain.repository.InterstitialAdManager
+import com.thezayin.dslrblur.framework.ads.admob.domain.repository.RewardedAdManager
+import com.thezayin.events.AnalyticsEvent
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.event.CalculatorEvents
@@ -18,7 +22,10 @@ import timber.log.Timber
 class CalculatorViewModel(
     val remoteConfig: RemoteConfig,
     val calculateUseCase: CalculateUseCase,
-    val insertCalcHistory: InsertCalcHistory
+    val insertCalcHistory: InsertCalcHistory,
+    val analytics: Analytics,
+    val adManager: InterstitialAdManager,
+    val rewardAdManager: RewardedAdManager
 ) : ViewModel() {
     private val _calculatorState = MutableStateFlow(CalculatorState())
     val calculatorState = _calculatorState.asStateFlow()
@@ -46,11 +53,22 @@ class CalculatorViewModel(
                 is Response.Success -> {
                     hideLoading()
                     Timber.tag("InsertCalcHistory").d("Success")
+                    analytics.logEvent(
+                        AnalyticsEvent.CalculationHistoryAdded(
+                            name = name,
+                            years = years,
+                            months = months,
+                            days = days
+                        )
+                    )
                 }
 
                 is Response.Error -> {
                     errorMessages(response.e)
                     showError()
+                    analytics.logEvent(
+                        AnalyticsEvent.CalculationHistoryFailure(errorMessage = response.e)
+                    )
                 }
 
                 is Response.Loading -> {
@@ -83,6 +101,7 @@ class CalculatorViewModel(
                     errorMessages(response.e)
                     hideLoading()
                     showError()
+                    AnalyticsEvent.CalculationFailure(errorMessage = response.e)
                 }
 
                 is Response.Loading -> {

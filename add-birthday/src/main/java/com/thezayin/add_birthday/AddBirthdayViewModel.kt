@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.thezayin.add_birthday.event.BirthdayUiEvent
 import com.thezayin.add_birthday.state.BirthdayUiState
+import com.thezayin.analytics.analytics.Analytics
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.usecase.AddBirthdayUseCase
 import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
+import com.thezayin.dslrblur.framework.ads.admob.domain.repository.RewardedAdManager
+import com.thezayin.events.AnalyticsEvent
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -16,9 +19,11 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 
 class AddBirthdayViewModel(
+    val analytics: Analytics,
     val remoteConfig: RemoteConfig,
     private val addBirthdayUseCase: AddBirthdayUseCase,
     private val getAllBirthdaysUseCase: GetAllBirthdaysUseCase,
+    internal val rewardedManager: RewardedAdManager
 ) : ViewModel() {
     private val _uiState = MutableStateFlow(BirthdayUiState())
     val uiState: StateFlow<BirthdayUiState> = _uiState.asStateFlow()
@@ -27,6 +32,7 @@ class AddBirthdayViewModel(
 
 
     init {
+        analytics.logEvent(AnalyticsEvent.AddBirthdayStarted())
         fetchAllBirthdays()
     }
 
@@ -55,6 +61,7 @@ class AddBirthdayViewModel(
                         isLoading(false)
                         isError(true)
                         errorMessage(response.e)
+                        analytics.logEvent(AnalyticsEvent.AddBirthdayFailure(errorMessage = response.e))
                     }
                 }
             }
@@ -71,7 +78,8 @@ class AddBirthdayViewModel(
             }
 
             if (isDuplicate) {
-                isDuplicate(true) // Trigger duplicate dialog
+                isDuplicate(true)
+                analytics.logEvent(AnalyticsEvent.AddBirthdayDuplicateDetected())
             } else {
                 addBirthdayToDatabase(birthday)
             }
@@ -79,9 +87,10 @@ class AddBirthdayViewModel(
     }
 
     fun confirmAddDuplicate(birthday: BirthdayModel) {
-        forceSave = true // Allow bypassing duplicate check
+        forceSave = true
         addBirthday(birthday)
-        forceSave = false // Reset flag after saving
+        forceSave = false
+        analytics.logEvent(AnalyticsEvent.AddBirthdayDuplicateConfirmed())
     }
 
     private fun addBirthdayToDatabase(birthday: BirthdayModel) {
@@ -92,12 +101,14 @@ class AddBirthdayViewModel(
                     is Response.Success -> {
                         isAdded(true)
                         isLoading(false)
+                        analytics.logEvent(AnalyticsEvent.AddBirthdaySuccess())
                     }
 
                     is Response.Error -> {
                         isLoading(false)
                         isError(true)
                         errorMessage(response.e)
+                        analytics.logEvent(AnalyticsEvent.AddBirthdayFailure(errorMessage = response.e))
                     }
                 }
             }
@@ -106,6 +117,9 @@ class AddBirthdayViewModel(
 
     fun isDuplicate(isDuplicate: Boolean) {
         handleEvent(BirthdayUiEvent.DuplicateBirthday(isDuplicate))
+        if (!isDuplicate) {
+            analytics.logEvent(AnalyticsEvent.AddBirthdayDuplicateCancelled())
+        }
     }
 
     private fun setBirthdays(birthday: List<BirthdayModel>) {
@@ -126,5 +140,6 @@ class AddBirthdayViewModel(
 
     private fun errorMessage(error: String) {
         handleEvent(BirthdayUiEvent.ErrorMessage(error))
+        analytics.logEvent(AnalyticsEvent.AddBirthdayFailure(errorMessage = error))
     }
 }

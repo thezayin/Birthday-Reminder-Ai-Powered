@@ -12,5 +12,4 @@ import com.thezayin.framework.remote.RemoteConfig
  */
 class SettingViewModel(
     val remoteConfig: RemoteConfig,
-    val analytics: com.thezayin.analytics.analytics.Analytics
 ) : ViewModel()

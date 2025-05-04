@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.unit.dp
+import com.thezayin.components.BannerAd
 import com.thezayin.values.R
 
 /**
@@ -21,6 +22,7 @@ import com.thezayin.values.R
  */
 @Composable
 fun SettingScreenContent(
+    showAd: Boolean,
     onBackClick: () -> Unit,
 ) {
 
@@ -40,7 +42,10 @@ fun SettingScreenContent(
                     onBackClick()  // Trigger back action
                 },
             )
-        }
+        },
+        bottomBar = {
+            BannerAd(showAd)
+        },
     ) { paddingValues ->
         // Main content of the screen
         Column(

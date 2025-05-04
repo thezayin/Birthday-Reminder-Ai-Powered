@@ -11,7 +11,6 @@ class SmsAlarmReceiver : BroadcastReceiver() {
 
     override fun onReceive(context: Context, intent: Intent?) {
         if (intent?.action == null) {
-            Log.e(TAG, "Received null action in SmsAlarmReceiver")
             return
         }
 
@@ -24,7 +23,6 @@ class SmsAlarmReceiver : BroadcastReceiver() {
             intent.getStringExtra("notificationMethod") ?: "Text" // Default to Text
 
         if (birthdayId == -1 || phoneNumber.isEmpty()) {
-            Log.e(TAG, "Invalid birthday data received in SmsAlarmReceiver")
             return
         }
 
@@ -39,7 +37,6 @@ class SmsAlarmReceiver : BroadcastReceiver() {
                     putExtra("birthdayMessage", birthdayMessage)
                 }
                 context.startService(serviceIntent)
-                Log.d(TAG, "Started SmsService for birthday ID: $birthdayId")
             }
 
             "WhatsApp" -> {
@@ -51,11 +48,9 @@ class SmsAlarmReceiver : BroadcastReceiver() {
                     phoneNumber = phoneNumber,
                     birthdayMessage = birthdayMessage
                 )
-                Log.d(TAG, "Initiated WhatsApp message for birthday ID: $birthdayId")
             }
 
             else -> {
-                Log.e(TAG, "Unsupported notification method: $notificationMethod")
             }
         }
     }

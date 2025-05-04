@@ -25,17 +25,13 @@ class AlarmService : Service() {
     override fun onCreate() {
         super.onCreate()
         createNotificationChannel()
-        Log.d(TAG, "Service Created")
     }
 
     @SuppressLint("NewApi")
     override fun onStartCommand(intent: Intent?, flags: Int, startId: Int): Int {
         var action = intent?.action
-        Log.d(TAG, "onStartCommand called with action: $action")
-
         when (action) {
             "STOP_ALARM" -> {
-                Log.d(TAG, "Stop Alarm action received")
                 stopAlarm()
             }
 
@@ -45,12 +41,9 @@ class AlarmService : Service() {
                 val id = intent?.getIntExtra("id", -1) ?: -1 // Use -1 to detect invalid IDs
 
                 if (id == -1) {
-                    Log.e(TAG, "Invalid ID received: $id")
                     stopSelf()
                     return START_NOT_STICKY
                 }
-
-                Log.d(TAG, "Starting alarm for: $name with ID: $id")
 
                 // Initialize MediaPlayer with the alarm sound
                 mediaPlayer =
@@ -63,11 +56,9 @@ class AlarmService : Service() {
                                 .build()
                         )
                         start()
-                        Log.d(TAG, "MediaPlayer started")
                     }
 
                 if (mediaPlayer == null) {
-                    Log.e(TAG, "Failed to create MediaPlayer")
                     stopSelf()
                     return START_NOT_STICKY
                 }
@@ -103,7 +94,6 @@ class AlarmService : Service() {
                     notification,
                     ServiceInfo.FOREGROUND_SERVICE_TYPE_MEDIA_PLAYBACK
                 )
-                Log.d(TAG, "Foreground service started with notification ID: $id")
             }
         }
 
@@ -111,31 +101,24 @@ class AlarmService : Service() {
     }
 
     private fun stopAlarm() {
-        Log.d(TAG, "Stopping alarm")
         mediaPlayer?.let {
             if (it.isPlaying) {
                 it.stop()
-                Log.d(TAG, "MediaPlayer stopped")
             }
             it.release()
-            Log.d(TAG, "MediaPlayer released")
         }
         mediaPlayer = null
         stopForeground(true)
         stopSelf()
-        Log.d(TAG, "Service stopped")
     }
 
     override fun onDestroy() {
         super.onDestroy()
-        Log.d(TAG, "Service Destroyed")
         mediaPlayer?.let {
             if (it.isPlaying) {
                 it.stop()
-                Log.d(TAG, "MediaPlayer stopped in onDestroy")
             }
             it.release()
-            Log.d(TAG, "MediaPlayer released in onDestroy")
         }
         mediaPlayer = null
     }
@@ -160,7 +143,6 @@ class AlarmService : Service() {
             val manager: NotificationManager =
                 getSystemService(Context.NOTIFICATION_SERVICE) as NotificationManager
             manager.createNotificationChannel(serviceChannel)
-            Log.d(TAG, "Notification channel created")
         }
     }
 }

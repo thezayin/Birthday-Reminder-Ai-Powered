@@ -24,9 +24,7 @@ class BootReceiver : BroadcastReceiver() {
                             AlarmScheduler.scheduleBirthdayAlarm(context, birthday)
                             AlarmScheduler.scheduleBirthdayNotification(context, birthday)
                         }
-                        Log.d("BootReceiver", "Alarms rescheduled for all birthdays.")
                     } else if (response is Response.Error) {
-                        Log.e("BootReceiver", "Error fetching birthdays: ${response.e}")
                     }
                 }
             }

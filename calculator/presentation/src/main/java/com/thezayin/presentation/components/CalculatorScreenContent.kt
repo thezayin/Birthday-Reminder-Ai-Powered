@@ -11,6 +11,8 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.input.TextFieldValue
+import com.thezayin.analytics.analytics.Analytics
+import com.thezayin.components.BannerAd
 import com.thezayin.components.ErrorQueryDialog
 import com.thezayin.components.LoadingDialog
 import com.thezayin.domain.model.CalculateModel
@@ -18,9 +20,11 @@ import com.thezayin.values.R
 
 @Composable
 fun CalculatorScreenContent(
+    showAd: Boolean,
     year: Int,
     month: Int,
     day: Int,
+    analytics: Analytics,
     isLoading: Boolean,
     showError: Boolean,
     result: CalculateModel?,
@@ -68,7 +72,7 @@ fun CalculatorScreenContent(
         containerColor = colorResource(id = R.color.background),
         topBar = {
             CalculatorTopBar(
-                onBackClick = onBackClick, onHistoryClick = onHistoryClick
+                onBackClick = onBackClick, onHistoryClick = onHistoryClick, analytics = analytics
             )
         },
         bottomBar = {
@@ -78,6 +82,7 @@ fun CalculatorScreenContent(
                     isButtonEnable = isButtonEnables.value,
                     onClick = onCalculateClick
                 )
+                BannerAd(showAd)
             }
         }) { padding ->
         Column(modifier = Modifier.padding(padding)) {

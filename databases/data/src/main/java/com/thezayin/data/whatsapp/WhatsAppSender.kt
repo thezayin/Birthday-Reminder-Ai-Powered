@@ -26,14 +26,11 @@ class WhatsAppSender(private val context: Context) {
 
             if (intent.resolveActivity(context.packageManager) != null) {
                 context.startActivity(intent)
-                Log.d(TAG, "WhatsApp intent started for $fullPhoneNumber")
             } else {
                 Toast.makeText(context, "WhatsApp is not installed.", Toast.LENGTH_SHORT).show()
-                Log.e(TAG, "WhatsApp not installed on the device.")
             }
         } catch (e: Exception) {
             Toast.makeText(context, "Failed to open WhatsApp: ${e.message}", Toast.LENGTH_LONG).show()
-            Log.e(TAG, "Error sending WhatsApp message: ${e.message}")
         }
     }
 }

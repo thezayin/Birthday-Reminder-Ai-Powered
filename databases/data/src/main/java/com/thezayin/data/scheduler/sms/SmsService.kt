@@ -18,7 +18,6 @@ class SmsService : Service() {
         val birthdayMessage = intent?.getStringExtra("birthdayMessage") ?: "Happy Birthday! 🎉"
 
         if (birthdayId == -1 || phoneNumber.isEmpty()) {
-            Log.e(TAG, "Invalid data received in SmsService")
             stopSelf()
             return START_NOT_STICKY
         }
@@ -39,10 +38,8 @@ class SmsService : Service() {
             val parts = smsManager.divideMessage(smsMessage)
             smsManager.sendMultipartTextMessage(fullPhoneNumber, null, parts, null, null)
             Toast.makeText(this, "SMS sent to $fullPhoneNumber", Toast.LENGTH_SHORT).show()
-            Log.d(TAG, "SMS sent to $fullPhoneNumber: $smsMessage")
         } catch (e: Exception) {
             Toast.makeText(this, "Failed to send SMS: ${e.message}", Toast.LENGTH_LONG).show()
-            Log.e(TAG, "Failed to send SMS to $fullPhoneNumber: ${e.message}")
         }
     }
 

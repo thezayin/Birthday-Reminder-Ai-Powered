@@ -7,6 +7,7 @@ import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.model.HomeMenu
 import com.thezayin.domain.usecase.GetAllBirthdaysUseCase
 import com.thezayin.domain.usecase.MenuItemsUseCase
+import com.thezayin.framework.ads.admob.domain.repository.InterstitialAdManager
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.event.HomeEvents
@@ -21,7 +22,8 @@ import java.time.temporal.ChronoUnit
 class HomeViewModel(
     val remoteConfig: RemoteConfig,
     val menuItemsUseCase: MenuItemsUseCase,
-    val getAllBirthdaysUseCase: GetAllBirthdaysUseCase
+    val getAllBirthdaysUseCase: GetAllBirthdaysUseCase,
+    val adManager: InterstitialAdManager
 ) : ViewModel() {
     private val _homeUiState = MutableStateFlow(HomeState())
     val homeUiState = _homeUiState.asStateFlow()

@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
+import com.thezayin.components.BannerAd
 import com.thezayin.components.LoadingDialog
 import com.thezayin.domain.model.BirthdayModel
 import com.thezayin.domain.model.HomeMenu
@@ -24,6 +25,7 @@ import ir.kaaveh.sdpcompose.ssp
 
 @Composable
 fun HomeScreenContent(
+    showAd: Boolean,
     isLoading: Boolean,
     list: List<HomeMenu>?,
     upcomingBirthdays: List<BirthdayModel>?,
@@ -46,6 +48,9 @@ fun HomeScreenContent(
                 settingCallback = onSettingsClick,
                 premiumCallback = onPremiumClick
             )
+        },
+        bottomBar = {
+            BannerAd(showAd)
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {

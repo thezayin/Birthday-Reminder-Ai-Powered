@@ -31,6 +31,8 @@ import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.thezayin.add_birthday.utils.isValidDayForMonth
 import com.thezayin.add_birthday.utils.updateButtonState
+import com.thezayin.analytics.analytics.Analytics
+import com.thezayin.events.AnalyticsEvent
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 import ir.kaaveh.sdpcompose.ssp
@@ -38,11 +40,12 @@ import ir.kaaveh.sdpcompose.ssp
 @Composable
 fun BirthdayDetails(
     modifier: Modifier = Modifier,
-    name: MutableState<TextFieldValue>, // Holds the value for the name input field
-    day: MutableState<TextFieldValue>,  // Holds the value for the day input field
-    month: MutableState<TextFieldValue>, // Holds the value for the month input field
-    year: MutableState<TextFieldValue>,  // Holds the value for the year input field
-    isButtonEnabled: MutableState<Boolean>, // Tracks whether the Save button is enabled
+    name: MutableState<TextFieldValue>,
+    day: MutableState<TextFieldValue>,
+    month: MutableState<TextFieldValue>,
+    year: MutableState<TextFieldValue>,
+    isButtonEnabled: MutableState<Boolean>,
+    analytics: Analytics
 ) {
     val activity = LocalContext.current as Activity
     // Error states for validation
@@ -78,6 +81,7 @@ fun BirthdayDetails(
             value = name.value,
             onValueChange = { newValue ->
                 name.value = newValue
+                analytics.logEvent(AnalyticsEvent.AddBirthdayInputChanged(fieldName = "Name", newValue = newValue.text))
                 if (newValue.text.isBlank()) {
                     isNameError = true
                     nameErrorMessage =

@@ -45,8 +45,6 @@ dependencies {
 
     //firebase
     implementation(libs.firebase.analytics)
-
-    implementation(libs.androidx.work.runtime)
     implementation(libs.timber)
 
     //koin dependency injection

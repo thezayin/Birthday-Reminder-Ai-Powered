@@ -15,11 +15,14 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
+import com.thezayin.analytics.analytics.Analytics
+import com.thezayin.events.AnalyticsEvent
 import com.thezayin.values.R
 import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun CalculatorTopBar(
+    analytics: Analytics,
     onBackClick: () -> Unit = {},
     onHistoryClick: () -> Unit = {}
 ) {
@@ -55,7 +58,10 @@ fun CalculatorTopBar(
                 contentDescription = "Settings",
                 modifier = Modifier
                     .size(25.dp)
-                    .clickable { onHistoryClick() }
+                    .clickable {
+                        analytics.logEvent(AnalyticsEvent.HistoryButtonClicked())
+                        onHistoryClick()
+                    }
             )
         }
     }

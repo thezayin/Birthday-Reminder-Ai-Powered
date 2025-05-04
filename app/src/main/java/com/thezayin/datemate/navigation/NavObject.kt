@@ -28,3 +28,6 @@ object GiftIdeasScreenNav
 
 @Serializable
 object RequestPermissionsScreenNav
+
+@Serializable
+object OnboardingScreenNav

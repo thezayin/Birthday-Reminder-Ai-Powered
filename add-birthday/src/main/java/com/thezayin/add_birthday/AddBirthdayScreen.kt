@@ -2,20 +2,19 @@ package com.thezayin.add_birthday
 
 import android.app.Activity
 import android.widget.Toast
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.input.TextFieldValue
 import com.thezayin.add_birthday.component.AddBirthdayScreenContent
 import com.thezayin.add_birthday.utils.NotificationDate
 import com.thezayin.add_birthday.utils.calculateNotifyAt
-import com.thezayin.components.AdLoadingDialog
 import com.thezayin.domain.model.BirthdayModel
-import com.thezayin.framework.ads.functions.interstitialAd
-import com.thezayin.framework.ads.functions.rewardedAd
+import com.thezayin.events.AnalyticsEvent
 import org.koin.compose.koinInject
 
 @Composable
@@ -24,9 +23,8 @@ fun AddBirthdayScreen(
 ) {
     val viewModel: AddBirthdayViewModel = koinInject()
     val uiState by viewModel.uiState.collectAsState()
-    val activity = LocalContext.current as Activity
-    val showLoadingAd = remember { mutableStateOf(false) }
-
+    val activity = LocalActivity.current as Activity
+    val analytics = viewModel.analytics
     // Remember states for input fields
     val name = remember { mutableStateOf(TextFieldValue()) }
     val day = remember { mutableStateOf(TextFieldValue()) }
@@ -55,15 +53,20 @@ fun AddBirthdayScreen(
 
     val groups = listOf("Family", "Friends", "Work", "Other") // Example groups
 
-    if (showLoadingAd.value) {
-        AdLoadingDialog()
+    val adManager = viewModel.rewardedManager
+
+    LaunchedEffect(Unit) {
+        adManager.loadAd(activity)
     }
+
+    analytics.logEvent(AnalyticsEvent.ScreenViewEvent("AddBirthdayScreen"))
 
     AddBirthdayScreenContent(
         name = name,
         day = day,
         month = month,
         year = year,
+        showAd = viewModel.remoteConfig.adConfigs.bannerAdOnAddBirthday,
         isAdded = uiState.isAdded,
         selectedGroup = selectedGroup,
         groups = groups,
@@ -76,15 +79,7 @@ fun AddBirthdayScreen(
         notifyYear = notificationDate.year,
         isLoading = uiState.isLoading,
         showError = uiState.isError,
-        navigateBack = {
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnBack,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnBack,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = { navigateBack() }
-            )
-        },
+        navigateBack = navigateBack,
         dismissErrorDialog = {
             viewModel.isError(false)
         },
@@ -93,14 +88,15 @@ fun AddBirthdayScreen(
         },
         error = uiState.error,
         isDuplicate = uiState.isDuplicate,  // Pass the duplicate state
-        onDismissDuplicateDialog = { viewModel.isDuplicate(false) },
+        onDismissDuplicateDialog = {
+            viewModel.isDuplicate(false)
+            analytics.logEvent(AnalyticsEvent.AddBirthdayDuplicateCancelled())
+        },
         onConfirmAddDuplicate = {
-            activity.rewardedAd(
-                showAd = viewModel.remoteConfig.adConfigs.rewardedOnBirthdaySave,
-                adUnitId = viewModel.remoteConfig.adUnits.rewardedOnBirthdaySave,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = {
+            adManager.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnBirthdaySave,
+                onNext = {
                     viewModel.confirmAddDuplicate(
                         BirthdayModel(
                             name = name.value.text,
@@ -118,15 +114,13 @@ fun AddBirthdayScreen(
                     )
                 }
             )
-
         },
         onAddBirthdayClick = {
-            activity.rewardedAd(
-                showAd = viewModel.remoteConfig.adConfigs.rewardedOnBirthdaySave,
-                adUnitId = viewModel.remoteConfig.adUnits.rewardedOnBirthdaySave,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = {
+            analytics.logEvent(AnalyticsEvent.AddBirthdaySaveClicked())
+            adManager.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnBirthdaySave,
+                onNext = {
                     // Validate inputs
                     val dayInt = day.value.text.toIntOrNull()
                     val monthInt = month.value.text.toIntOrNull()
@@ -168,12 +162,19 @@ fun AddBirthdayScreen(
                             // Add phone details here if needed in the future
                         )
                         viewModel.addBirthday(birthday)
+                        analytics.logEvent(
+                            AnalyticsEvent.AddBirthdayInputChanged(
+                                fieldName = "AllFields",
+                                newValue = "All fields validated"
+                            )
+                        )
                     } else {
                         Toast.makeText(
                             activity,
                             "Please enter valid details",
                             Toast.LENGTH_SHORT
                         ).show()
+                        analytics.logEvent(AnalyticsEvent.AddBirthdayFailure(errorMessage = "Invalid input details"))
                     }
                 })
         },
@@ -182,6 +183,7 @@ fun AddBirthdayScreen(
         phoneNumber = phoneNumber,
         notificationMethod = notificationMethod,
         sendCustomMessage = sendCustomMessage,
-        birthdayMessage = birthdayMessage
+        birthdayMessage = birthdayMessage,
+        analytics = analytics
     )
 }

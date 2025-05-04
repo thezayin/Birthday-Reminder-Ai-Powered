@@ -16,6 +16,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
+import com.thezayin.components.BannerAd
 import com.thezayin.components.LoadingDialog
 import com.thezayin.domain.model.AgeCalModel
 import com.thezayin.values.R
@@ -23,6 +24,7 @@ import ir.kaaveh.sdpcompose.sdp
 
 @Composable
 fun CalcHistoryScreenContent(
+    showAd: Boolean,
     isLoading: Boolean,
     noResultFound: Boolean,
     list: List<AgeCalModel>?,
@@ -58,6 +60,9 @@ fun CalcHistoryScreenContent(
                 )
             }
         },
+        bottomBar = {
+            BannerAd(showAd)
+        }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             if (!noResultFound && list != null) {

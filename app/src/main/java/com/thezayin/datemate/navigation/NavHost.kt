@@ -1,6 +1,5 @@
 package com.thezayin.datemate.navigation
 
-import android.util.Log
 import androidx.compose.runtime.Composable
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
@@ -12,7 +11,8 @@ import com.thezayin.presentation.GiftIdeasScreen
 import com.thezayin.presentation.HomeScreen
 import com.thezayin.saved_birthdays.SavedBirthdaysScreen
 import com.thezayin.setting.SettingScreen
-import com.thezayin.splash.SplashScreen
+import com.thezayin.splash.onboarding.OnboardingScreen
+import com.thezayin.splash.splash.SplashScreen
 
 @Composable
 fun NavHost(navController: NavHostController) {
@@ -22,7 +22,18 @@ fun NavHost(navController: NavHostController) {
     ) {
         composable<SplashScreenNav> {
             SplashScreen(
-                onNavigate = {
+                navigateToHome = {
+                    navController.navigate(HomeScreenNav)
+                },
+                navigateToOnboarding = {
+                    navController.navigate(OnboardingScreenNav)
+                }
+            )
+        }
+
+        composable<OnboardingScreenNav> {
+            OnboardingScreen(
+                navigateToHome = {
                     navController.navigate(HomeScreenNav)
                 }
             )
@@ -31,7 +42,6 @@ fun NavHost(navController: NavHostController) {
         composable<RequestPermissionsScreenNav> {
             RequestPermissionsScreen(
                 onPermissionsGranted = {
-                    Log.d("AppNavHost", "Permissions granted, navigating to home.")
                     navController.navigate(SplashScreenNav) {
                         popUpTo(RequestPermissionsScreenNav) { inclusive = true }
                     }

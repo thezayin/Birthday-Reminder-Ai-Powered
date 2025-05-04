@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.thezayin.domain.model.AgeCalModel
 import com.thezayin.domain.usecase.ClearCalcHistory
 import com.thezayin.domain.usecase.GetCalHistory
+import com.thezayin.framework.ads.admob.domain.repository.InterstitialAdManager
 import com.thezayin.framework.remote.RemoteConfig
 import com.thezayin.framework.utils.Response
 import com.thezayin.presentation.events.CalHistoryEvents
@@ -18,7 +19,8 @@ import kotlinx.coroutines.launch
 class DatabaseViewModel(
     val remoteConfig: RemoteConfig,
     val getCalHistory: GetCalHistory,
-    val clearCalcHistory: ClearCalcHistory
+    val clearCalcHistory: ClearCalcHistory,
+    val adManager: InterstitialAdManager
 ) : ViewModel() {
     private val _calHistoryState = MutableStateFlow(CalHistoryState())
     val calHistoryState = _calHistoryState.asStateFlow()

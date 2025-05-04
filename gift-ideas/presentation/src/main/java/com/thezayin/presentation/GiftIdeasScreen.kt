@@ -2,6 +2,7 @@ package com.thezayin.presentation
 
 import android.app.Activity
 import android.speech.tts.TextToSpeech
+import androidx.activity.compose.LocalActivity
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.LaunchedEffect
@@ -11,9 +12,6 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.platform.LocalContext
-import com.thezayin.components.AdLoadingDialog
-import com.thezayin.framework.ads.functions.interstitialAd
-import com.thezayin.framework.ads.functions.rewardedAd
 import com.thezayin.framework.extension.copyText
 import com.thezayin.framework.extension.share
 import com.thezayin.framework.extension.textToSpeech
@@ -29,14 +27,16 @@ fun GiftIdeasScreen(
     val uiState by viewModel.uiState.collectAsState()
 
     val context = LocalContext.current
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current as Activity
 
-    val showLoadingAd = remember { mutableStateOf(false) }
+    val rewardedAd = viewModel.rewardedAdManager
 
     // Initialize TextToSpeech
     var textToSpeech by remember { mutableStateOf<TextToSpeech?>(null) }
 
     LaunchedEffect(Unit) {
+        rewardedAd.loadAd(activity)
+
         textToSpeech = TextToSpeech(context) { status ->
             if (status != TextToSpeech.ERROR) {
                 textToSpeech?.language = Locale.US
@@ -53,34 +53,22 @@ fun GiftIdeasScreen(
     // Calculate thoughtDuration
     val thoughtDuration = remember { viewModel.thoughtDuration }
 
-    if (showLoadingAd.value) {
-        AdLoadingDialog()
-    }
 
     GiftIdeasScreenContent(
+        showAd = viewModel.remoteConfig.adConfigs.bannerOnGiftIdeasScreen,
         showError = uiState.isError,
         error = uiState.errorMessage,
-        navigateBack = {
-            activity.interstitialAd(
-                showAd = viewModel.remoteConfig.adConfigs.interstitialAdOnBack,
-                adUnitId = viewModel.remoteConfig.adUnits.interstitialAdOnBack,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = { navigateBack() }
-            )
-        },
+        navigateBack = navigateBack,
         isWriting = uiState.isWriting,
         writingProgress = uiState.writingProgress,
         isWritingCompleted = uiState.isWritingCompleted,
         giftIdeas = uiState.giftIdeas,
         thoughtDuration = thoughtDuration, // Pass the duration
         onGenerateClick = { interests, dislikes, relationship, budget ->
-            activity.rewardedAd(
-                showAd = viewModel.remoteConfig.adConfigs.rewardedAdOnGenerateIdea,
-                adUnitId = viewModel.remoteConfig.adUnits.rewardedAdOnGenerateIdea,
-                showLoading = { showLoadingAd.value = true },
-                hideLoading = { showLoadingAd.value = false },
-                callback = {
+            rewardedAd.showAd(
+                activity = activity,
+                showAd = viewModel.remoteConfig.adConfigs.adOnGenerateIdea,
+                onNext = {
                     viewModel.fetchGiftIdeas(budget, relationship, interests, dislikes)
                 }
             )

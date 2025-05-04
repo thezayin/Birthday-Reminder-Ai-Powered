@@ -81,7 +81,6 @@ object AlarmScheduler {
 
         // Ensure the alarm is set for a future time
         if (calendar.timeInMillis <= System.currentTimeMillis()) {
-            Log.e(TAG, "Cannot schedule alarm in the past for birthday: $birthday")
             return
         }
 
@@ -92,7 +91,6 @@ object AlarmScheduler {
             pendingIntent
         )
 
-        Log.d(TAG, "Scheduled alarm for birthday: $birthday at ${calendar.time}")
     }
 
     fun cancelBirthdayAlarm(context: Context, birthday: BirthdayModel) {
@@ -108,6 +106,5 @@ object AlarmScheduler {
         )
 
         alarmManager.cancel(pendingIntent)
-        Log.d(TAG, "Canceled alarm for birthday: $birthday")
     }
 }

@@ -2,6 +2,7 @@
 package com.thezayin.add_birthday.component
 
 import android.app.Activity
+import androidx.activity.compose.LocalActivity
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -34,13 +35,14 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.input.TextFieldValue
 import com.thezayin.add_birthday.utils.calculateNextBirthday
+import com.thezayin.analytics.analytics.Analytics
+import com.thezayin.components.BannerAd
 import com.thezayin.components.ErrorQueryDialog
 import com.thezayin.components.LoadingDialog
 import com.thezayin.values.R
@@ -51,6 +53,7 @@ import java.util.Calendar
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun AddBirthdayScreenContent(
+    showAd: Boolean,
     name: MutableState<TextFieldValue>,
     day: MutableState<TextFieldValue>,
     month: MutableState<TextFieldValue>,
@@ -68,6 +71,7 @@ fun AddBirthdayScreenContent(
     notifyYear: MutableState<TextFieldValue>,
     isLoading: Boolean,
     showError: Boolean,
+    analytics: Analytics,
     navigateBack: () -> Unit,
     dismissErrorDialog: () -> Unit,
     onAddBirthdayClick: () -> Unit,
@@ -85,7 +89,7 @@ fun AddBirthdayScreenContent(
 ) {
     val scrollState = rememberScrollState()
     val state = rememberModalBottomSheetState(skipPartiallyExpanded = true)
-    val activity = LocalContext.current as Activity
+    val activity = LocalActivity.current as Activity
 
     // Error states for phone and message
     var showPhoneError by remember { mutableStateOf(false) }
@@ -184,26 +188,29 @@ fun AddBirthdayScreenContent(
             }
         },
         bottomBar = {
-            // Save button in the bottom bar
-            Button(
-                onClick = onAddBirthdayClick,
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(16.sdp)
-                    .height(35.sdp),
-                enabled = isButtonEnabled.value,
-                shape = RoundedCornerShape(8.sdp),
-                colors = ButtonDefaults.buttonColors(
-                    containerColor = colorResource(id = R.color.primary),
-                    disabledContainerColor = colorResource(id = R.color.greyish),
-                ),
-            ) {
-                Text(
-                    text = activity.getString(R.string.save),
-                    fontSize = 12.ssp,
-                    fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
-                    color = colorResource(id = R.color.white)
-                )
+            Column {
+                // Save button in the bottom bar
+                Button(
+                    onClick = onAddBirthdayClick,
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .padding(16.sdp)
+                        .height(35.sdp),
+                    enabled = isButtonEnabled.value,
+                    shape = RoundedCornerShape(8.sdp),
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = colorResource(id = R.color.primary),
+                        disabledContainerColor = colorResource(id = R.color.greyish),
+                    ),
+                ) {
+                    Text(
+                        text = activity.getString(R.string.save),
+                        fontSize = 12.ssp,
+                        fontFamily = FontFamily(Font(R.font.noto_sans_bold)),
+                        color = colorResource(id = R.color.white)
+                    )
+                }
+                BannerAd(showAd)
             }
         }
     ) { paddingValues ->
@@ -222,6 +229,7 @@ fun AddBirthdayScreenContent(
                 month = month,
                 year = year,
                 isButtonEnabled = isButtonEnabled,
+                analytics = analytics
             )
 
             Spacer(modifier = Modifier.height(20.sdp))

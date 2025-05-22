@@ -13,7 +13,7 @@ import com.google.android.gms.ads.AdView
 fun BannerAd(
     showAd: Boolean,
 ) {
-    if (!showAd) return
+    if (showAd) return
     AndroidView(
         factory = { context ->
             AdView(context).apply {
